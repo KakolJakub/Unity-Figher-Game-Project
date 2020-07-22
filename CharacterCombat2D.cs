@@ -51,22 +51,22 @@ public class CharacterCombat2D : MonoBehaviour
 			{
 			case 1 :
 				//Spawn hit particle
-				Debug.Log("Took first attack damage");
+				Debug.Log("Took first attack damage: " + damage);
 				break;
 			case 2 :
 				Hurt();
-				Debug.Log("Took second attack damage");
+				Debug.Log("Took second attack damage: " + damage);
 				break;
 			case 3 :
 				Knockback();
-				Debug.Log("Took third attack damage"+playerStats.knockbackForce);
+				Debug.Log("Took third attack damage: " + damage);
 				break;
 			default:
 				Debug.Log("Took damage");
 				break;
 			}
 			playerStats.health-=damage;
-			Debug.Log("health"+playerStats.health);
+			Debug.Log(name+" health: "+playerStats.health);
 		}
 	}
 	

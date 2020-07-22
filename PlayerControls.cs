@@ -6,8 +6,9 @@ public class PlayerControls : MonoBehaviour
 {
     public PlayerStats stats;
 	
-	private CharacterMovement2D CharacterMovement2D;
-	private CharacterCombat2D CharacterCombat2D;
+	private CharacterMovement2D characterMovement2D;
+	private CharacterCombat2D characterCombat2D;
+	private CharacterAbilities2D characterAbilities2D;
 	
 	// Start is called before the first frame update
     void Start()
@@ -20,49 +21,55 @@ public class PlayerControls : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.A))
 		{
-			CharacterMovement2D=GetComponent<CharacterMovement2D>();
-			CharacterMovement2D.Move(-stats.movementSpeed*Time.fixedDeltaTime);
+			characterMovement2D=GetComponent<CharacterMovement2D>();
+			characterMovement2D.Move(-stats.movementSpeed*Time.fixedDeltaTime);
 		}
 		if(Input.GetKeyUp(KeyCode.A))
 		{
-			CharacterMovement2D=GetComponent<CharacterMovement2D>();
-			CharacterMovement2D.DontMove();
-			CharacterMovement2D=null;
+			characterMovement2D=GetComponent<CharacterMovement2D>();
+			characterMovement2D.DontMove();
+			characterMovement2D=null;
 		}
 		if(Input.GetKeyDown(KeyCode.A))
 		{
-			CharacterMovement2D=GetComponent<CharacterMovement2D>();
-			CharacterMovement2D.Dodge("Left");
+			characterMovement2D=GetComponent<CharacterMovement2D>();
+			characterMovement2D.Dodge("Left");
 		}
 		
 		if(Input.GetKey(KeyCode.D))
 		{
-			CharacterMovement2D=GetComponent<CharacterMovement2D>();
-			CharacterMovement2D.Move(stats.movementSpeed*Time.fixedDeltaTime);
+			characterMovement2D=GetComponent<CharacterMovement2D>();
+			characterMovement2D.Move(stats.movementSpeed*Time.fixedDeltaTime);
 		}
 		if(Input.GetKeyUp(KeyCode.D))
 		{
-			CharacterMovement2D=GetComponent<CharacterMovement2D>();
-			CharacterMovement2D.DontMove();
-			CharacterMovement2D=null;
+			characterMovement2D=GetComponent<CharacterMovement2D>();
+			characterMovement2D.DontMove();
+			characterMovement2D=null;
 		}
 		if(Input.GetKeyDown(KeyCode.D))
 		{
-			CharacterMovement2D=GetComponent<CharacterMovement2D>();
-			CharacterMovement2D.Dodge("Right");
+			characterMovement2D=GetComponent<CharacterMovement2D>();
+			characterMovement2D.Dodge("Right");
 		}
 		
 		if(Input.GetKeyDown(KeyCode.Space))
 		{
-			CharacterCombat2D=GetComponent<CharacterCombat2D>();
-			CharacterCombat2D.Attack();
+			characterCombat2D=GetComponent<CharacterCombat2D>();
+			characterCombat2D.Attack();
 		}
 		
 		if(Input.GetKeyDown(KeyCode.LeftShift))
 		{
-			CharacterCombat2D=GetComponent<CharacterCombat2D>();
-			CharacterCombat2D.Block();
+			characterCombat2D=GetComponent<CharacterCombat2D>();
+			characterCombat2D.Block();
 		}
 		
+		//TESTING ONLY:
+		if(Input.GetKeyDown(KeyCode.P))
+		{
+			characterAbilities2D=GetComponent<CharacterAbilities2D>();
+			characterAbilities2D.ability1.Use();
+		}
     }
 }
