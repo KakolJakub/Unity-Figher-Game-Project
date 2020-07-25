@@ -19,8 +19,9 @@ public class VoltShockGrenadeAbility : Ability
 	}
 		
 	//TODO:
-	//Create Animation
-	//Create a public ShockGrenadeDealDamage method that will be used via animation events
+	//Implement animation - add a trigger
+	//Create a public ShockGrenadeDealDamage method - used via animation events
+	//Create electric particles - used when the grenade detonates
 	
 	//DONE: Create GameObject which will serve as a projectile spawn point and Attach it to the character
 	//DONE: Create a Projectile Logic Script
