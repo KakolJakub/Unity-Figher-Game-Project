@@ -192,6 +192,7 @@ public class CharacterCombat2D : MonoBehaviour
 		
 		Gizmos.DrawWireSphere(attackPoint.position, attackRange);
 	}
+	
 	//TESTING ONLY:
 	void Update()
 	{

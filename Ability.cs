@@ -7,7 +7,7 @@ public class Ability : MonoBehaviour
     public Sprite abilityIcon;
 	public string abilityName;
 	
-	public int damage;
+	public int abilityDamage;
 	
 	public float abilityCooldown;
 	float activeCooldown;
