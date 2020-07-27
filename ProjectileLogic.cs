@@ -9,6 +9,8 @@ public class ProjectileLogic : MonoBehaviour
 	[SerializeField] int projectileDamage;
 	[SerializeField] int projectileDamageStatusNumber;
 	
+	[SerializeField] ParticleSystem projectileExplosion;
+	
 	public Rigidbody2D rigidbodyReference;
 	public Animator animatorReference;
 	
@@ -24,9 +26,20 @@ public class ProjectileLogic : MonoBehaviour
 		projectileLifeTime = lifetime;
 	}
 	
+	public void SetProjectileEffects(ParticleSystem effect)
+	{
+		projectileExplosion = effect;
+	}
+	
 	public void EraseProjectile()
 	{
 		Destroy(gameObject);
+	}
+	
+	//used via animation events
+	public void AddExplosionEffect()
+	{
+		Instantiate(projectileExplosion, gameObject.transform.position, gameObject.transform.rotation);
 	}
 	
 	void Start()

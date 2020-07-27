@@ -7,6 +7,8 @@ public class VoltShockGrenadeAbility : Ability
     public Transform projectileSpawnPoint;
 	public Transform projectile;
 	
+	public ParticleSystem explosion;
+	
 	public int damageEffect;
 	public float grenadeSpeed;
 	public float grenadeLifeTime;
@@ -14,6 +16,7 @@ public class VoltShockGrenadeAbility : Ability
 	void Start()
 	{
 		projectile.GetComponent<ProjectileLogic>().SetProjectileStats(abilityDamage, damageEffect, grenadeSpeed, grenadeLifeTime);
+		projectile.GetComponent<ProjectileLogic>().SetProjectileEffects(explosion);
 	}
 	
 	public override void ActivateAbility()
