@@ -6,6 +6,7 @@ public class VoltShockGrenadeAbility : Ability
 {
     public Transform projectileSpawnPoint;
 	public Transform projectile;
+	public Animator animate;
 	
 	public ParticleSystem explosion;
 	
@@ -21,12 +22,10 @@ public class VoltShockGrenadeAbility : Ability
 	
 	public override void ActivateAbility()
 	{
-		//animate.SetTrigger("ShockGrenade");
-		TestProjectileSpawn();
-		Debug.Log("Volt Shock Grenade WIP");
+		animate.SetTrigger("Ability_ShockGrenade");
 	}
 	
-	public void TestProjectileSpawn()
+	public void ThrowGrenade()
 	{
 		Instantiate(projectile, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
 	}
