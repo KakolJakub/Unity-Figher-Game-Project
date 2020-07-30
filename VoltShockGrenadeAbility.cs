@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class VoltShockGrenadeAbility : Ability
-{
-    public Transform projectileSpawnPoint;
+{	
+	public Transform projectileSpawnPoint;
 	public Transform projectile;
 	public Animator animate;
 	
@@ -13,10 +13,11 @@ public class VoltShockGrenadeAbility : Ability
 	public int damageEffect;
 	public float grenadeSpeed;
 	public float grenadeLifeTime;
+	public float grenadeGravity;
 	
 	void Start()
 	{
-		projectile.GetComponent<ProjectileLogic>().SetProjectileStats(abilityDamage, damageEffect, grenadeSpeed, grenadeLifeTime);
+		projectile.GetComponent<ProjectileLogic>().SetProjectileStats(abilityDamage, damageEffect, grenadeSpeed, grenadeLifeTime, grenadeGravity);
 		projectile.GetComponent<ProjectileLogic>().SetProjectileEffects(explosion);
 	}
 	
@@ -31,11 +32,11 @@ public class VoltShockGrenadeAbility : Ability
 	}
 	
 	//TODO:
-	//Add gravity to the Shock Grenade Projectile (the gravity value should be set in this script)
-	//Add explosion radius to the Shock Grenade Projectile (the radius value should be set in this script)
-	//Make an enum for damageEffects (characterCombat script OR playerStats script)
+	//Adjust animation
+	//Make an enum for damageEffects (PlayerStats script)
 	
-	
+	//DONE: Make the player unable to move or attack when casting this ability
+	//DONE: Add gravity to the Shock Grenade Projectile (the gravity value should be set in this script)
 	//DONE: Create electric particles - used when the grenade detonates
 	//DONE: Implement animation - add an animator reference, add a SetTrigger
 	//DONE: Create a DealProjectileDamage method - used on collider collision (ProjectileLogic script)

@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Ability : MonoBehaviour
 {
-    public Sprite abilityIcon;
+    public PlayerStats playerStats;
+	
+	public Sprite abilityIcon;
 	public string abilityName;
 	
 	public int abilityDamage;
@@ -30,19 +32,39 @@ public class Ability : MonoBehaviour
 	
 	public void Use()
 	{
-		if(abilityReady)
+		if(playerStats.canCastAbility)
 		{
-			activeCooldown = abilityCooldown;
-			ActivateAbility();
+			if(abilityReady)
+			{
+				activeCooldown = abilityCooldown;
+				ActivateAbility();
+			}
+			else
+			{
+				Debug.Log(abilityName + " is not ready. " + activeCooldown);
+			}
 		}
-		else
-		{
-			Debug.Log(abilityName + " is not ready. " + activeCooldown);
-		}
+	}
+	
+	public void CastingAbility()
+	{
+		playerStats.canMove = false;
+		playerStats.canAttack = false;
+	}
+	
+	public void CanUseAbility()
+	{
+		playerStats.canCastAbility = true;
+	}
+	
+	public void CantUseAbility()
+	{
+		playerStats.canCastAbility = false;
 	}
 	
 	public virtual void ActivateAbility()
 	{
 		Debug.Log("You used " + abilityName);
 	}
+	
 }

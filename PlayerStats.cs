@@ -9,7 +9,7 @@ public class PlayerStats : MonoBehaviour
 	
 	public float movementSpeed = 35;
 	public float dodgeRange = 40;
-	public bool canMove=true;
+	public bool canMove = true;
 	
 	public float comboTime = 3;
 	public bool canAttack = true;
@@ -21,6 +21,8 @@ public class PlayerStats : MonoBehaviour
 	
 	public float knockbackForce = 10;
 	public float knockbackDuration = 1.2f;
+	
+	public bool canCastAbility = true;
 	
 	// Start is called before the first frame update
     void Start()

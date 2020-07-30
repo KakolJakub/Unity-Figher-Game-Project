@@ -18,12 +18,13 @@ public class ProjectileLogic : MonoBehaviour
 	public bool explodesOnImpact;
 	public bool dealsDamage;
 	
-	public void SetProjectileStats(int damage, int statusNumber, float speed, float lifetime)
+	public void SetProjectileStats(int damage, int statusNumber, float speed, float lifetime, float gravity)
 	{
 		projectileDamage = damage;
 		projectileDamageStatusNumber = statusNumber;
 		projectileSpeed = speed;
 		projectileLifeTime = lifetime;
+		rigidbodyReference.gravityScale = gravity;
 	}
 	
 	public void SetProjectileEffects(ParticleSystem effect)
@@ -84,6 +85,7 @@ public class ProjectileLogic : MonoBehaviour
 	
 	void StopProjectile()
 	{
+		rigidbodyReference.gravityScale = 0;
 		rigidbodyReference.velocity = new Vector2(0,0);
 	}
 }
