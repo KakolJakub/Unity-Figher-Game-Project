@@ -32,8 +32,9 @@ public class VoltShockGrenadeAbility : Ability
 	}
 	
 	//TODO:
-	//Adjust animation
-	//Make an enum for damageEffects (PlayerStats script)
+	//Make final touches: Adjust animation (look and speed), Check for bugs
+	//Maybe add energyColor to CharacterAbilities Script
+	//Make an enum for damageEffects
 	
 	//DONE: Make the player unable to move or attack when casting this ability
 	//DONE: Add gravity to the Shock Grenade Projectile (the gravity value should be set in this script)
