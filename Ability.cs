@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Ability : MonoBehaviour
 {
-    public PlayerStats playerStats;
+    public Animator animate;
+	
+	public PlayerStats playerStats;
 	
 	public Sprite abilityIcon;
 	public string abilityName;

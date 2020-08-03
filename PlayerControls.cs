@@ -66,10 +66,15 @@ public class PlayerControls : MonoBehaviour
 		}
 		
 		//TESTING ONLY:
-		if(Input.GetKeyDown(KeyCode.P))
+		if(Input.GetKeyDown(KeyCode.I))
 		{
 			characterAbilities2D=GetComponent<CharacterAbilities2D>();
 			characterAbilities2D.ability1.Use();
+		}
+		if(Input.GetKeyDown(KeyCode.O))
+		{
+			characterAbilities2D=GetComponent<CharacterAbilities2D>();
+			characterAbilities2D.ability2.Use();
 		}
     }
 }

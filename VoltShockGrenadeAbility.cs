@@ -6,7 +6,6 @@ public class VoltShockGrenadeAbility : Ability
 {	
 	public Transform projectileSpawnPoint;
 	public Transform projectile;
-	public Animator animate;
 	
 	public ParticleSystem explosion;
 	
