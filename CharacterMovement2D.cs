@@ -122,17 +122,37 @@ public class CharacterMovement2D : MonoBehaviour
 		if(m_FacingRight)
 		{
 			m_Rigidbody2D.velocity = Vector2.left * playerStats.knockbackForce;
-			Invoke("ResetVelocity", playerStats.knockbackDuration);
 		}
 		if(!m_FacingRight)
 		{
 			m_Rigidbody2D.velocity = Vector2.right * playerStats.knockbackForce;
-			Invoke("ResetVelocity", playerStats.knockbackDuration);
 		}
 		else
 		{
 			return;
 		}
+	}
+	
+	public void MovePlayerForward(float distance)
+	{
+		if(!m_FacingRight)
+		{
+			m_Rigidbody2D.velocity = Vector2.left * distance;
+		}
+		if(m_FacingRight)
+		{
+			m_Rigidbody2D.velocity = Vector2.right * distance;
+		}
+		else
+		{
+			return;
+		}
+	}
+	
+	//Used via animation events on knockback animation
+	public void ResetVelocity()
+	{
+		m_Rigidbody2D.velocity = new Vector2(0.0f, 0.0f);
 	}
 	
 	public void Dodge(string direction)
@@ -174,10 +194,6 @@ public class CharacterMovement2D : MonoBehaviour
 		{
 			return;
 		}
-	}
-	private void ResetVelocity()
-	{
-		m_Rigidbody2D.velocity=new Vector2(0.0f, 0.0f);
 	}
 	
 	/*

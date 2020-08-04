@@ -174,6 +174,7 @@ public class CharacterCombat2D : MonoBehaviour
 	{
 		playerStats.canMove = false;
 		playerStats.canAttack = false;
+		playerStats.canCastAbility = false;
 		animate.SetTrigger("Hurt");
 	}
 	
@@ -183,6 +184,7 @@ public class CharacterCombat2D : MonoBehaviour
 		
 		playerStats.canMove = false;
 		playerStats.canAttack = false;
+		playerStats.canCastAbility = false;
 	}
 	
 	void OnDrawGizmosSelected()

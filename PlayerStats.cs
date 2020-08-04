@@ -20,7 +20,6 @@ public class PlayerStats : MonoBehaviour
 	public int thirdAttackDamage = 30;
 	
 	public float knockbackForce = 10;
-	public float knockbackDuration = 1.2f;
 	
 	public bool canCastAbility = true;
 	
