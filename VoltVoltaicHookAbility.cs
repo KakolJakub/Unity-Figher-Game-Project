@@ -31,21 +31,29 @@ public class VoltVoltaicHookAbility : Ability
 	   RaycastHit2D ropeImpact = Physics2D.Raycast(ropeSpawnPoint.position, ropeSpawnPoint.right);
 	   if(ropeImpact)
 	   {
-		   Instantiate(rope, ropeSpawnPoint.position, ropeSpawnPoint.rotation);
 		   rope.SetPosition(0, ropeSpawnPoint.position);
 		   rope.SetPosition(1, ropeImpact.point);
 		   attachRope = true;
 		   Debug.Log("You attached the rope");
 	   }
+	   else
+	   {
+		   rope.SetPosition(0, ropeSpawnPoint.position);
+		   rope.SetPosition(1, ropeSpawnPoint.position + ropeSpawnPoint.right * 100);
+	   }
+	   rope.enabled = true;
    }
-   
-   void Update()
+
+   void FixedUpdate()
    {
 	   if(attachRope)
 	   {
-		   //TO FIX: Rope needs to update its position properly
 		   rope.SetPosition(0, ropeSpawnPoint.position);
-		   Debug.Log(ropeSpawnPoint.position);
 	   }
+   }
+   
+   void Start()
+   {
+	   rope.enabled = false;
    }
 }

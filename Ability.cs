@@ -69,4 +69,9 @@ public class Ability : MonoBehaviour
 		Debug.Log("You used " + abilityName);
 	}
 	
+	public void ResetCooldown()
+	{
+		abilityCooldown = 0;
+	}
+	
 }
