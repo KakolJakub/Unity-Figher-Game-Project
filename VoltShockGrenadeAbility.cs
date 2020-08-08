@@ -9,14 +9,13 @@ public class VoltShockGrenadeAbility : Ability
 	
 	public ParticleSystem explosion;
 	
-	public int damageEffect;
 	public float grenadeSpeed;
 	public float grenadeLifeTime;
 	public float grenadeGravity;
 	
 	void Start()
 	{
-		projectile.GetComponent<ProjectileLogic>().SetProjectileStats(abilityDamage, damageEffect, grenadeSpeed, grenadeLifeTime, grenadeGravity);
+		projectile.GetComponent<ProjectileLogic>().SetProjectileStats(abilityDamage, abilityDamageEffect, grenadeSpeed, grenadeLifeTime, grenadeGravity);
 		projectile.GetComponent<ProjectileLogic>().SetProjectileEffects(explosion);
 	}
 	

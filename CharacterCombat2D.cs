@@ -35,6 +35,11 @@ public class CharacterCombat2D : MonoBehaviour
 				break;
 		}
 		
+		DealCombatDamage(damage, number);
+	}
+	
+	public void DealCombatDamage(int damage, int number)
+	{
 		Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 		
 		foreach(Collider2D enemy in hitEnemies)

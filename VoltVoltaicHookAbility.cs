@@ -43,7 +43,12 @@ public class VoltVoltaicHookAbility : Ability
 	   }
 	   rope.enabled = true;
    }
-
+   
+   public void DealVoltaicHookDamage()
+   {
+	   GetComponent<CharacterCombat2D>().DealCombatDamage(abilityDamage, abilityDamageEffect);
+   }
+   
    void FixedUpdate()
    {
 	   if(attachRope)

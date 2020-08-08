@@ -12,6 +12,7 @@ public class Ability : MonoBehaviour
 	public string abilityName;
 	
 	public int abilityDamage;
+	public int abilityDamageEffect;
 	
 	public float abilityCooldown;
 	float activeCooldown;
