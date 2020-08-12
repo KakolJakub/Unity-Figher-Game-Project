@@ -30,6 +30,7 @@ public class VoltShockGrenadeAbility : Ability
 	}
 	
 	//TODO:
+	//Adjust grenade animation to fit the direction
 	//Maybe add energyColor to CharacterAbilities Script
 	//Make an enum for damageEffects
 	

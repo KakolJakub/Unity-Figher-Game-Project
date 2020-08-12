@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class VoltVoltaicHookAbility : Ability
 {
+   //TODO: Complete animation
    //TODO: Try Raycast approach
    //OR:
    //Create animation trigger
@@ -15,7 +16,6 @@ public class VoltVoltaicHookAbility : Ability
    //-> then the rope shortens in the direction of ropeEndPoint
    //-> Player moves in the same direction
    //-> At the end of animation destroy the rope object and stop moving the player
-   
    //TO SOLVE: Extending the rope only in one direction
    //TO SOLVE: Attaching the ropeEndPoint to the hit Collider2D
    
