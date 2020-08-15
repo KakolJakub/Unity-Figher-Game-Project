@@ -13,7 +13,7 @@ public class VoltVoltaicHookAbility : Ability
    //-> the ropeBeginPoint
    //-> when spawned, the rope needs to extend in the direction of ropeEndPoint (change Transform values and SpriteRenderer values accordingly)
    //-> when ropeEndPoint enters another Collider2D it stops extending and "attaches" to the Collider2D (NEEDS SOLVING)
-   //-> then the rope shortens in the direction of ropeEndPoint
+   //-> then the rope shortens in the direction of ropeEndPoint OR ropeBeginPoint (no decision yet)
    //-> Player moves in the same direction
    //-> At the end of animation destroy the rope object and stop moving the player
    //TO SOLVE: Extending the rope only in one direction
