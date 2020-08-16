@@ -24,6 +24,8 @@ public class VoltVoltaicHookAbility : Ability
    public Transform ropeSpawnPoint;
    public LineRenderer rope;
 
+   public float pullDistance;
+   
    bool attachRope;
    
    public override void ActivateAbility()
@@ -44,9 +46,14 @@ public class VoltVoltaicHookAbility : Ability
 	   rope.enabled = true;
    }
    
-   public void DealVoltaicHookDamage()
+   public void VoltaicHook_DealDamage()
    {
 	   GetComponent<CharacterCombat2D>().DealCombatDamage(abilityDamage, abilityDamageEffect);
+   }
+   
+   public void VoltaicHook_Pull()
+   {
+	   GetComponent<CharacterMovement2D>().MovePlayerForward(pullDistance);
    }
    
    void FixedUpdate()

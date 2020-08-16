@@ -24,7 +24,7 @@ public class VoltShockGrenadeAbility : Ability
 		animate.SetTrigger("Ability_ShockGrenade");
 	}
 	
-	public void ThrowGrenade()
+	public void ShockGrenade_ThrowGrenade()
 	{
 		Instantiate(projectile, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
 	}
