@@ -30,6 +30,11 @@ public class VoltVoltaicHookAbility : Ability
    
    public override void ActivateAbility()
    {
+	   animate.SetTrigger("Ability_VoltaicHook");
+   }
+   
+   public void VoltaicHook_Fire()
+   {
 	   RaycastHit2D ropeImpact = Physics2D.Raycast(ropeSpawnPoint.position, ropeSpawnPoint.right);
 	   if(ropeImpact)
 	   {
