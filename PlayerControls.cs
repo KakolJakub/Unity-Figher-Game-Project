@@ -1,10 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerControls : MonoBehaviour
 {
     public PlayerStats stats;
+	
+	public KeyCode moveLeft;
+	public KeyCode moveRight;
+	public KeyCode attack;
+	public KeyCode block;
+	public KeyCode firstAbility;
+	public KeyCode secondAbility;
+	public KeyCode thirdAbility;
 	
 	private CharacterMovement2D characterMovement2D;
 	private CharacterCombat2D characterCombat2D;
@@ -19,47 +28,47 @@ public class PlayerControls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKey(KeyCode.A))
+        if(Input.GetKey(moveLeft))
 		{
 			characterMovement2D=GetComponent<CharacterMovement2D>();
 			characterMovement2D.Move(-stats.movementSpeed*Time.fixedDeltaTime);
 		}
-		if(Input.GetKeyUp(KeyCode.A))
+		if(Input.GetKeyUp(moveLeft))
 		{
 			characterMovement2D=GetComponent<CharacterMovement2D>();
 			characterMovement2D.DontMove();
 			characterMovement2D=null;
 		}
-		if(Input.GetKeyDown(KeyCode.A))
+		if(Input.GetKeyDown(moveLeft))
 		{
 			characterMovement2D=GetComponent<CharacterMovement2D>();
 			characterMovement2D.Dodge("Left");
 		}
 		
-		if(Input.GetKey(KeyCode.D))
+		if(Input.GetKey(moveRight))
 		{
 			characterMovement2D=GetComponent<CharacterMovement2D>();
 			characterMovement2D.Move(stats.movementSpeed*Time.fixedDeltaTime);
 		}
-		if(Input.GetKeyUp(KeyCode.D))
+		if(Input.GetKeyUp(moveRight))
 		{
 			characterMovement2D=GetComponent<CharacterMovement2D>();
 			characterMovement2D.DontMove();
 			characterMovement2D=null;
 		}
-		if(Input.GetKeyDown(KeyCode.D))
+		if(Input.GetKeyDown(moveRight))
 		{
 			characterMovement2D=GetComponent<CharacterMovement2D>();
 			characterMovement2D.Dodge("Right");
 		}
 		
-		if(Input.GetKeyDown(KeyCode.Space))
+		if(Input.GetKeyDown(attack))
 		{
 			characterCombat2D=GetComponent<CharacterCombat2D>();
 			characterCombat2D.Attack();
 		}
 		
-		if(Input.GetKeyDown(KeyCode.LeftShift))
+		if(Input.GetKeyDown(block))
 		{
 			characterCombat2D=GetComponent<CharacterCombat2D>();
 			characterCombat2D.Block();
@@ -76,5 +85,17 @@ public class PlayerControls : MonoBehaviour
 			characterAbilities2D=GetComponent<CharacterAbilities2D>();
 			characterAbilities2D.ability2.Use();
 		}
+		
     }
+	
+	public void DetectKey()
+	{
+		foreach(KeyCode code in Enum.GetValues(typeof(KeyCode)))
+		{
+			if (Input.GetKeyDown(code))
+			{  
+				Debug.Log("KeyCode down: " + code);
+			}
+		}
+	}
 }
