@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Attacks
+{
+	First, Second, Third
+}
+
 public class CharacterCombat2D : MonoBehaviour
 {
 	public PlayerStats playerStats;
@@ -15,56 +20,61 @@ public class CharacterCombat2D : MonoBehaviour
 	bool canCombo=false; 
 	int clickAmount=0;
 		
-	public void DealAttackDamage(int number)
+	public void DealAttackDamage(Attacks number)
 	{
 		int damage;
+		DamageEffects damageEffect;
 		
 		switch(number)
 		{
-			case 1 :
-				damage=playerStats.firstAttackDamage;
+			case Attacks.First :
+				damage = playerStats.firstAttackDamage;
+				damageEffect = DamageEffects.Hit;
 				break;
-			case 2 :
-				damage=playerStats.secondAttackDamage;
+			case Attacks.Second :
+				damage = playerStats.secondAttackDamage;
+				damageEffect = DamageEffects.Hurt;
 				break;
-			case 3 :
-				damage=playerStats.thirdAttackDamage;
+			case Attacks.Third :
+				damage = playerStats.thirdAttackDamage;
+				damageEffect = DamageEffects.Knockback;
 				break;
 			default:
-				damage=playerStats.firstAttackDamage;
+				damage = playerStats.firstAttackDamage;
+				damageEffect = DamageEffects.Hit;
 				break;
 		}
 		
-		DealCombatDamage(damage, number);
+		DealCombatDamage(damage, damageEffect);
 	}
 	
-	public void DealCombatDamage(int damage, int number)
+	public void DealCombatDamage(int damage, DamageEffects effect)
 	{
 		Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 		
 		foreach(Collider2D enemy in hitEnemies)
 		{
-			enemy.GetComponent<CharacterCombat2D>().TakeDamage(damage, number);
+			enemy.GetComponent<CharacterCombat2D>().TakeDamage(damage, effect);
 		}
 	}
 	
-	public void TakeDamage(int damage, int number)
+	public void TakeDamage(int damage, DamageEffects effect)
 	{
 		if(!playerStats.blocking)
 		{
-			switch(number)
+			switch(effect)
 			{
-			case 1 :
+			case DamageEffects.Hit :
 				//Spawn hit particle
-				Debug.Log("Took first attack damage: " + damage);
+				Debug.Log(name + " affected by: " + effect);
 				break;
-			case 2 :
+			case DamageEffects.Hurt :
 				Hurt();
-				Debug.Log("Took second attack damage: " + damage);
+				Debug.Log(name + " affected by: " + effect);
 				break;
-			case 3 :
+			case DamageEffects.Knockback :
 				Knockback();
-				Debug.Log("Took third attack damage: " + damage);
+				Debug.Log(name + " affected by: " + effect);
 				break;
 			default:
 				Debug.Log("Took damage");
@@ -205,15 +215,15 @@ public class CharacterCombat2D : MonoBehaviour
 	{
 		if(Input.GetKeyDown(KeyCode.Alpha1))
 		{
-			TakeDamage(playerStats.firstAttackDamage,1);
+			TakeDamage(playerStats.firstAttackDamage, (DamageEffects)0);
 		}
 		if(Input.GetKeyDown(KeyCode.Alpha2))
 		{
-			TakeDamage(playerStats.secondAttackDamage,2);
+			TakeDamage(playerStats.secondAttackDamage, (DamageEffects)1);
 		}
 		if(Input.GetKeyDown(KeyCode.Alpha3))
 		{
-			TakeDamage(playerStats.thirdAttackDamage,3);
+			TakeDamage(playerStats.thirdAttackDamage, (DamageEffects)2);
 		}
 	}
 }

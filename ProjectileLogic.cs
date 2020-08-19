@@ -7,7 +7,7 @@ public class ProjectileLogic : MonoBehaviour
     [SerializeField] float projectileLifeTime;
 	[SerializeField] float projectileSpeed;
 	[SerializeField] int projectileDamage;
-	[SerializeField] int projectileDamageStatusNumber;
+	[SerializeField] DamageEffects projectileDamageStatusNumber;
 	
 	[SerializeField] ParticleSystem projectileExplosion;
 	
@@ -18,7 +18,7 @@ public class ProjectileLogic : MonoBehaviour
 	public bool explodesOnImpact;
 	public bool dealsDamage;
 	
-	public void SetProjectileStats(int damage, int statusNumber, float speed, float lifetime, float gravity)
+	public void SetProjectileStats(int damage, DamageEffects statusNumber, float speed, float lifetime, float gravity)
 	{
 		projectileDamage = damage;
 		projectileDamageStatusNumber = statusNumber;
@@ -69,7 +69,7 @@ public class ProjectileLogic : MonoBehaviour
        Destroy(gameObject, projectileLifeTime);
     }
 	
-	void DealProjectileDamage(Collider2D enemy, int damage, int statusNumber)
+	void DealProjectileDamage(Collider2D enemy, int damage, DamageEffects statusNumber)
 	{
 		CharacterCombat2D enemyCombatSystem = enemy.GetComponent<CharacterCombat2D>();
 		if (enemy != null)

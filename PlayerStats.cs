@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum DamageEffects
+{
+	Hit, Hurt, Knockback
+}
+
 public class PlayerStats : MonoBehaviour
 {
     
