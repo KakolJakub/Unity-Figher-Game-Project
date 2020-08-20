@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Attacks
+public enum MeleeAttack
 {
 	First, Second, Third
 }
@@ -20,35 +20,35 @@ public class CharacterCombat2D : MonoBehaviour
 	bool canCombo=false; 
 	int clickAmount=0;
 		
-	public void DealAttackDamage(Attacks number)
+	public void DealAttackDamage(MeleeAttack number)
 	{
 		int damage;
-		DamageEffects damageEffect;
+		DamageEffect damageEffect;
 		
 		switch(number)
 		{
-			case Attacks.First :
+			case MeleeAttack.First :
 				damage = playerStats.firstAttackDamage;
-				damageEffect = DamageEffects.Hit;
+				damageEffect = DamageEffect.Hit;
 				break;
-			case Attacks.Second :
+			case MeleeAttack.Second :
 				damage = playerStats.secondAttackDamage;
-				damageEffect = DamageEffects.Hurt;
+				damageEffect = DamageEffect.Hurt;
 				break;
-			case Attacks.Third :
+			case MeleeAttack.Third :
 				damage = playerStats.thirdAttackDamage;
-				damageEffect = DamageEffects.Knockback;
+				damageEffect = DamageEffect.Knockback;
 				break;
 			default:
 				damage = playerStats.firstAttackDamage;
-				damageEffect = DamageEffects.Hit;
+				damageEffect = DamageEffect.Hit;
 				break;
 		}
 		
 		DealCombatDamage(damage, damageEffect);
 	}
 	
-	public void DealCombatDamage(int damage, DamageEffects effect)
+	public void DealCombatDamage(int damage, DamageEffect effect)
 	{
 		Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 		
@@ -58,21 +58,21 @@ public class CharacterCombat2D : MonoBehaviour
 		}
 	}
 	
-	public void TakeDamage(int damage, DamageEffects effect)
+	public void TakeDamage(int damage, DamageEffect effect)
 	{
 		if(!playerStats.blocking)
 		{
 			switch(effect)
 			{
-			case DamageEffects.Hit :
+			case DamageEffect.Hit :
 				//Spawn hit particle
 				Debug.Log(name + " affected by: " + effect);
 				break;
-			case DamageEffects.Hurt :
+			case DamageEffect.Hurt :
 				Hurt();
 				Debug.Log(name + " affected by: " + effect);
 				break;
-			case DamageEffects.Knockback :
+			case DamageEffect.Knockback :
 				Knockback();
 				Debug.Log(name + " affected by: " + effect);
 				break;
@@ -215,15 +215,15 @@ public class CharacterCombat2D : MonoBehaviour
 	{
 		if(Input.GetKeyDown(KeyCode.Alpha1))
 		{
-			TakeDamage(playerStats.firstAttackDamage, (DamageEffects)0);
+			TakeDamage(playerStats.firstAttackDamage, (DamageEffect)0);
 		}
 		if(Input.GetKeyDown(KeyCode.Alpha2))
 		{
-			TakeDamage(playerStats.secondAttackDamage, (DamageEffects)1);
+			TakeDamage(playerStats.secondAttackDamage, (DamageEffect)1);
 		}
 		if(Input.GetKeyDown(KeyCode.Alpha3))
 		{
-			TakeDamage(playerStats.thirdAttackDamage, (DamageEffects)2);
+			TakeDamage(playerStats.thirdAttackDamage, (DamageEffect)2);
 		}
 	}
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum DamageEffects
+public enum DamageEffect
 {
 	Hit, Hurt, Knockback
 }
