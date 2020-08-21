@@ -22,6 +22,7 @@ public class VoltVoltaicHookAbility : Ability
    //DONE: Animator reference should be put in the base Ability script (since every ability needs an Animator reference)
    
    public Transform ropeSpawnPoint;
+   public Transform ropeTip;
    public LineRenderer rope;
 
    public float pullDistance;
@@ -35,19 +36,9 @@ public class VoltVoltaicHookAbility : Ability
    
    public void VoltaicHook_Fire()
    {
-	   RaycastHit2D ropeImpact = Physics2D.Raycast(ropeSpawnPoint.position, ropeSpawnPoint.right);
-	   if(ropeImpact)
-	   {
-		   rope.SetPosition(0, ropeSpawnPoint.position);
-		   rope.SetPosition(1, ropeImpact.point);
-		   attachRope = true;
-		   Debug.Log("You attached the rope");
-	   }
-	   else
-	   {
-		   rope.SetPosition(0, ropeSpawnPoint.position);
-		   rope.SetPosition(1, ropeSpawnPoint.position + ropeSpawnPoint.right * 100);
-	   }
+	   Instantiate(ropeTip, ropeSpawnPoint.position, ropeSpawnPoint.rotation);
+	   rope.SetPosition(0, ropeSpawnPoint.position);
+	   rope.SetPosition(1, GameObject.Find("TestRopeTip(Clone)").transform.position); //change this line
 	   rope.enabled = true;
    }
    
@@ -63,9 +54,11 @@ public class VoltVoltaicHookAbility : Ability
    
    void FixedUpdate()
    {
-	   if(attachRope)
+	   if(rope.enabled)
 	   {
 		   rope.SetPosition(0, ropeSpawnPoint.position);
+		   rope.SetPosition(1, GameObject.Find("TestRopeTip(Clone)").transform.position);
+		   //Debug.Log(GameObject.Find("TestRopeTip(Clone)").transform.position);
 	   }
    }
    

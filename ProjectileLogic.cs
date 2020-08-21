@@ -15,6 +15,7 @@ public class ProjectileLogic : MonoBehaviour
 	public Animator animatorReference;
 	
 	public bool movesOnSpawn;
+	public bool stopsOnImpact;
 	public bool explodesOnImpact;
 	public bool dealsDamage;
 	
@@ -49,13 +50,20 @@ public class ProjectileLogic : MonoBehaviour
 		{
 			MoveProjectile();	
 		}
+		if(explodesOnImpact)
+		{
+			stopsOnImpact = true;
+		}
 	}
 	
 	void OnTriggerEnter2D(Collider2D enemy)
 	{		
-		if(explodesOnImpact)
+		if(stopsOnImpact)
 		{
 			StopProjectile();
+		}
+		if(explodesOnImpact)
+		{
 			animatorReference.SetTrigger("Detonate");
 		}
 		if(dealsDamage)
