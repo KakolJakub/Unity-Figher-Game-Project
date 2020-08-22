@@ -96,4 +96,9 @@ public class ProjectileLogic : MonoBehaviour
 		rigidbodyReference.gravityScale = 0;
 		rigidbodyReference.velocity = new Vector2(0,0);
 	}
+	
+	void MoveProjectileBackwards()
+	{
+		rigidbodyReference.velocity = transform.right * projectileSpeed * (-1);
+	}
 }

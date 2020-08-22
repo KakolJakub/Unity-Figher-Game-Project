@@ -27,19 +27,27 @@ public class VoltVoltaicHookAbility : Ability
 
    public float pullDistance;
    
+   string ropeTipName;
    bool attachRope;
    
    public override void ActivateAbility()
    {
-	   animate.SetTrigger("Ability_VoltaicHook");
+	   VoltaicHook_Fire();
+	   //animate.SetTrigger("Ability_VoltaicHook");
    }
    
    public void VoltaicHook_Fire()
    {
-	   Instantiate(ropeTip, ropeSpawnPoint.position, ropeSpawnPoint.rotation);
-	   rope.SetPosition(0, ropeSpawnPoint.position);
-	   rope.SetPosition(1, GameObject.Find("TestRopeTip(Clone)").transform.position); //change this line
-	   rope.enabled = true;
+	   //DONE: Instantiate RopeTip
+	   //DONE: LineRenderer follows RopeTip
+	   //DONE: When tip hits target it stops moving
+	   //TODO: if it doesn't in X seconds it moves back
+	   //TODO: when tip hits target, perform VoltaicHook_Pull()
+	   SpawnRope();
+	   //if()
+	   //{
+		//   VoltaicHook_Pull();
+	   //}
    }
    
    public void VoltaicHook_DealDamage()
@@ -56,14 +64,37 @@ public class VoltVoltaicHookAbility : Ability
    {
 	   if(rope.enabled)
 	   {
-		   rope.SetPosition(0, ropeSpawnPoint.position);
-		   rope.SetPosition(1, GameObject.Find("TestRopeTip(Clone)").transform.position);
-		   //Debug.Log(GameObject.Find("TestRopeTip(Clone)").transform.position);
+		   TrackRopeTip();
 	   }
    }
    
    void Start()
    {
 	   rope.enabled = false;
+	   GetRopeTipName();
+   }
+   
+   void SpawnRope()
+   {
+	   Instantiate(ropeTip, ropeSpawnPoint.position, ropeSpawnPoint.rotation);
+	   TrackRopeTip();
+	   rope.enabled = true;
+   }
+   
+   void TrackRopeTip()
+   {
+	   rope.SetPosition(0, ropeSpawnPoint.position); 
+	   rope.SetPosition(1, GetRopeTipPosition());
+   }
+   
+   void GetRopeTipName()
+   {
+	   string clonePrefix = "(Clone)";
+	   ropeTipName = ropeTip.name + clonePrefix;
+   }
+   
+   Vector3 GetRopeTipPosition()
+   {
+	   return GameObject.Find(ropeTipName).transform.position;
    }
 }
