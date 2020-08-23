@@ -44,10 +44,10 @@ public class VoltVoltaicHookAbility : Ability
 	   //TODO: if it doesn't in X seconds it moves back
 	   //TODO: when tip hits target, perform VoltaicHook_Pull()
 	   SpawnRope();
-	   //if()
-	   //{
-		//   VoltaicHook_Pull();
-	   //}
+	   
+	   //IDEA: Make RopeTip a child of Player
+	   //Move the RopeTip via this script
+	   //
    }
    
    public void VoltaicHook_DealDamage()
@@ -79,6 +79,11 @@ public class VoltVoltaicHookAbility : Ability
 	   Instantiate(ropeTip, ropeSpawnPoint.position, ropeSpawnPoint.rotation);
 	   TrackRopeTip();
 	   rope.enabled = true;
+   }
+   
+   void HideRope()
+   {
+	   rope.enabled = false;
    }
    
    void TrackRopeTip()
