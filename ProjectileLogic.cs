@@ -19,6 +19,8 @@ public class ProjectileLogic : MonoBehaviour
 	public bool explodesOnImpact;
 	public bool dealsDamage;
 	
+	public bool Impact { get; private set; }
+	
 	public void SetProjectileStats(int damage, DamageEffect statusNumber, float speed, float lifetime, float gravity)
 	{
 		projectileDamage = damage;
@@ -60,6 +62,7 @@ public class ProjectileLogic : MonoBehaviour
 	{		
 		if(stopsOnImpact)
 		{
+			Impact = true;
 			StopProjectile();
 		}
 		if(explodesOnImpact)

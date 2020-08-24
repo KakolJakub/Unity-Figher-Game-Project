@@ -32,10 +32,12 @@ public class VoltVoltaicHookAbility : Ability
    
    public override void ActivateAbility()
    {
-	   VoltaicHook_Fire();
 	   //animate.SetTrigger("Ability_VoltaicHook");
+	   //testing only:
+	   VoltaicHook_Fire();
    }
    
+   //used via animation event
    public void VoltaicHook_Fire()
    {
 	   //DONE: Instantiate RopeTip
@@ -50,18 +52,26 @@ public class VoltVoltaicHookAbility : Ability
 	   //
    }
    
+   //used via animation event
    public void VoltaicHook_DealDamage()
    {
 	   GetComponent<CharacterCombat2D>().DealCombatDamage(abilityDamage, abilityDamageEffect);
    }
    
+   //used via animation event
    public void VoltaicHook_Pull()
    {
-	   GetComponent<CharacterMovement2D>().MovePlayerForward(pullDistance);
+	   if(attachRope)
+	   {
+		   //animate.SetTrigger("pull")....
+	   }
+	   //GetComponent<CharacterMovement2D>().MovePlayerForward(pullDistance);
    }
    
    void FixedUpdate()
    {
+	   attachRope = GetRopeTipImpactInfo();
+	   
 	   if(rope.enabled)
 	   {
 		   TrackRopeTip();
@@ -70,6 +80,7 @@ public class VoltVoltaicHookAbility : Ability
    
    void Start()
    {
+	   attachRope = false;
 	   rope.enabled = false;
 	   GetRopeTipName();
    }
@@ -98,8 +109,37 @@ public class VoltVoltaicHookAbility : Ability
 	   ropeTipName = ropeTip.name + clonePrefix;
    }
    
+   //IDEA: store the RopeTip object as a variable, in case duplicates appear
+   
+   bool GetRopeTipImpactInfo()
+   {
+	   bool ropeImpactInfo;
+	   
+	   if(GameObject.Find(ropeTipName) == null)
+	   {
+		   ropeImpactInfo = false;
+	   }
+	   else
+	   {
+		   ropeImpactInfo = GameObject.Find(ropeTipName).GetComponent<ProjectileLogic>().Impact;
+	   }
+	   
+	   return ropeImpactInfo;
+   }
+   
    Vector3 GetRopeTipPosition()
    {
-	   return GameObject.Find(ropeTipName).transform.position;
+	   Vector3 ropeTipPosition;
+	   
+	   if(GameObject.Find(ropeTipName) == null)
+	   {
+		   ropeTipPosition = new Vector3(0,0,0);
+	   }
+	   else
+	   {
+		   ropeTipPosition = GameObject.Find(ropeTipName).transform.position;
+	   }
+	   
+	   return ropeTipPosition;
    }
 }
