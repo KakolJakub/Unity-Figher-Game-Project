@@ -59,13 +59,22 @@ public class VoltVoltaicHookAbility : Ability
    }
    
    //used via animation event
-   public void VoltaicHook_Pull()
+   public void VoltaicHook_X()
    {
 	   if(attachRope)
 	   {
-		   //animate.SetTrigger("pull")....
+		   //animate.SetTrigger("VH_Pull").....
 	   }
-	   //GetComponent<CharacterMovement2D>().MovePlayerForward(pullDistance);
+	   else
+	   {
+		   //animate.SetTrigger("VH_Return").....
+	   }
+   }
+   
+   //used via animation event
+   public void VoltaicHook_Pull()
+   {
+	   GetComponent<CharacterMovement2D>().MovePlayerForward(pullDistance);
    }
    
    void FixedUpdate()
