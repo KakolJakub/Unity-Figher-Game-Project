@@ -11,10 +11,10 @@ Backup C# scripts for my Unity project, in case of data loss.
 Developing Combat Gameplay.
 
 ## Planned features
-* Combat gameplay
-* Main menu
-* Character selection screen
-* Arena selection screen
+* Combat Gameplay
+* Main Menu
+* Character Selection Screen
+* Arena Selection Screen
 
 ## Technologies
 Project is created with:
