@@ -8,8 +8,11 @@
 Backup C# scripts for my Unity project, in case of data loss.
 
 ## Planned features
-In the final version the game should include main menu, character selection screen, arena selection screen and combat gameplay.
-	
+*Combat gameplay
+*Main menu
+*Character selection screen
+*Arena selection screen
+
 ## Technologies
 Project is created with:
 * Visual Studio Community 2019
