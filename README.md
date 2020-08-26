@@ -7,11 +7,14 @@
 ## General info
 Backup C# scripts for my Unity project, in case of data loss.
 
+## Status
+Developing Combat Gameplay.
+
 ## Planned features
-*Combat gameplay
-*Main menu
-*Character selection screen
-*Arena selection screen
+* Combat gameplay
+* Main menu
+* Character selection screen
+* Arena selection screen
 
 ## Technologies
 Project is created with:
