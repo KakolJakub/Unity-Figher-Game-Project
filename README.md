@@ -1,6 +1,7 @@
 # Unity Fighter Game Project
 ## Table of contents
 * [General info](#general-info)
+* [Status](#status)
 * [Planned features](#planned-features)
 * [Technologies](#technologies)
 
