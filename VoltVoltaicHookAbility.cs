@@ -59,7 +59,7 @@ public class VoltVoltaicHookAbility : Ability
    }
    
    //used via animation event
-   public void VoltaicHook_X()
+   public void VoltaicHook_Adjust()
    {
 	   if(attachRope)
 	   {
@@ -142,7 +142,7 @@ public class VoltVoltaicHookAbility : Ability
 	   
 	   if(GameObject.Find(ropeTipName) == null)
 	   {
-		   ropeTipPosition = new Vector3(0,0,0);
+		   ropeTipPosition = ropeSpawnPoint.position;
 	   }
 	   else
 	   {
