@@ -41,7 +41,7 @@ public class CharacterMovement2D : MonoBehaviour
 	
 	private void Update()
 	{
-	//TODO-Dodge method and timer
+		//TODO: Dodge method and timer
 		if(dodgeTimer>0)
 		{
 			dodgeTimer-=Time.deltaTime;
@@ -155,7 +155,7 @@ public class CharacterMovement2D : MonoBehaviour
 		m_Rigidbody2D.velocity = new Vector2(0.0f, 0.0f);
 	}
 	
-	public void Dodge(string direction)
+	public void Dodge(string direction) //TODO: Consider making an Enum
 	{
 		if(direction == "Left")
 		{

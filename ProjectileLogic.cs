@@ -19,7 +19,7 @@ public class ProjectileLogic : MonoBehaviour
 	public bool explodesOnImpact;
 	public bool dealsDamage;
 	
-	public bool Impact { get; private set; } //TODO: Consider adding [SerializeField] attribute
+	public bool Impact { get; private set; }
 	
 	public void SetProjectileStats(int damage, DamageEffect statusNumber, float speed, float lifetime, float gravity)
 	{

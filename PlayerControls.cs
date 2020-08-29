@@ -88,6 +88,9 @@ public class PlayerControls : MonoBehaviour
 		
     }
 	
+	//IDEA:
+	//Probably not in this script
+	//Instead of returning nothing, return KeyCode
 	public void DetectKey()
 	{
 		foreach(KeyCode code in Enum.GetValues(typeof(KeyCode)))

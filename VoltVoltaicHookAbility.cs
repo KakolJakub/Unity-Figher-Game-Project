@@ -43,13 +43,15 @@ public class VoltVoltaicHookAbility : Ability
 	   //DONE: Instantiate RopeTip
 	   //DONE: LineRenderer follows RopeTip
 	   //DONE: When tip hits target it stops moving
-	   //TODO: if it doesn't in X seconds it moves back
-	   //TODO: when tip hits target, perform VoltaicHook_Pull()
+	   //SCRAPPED(done by VoltaicHook_Adjust): if it doesn't in X seconds it moves back
+	   //DONE: when tip hits target, perform VoltaicHook_Pull()
+	   
 	   SpawnRope();
 	   
 	   //IDEA: Make RopeTip a child of Player
 	   //Move the RopeTip via this script
-	   //
+	   //By doing so, you avoid the chance of a bug appearing when another RopeTip appears
+	   
    }
    
    //used via animation event
@@ -117,8 +119,6 @@ public class VoltVoltaicHookAbility : Ability
 	   string clonePrefix = "(Clone)";
 	   ropeTipName = ropeTip.name + clonePrefix;
    }
-   
-   //IDEA: store the RopeTip object as a variable, in case duplicates appear
    
    bool GetRopeTipImpactInfo()
    {
