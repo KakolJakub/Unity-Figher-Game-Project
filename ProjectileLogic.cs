@@ -77,7 +77,7 @@ public class ProjectileLogic : MonoBehaviour
 	
 	void Update()
     {
-       Destroy(gameObject, projectileLifeTime);
+	   Destroy(gameObject, projectileLifeTime);
     }
 	
 	void DealProjectileDamage(Collider2D enemy, int damage, DamageEffect statusNumber)
@@ -91,7 +91,8 @@ public class ProjectileLogic : MonoBehaviour
 	
 	void MoveProjectile()
 	{
-		rigidbodyReference.velocity = transform.right * projectileSpeed;	
+		rigidbodyReference.velocity = transform.right * projectileSpeed;
+		FlipProjectile(); //TODO: Fix the projectile not changing its rotation
 	}
 	
 	void StopProjectile()
@@ -103,5 +104,14 @@ public class ProjectileLogic : MonoBehaviour
 	void MoveProjectileBackwards()
 	{
 		rigidbodyReference.velocity = transform.right * projectileSpeed * (-1);
+	}
+	
+	void FlipProjectile()
+	{
+		if(rigidbodyReference.velocity.x < 0)
+		{
+			transform.Rotate(0f, 180f, 0f);
+			Debug.Log("flip: " + transform.rotation);
+		}
 	}
 }

@@ -32,9 +32,9 @@ public class VoltVoltaicHookAbility : Ability
    
    public override void ActivateAbility()
    {
-	   //animate.SetTrigger("Ability_VoltaicHook");
+	   animate.SetTrigger("Ability_VoltaicHook");
 	   //testing only:
-	   VoltaicHook_Fire();
+	   //VoltaicHook_Fire();
    }
    
    //used via animation event
@@ -65,10 +65,14 @@ public class VoltVoltaicHookAbility : Ability
    {
 	   if(attachRope)
 	   {
+		   Debug.Log("VH: Pull");
+		   //testing only:
+		   VoltaicHook_Pull();
 		   //animate.SetTrigger("VH_Pull").....
 	   }
 	   else
 	   {
+		   Debug.Log("VH: Return");
 		   //animate.SetTrigger("VH_Return").....
 	   }
    }
