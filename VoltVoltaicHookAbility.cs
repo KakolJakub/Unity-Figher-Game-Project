@@ -83,10 +83,10 @@ public class VoltVoltaicHookAbility : Ability
 	   GetComponent<CharacterMovement2D>().MovePlayerForward(pullDistance);
    }
    
-   //TODO: 
+   //TODO:
    public void VoltaicHook_Retract()
    {
-   //Pull the projectile backwards, destroy it, hide the rope, etc.
+	   //GameObject.Find(ropeTipName).GetComponent<ProjectileLogic>().MoveProjectileBackwards();
    }
    
    void FixedUpdate()
