@@ -35,6 +35,7 @@ public class ProjectileLogic : MonoBehaviour
 		projectileExplosion = effect;
 	}
 	
+	//used via animation events
 	public void EraseProjectile()
 	{
 		Destroy(gameObject);
@@ -92,7 +93,9 @@ public class ProjectileLogic : MonoBehaviour
 	void MoveProjectile()
 	{
 		rigidbodyReference.velocity = transform.right * projectileSpeed;
-		FlipProjectile(); //TODO: Fix the projectile not changing its rotation
+		FlipProjectile(); 
+		//TODO: Fix the projectile not changing its rotation
+		//SOLVED? Idle Animation of the projectile is done via record, so it overrides the rotation set by this script
 	}
 	
 	void StopProjectile()
@@ -101,14 +104,33 @@ public class ProjectileLogic : MonoBehaviour
 		rigidbodyReference.velocity = new Vector2(0,0);
 	}
 	
-	void MoveProjectileBackwards()
+	public void MoveProjectileBackwards()
 	{
-		rigidbodyReference.velocity = transform.right * projectileSpeed * (-1);
+		if(ProjectileMovesRight())
+		{
+			rigidbodyReference.velocity = transform.right * projectileSpeed * (-1);
+		}
+		else if(!ProjectileMovesRight())
+		{
+			rigidbodyReference.velocity = transform.right * projectileSpeed;
+		}
+	}
+	
+	bool ProjectileMovesRight()
+	{
+		if(rigidbodyReference.velocity.x >= 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	void FlipProjectile()
 	{
-		if(rigidbodyReference.velocity.x < 0)
+		if(!ProjectileMovesRight())
 		{
 			transform.Rotate(0f, 180f, 0f);
 			Debug.Log("flip: " + transform.rotation);

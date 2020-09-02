@@ -27,8 +27,11 @@ public class VoltVoltaicHookAbility : Ability
 
    public float pullDistance;
    
-   string ropeTipName;
+   Transform actualRopeTip;
    bool attachRope;
+   
+   //OLD
+   //string ropeTipName;
    
    public override void ActivateAbility()
    {
@@ -73,6 +76,8 @@ public class VoltVoltaicHookAbility : Ability
 	   else
 	   {
 		   Debug.Log("VH: Return");
+		   //testing only:
+		   VoltaicHook_Retract();
 		   //animate.SetTrigger("VH_Return").....
 	   }
    }
@@ -86,7 +91,8 @@ public class VoltVoltaicHookAbility : Ability
    //TODO:
    public void VoltaicHook_Retract()
    {
-	   //GameObject.Find(ropeTipName).GetComponent<ProjectileLogic>().MoveProjectileBackwards();
+	   actualRopeTip.GetComponent<ProjectileLogic>().MoveProjectileBackwards();
+	   actualRopeTip.GetComponent<ProjectileLogic>().dealsDamage = false;
    }
    
    void FixedUpdate()
@@ -97,18 +103,20 @@ public class VoltVoltaicHookAbility : Ability
 	   {
 		   TrackRopeTip();
 	   }
+	   //Debug.Log(GetRopeTipPosition());
    }
    
    void Start()
    {
 	   attachRope = false;
 	   rope.enabled = false;
-	   GetRopeTipName();
+	   //OLD
+	   //GetRopeTipName();
    }
    
    void SpawnRope()
    {
-	   Instantiate(ropeTip, ropeSpawnPoint.position, ropeSpawnPoint.rotation);
+	   actualRopeTip = Instantiate(ropeTip, ropeSpawnPoint.position, ropeSpawnPoint.rotation);
 	   TrackRopeTip();
 	   rope.enabled = true;
    }
@@ -124,14 +132,32 @@ public class VoltVoltaicHookAbility : Ability
 	   rope.SetPosition(1, GetRopeTipPosition());
    }
    
+   //OLD
+   /*
    void GetRopeTipName()
    {
 	   string clonePrefix = "(Clone)";
 	   ropeTipName = ropeTip.name + clonePrefix;
    }
+   */
    
    bool GetRopeTipImpactInfo()
    {
+	   bool ropeImpactInfo;
+	   
+	   if(actualRopeTip == null)
+	   {
+		   ropeImpactInfo = false;
+	   }
+	   else
+	   {
+		   ropeImpactInfo = actualRopeTip.GetComponent<ProjectileLogic>().Impact;
+	   }
+	   
+	   return ropeImpactInfo;
+	   
+	   //OLD
+	   /*
 	   bool ropeImpactInfo;
 	   
 	   if(GameObject.Find(ropeTipName) == null)
@@ -144,10 +170,26 @@ public class VoltVoltaicHookAbility : Ability
 	   }
 	   
 	   return ropeImpactInfo;
+	   */
    }
    
    Vector3 GetRopeTipPosition()
    {
+	   Vector3 ropeTipPosition;
+	   
+	   if(actualRopeTip == null)
+	   {
+		   ropeTipPosition = ropeSpawnPoint.position;
+	   }
+	   else
+	   {
+		   ropeTipPosition = actualRopeTip.transform.position;
+	   }
+	   
+	   return ropeTipPosition;
+	   
+	   //OLD
+	   /*
 	   Vector3 ropeTipPosition;
 	   
 	   if(GameObject.Find(ropeTipName) == null)
@@ -160,5 +202,6 @@ public class VoltVoltaicHookAbility : Ability
 	   }
 	   
 	   return ropeTipPosition;
+	   */
    }
 }
