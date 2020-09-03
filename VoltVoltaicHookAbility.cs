@@ -85,14 +85,15 @@ public class VoltVoltaicHookAbility : Ability
    //used via animation event
    public void VoltaicHook_Pull()
    {
+	   DisarmRopeTip();
 	   GetComponent<CharacterMovement2D>().MovePlayerForward(pullDistance);
    }
    
    //TODO:
    public void VoltaicHook_Retract()
    {
-	   actualRopeTip.GetComponent<ProjectileLogic>().MoveProjectileBackwards();
-	   actualRopeTip.GetComponent<ProjectileLogic>().dealsDamage = false;
+	   DisarmRopeTip();
+	   MoveRopeTipBackwards();
    }
    
    void FixedUpdate()
@@ -132,6 +133,23 @@ public class VoltVoltaicHookAbility : Ability
 	   rope.SetPosition(1, GetRopeTipPosition());
    }
    
+   void DisarmRopeTip()
+   {
+	   actualRopeTip.GetComponent<ProjectileLogic>().dealsDamage = false;
+   }
+   
+   void MoveRopeTipBackwards()
+   {
+		actualRopeTip.GetComponent<ProjectileLogic>().rigidbodyReference.velocity = transform.right * 40 * (-1);
+   }
+   
+   void DestroyRopeTip()
+   {
+	   //TODO: Decide when and how the RopeTip needs to be destroyed
+	   //if(GetRopeTipPosition().x <= ropeSpawnPoint.position.x)
+	   //{	  
+	   //}
+   }
    //OLD
    /*
    void GetRopeTipName()

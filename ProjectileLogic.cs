@@ -104,6 +104,7 @@ public class ProjectileLogic : MonoBehaviour
 		rigidbodyReference.velocity = new Vector2(0,0);
 	}
 	
+	/*
 	public void MoveProjectileBackwards()
 	{
 		if(ProjectileMovesRight())
@@ -115,8 +116,9 @@ public class ProjectileLogic : MonoBehaviour
 			rigidbodyReference.velocity = transform.right * projectileSpeed;
 		}
 	}
+	*/
 	
-	bool ProjectileMovesRight()
+	public bool ProjectileMovesRight()
 	{
 		if(rigidbodyReference.velocity.x >= 0)
 		{
