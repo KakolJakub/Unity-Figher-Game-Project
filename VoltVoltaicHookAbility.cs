@@ -94,6 +94,7 @@ public class VoltVoltaicHookAbility : Ability
    {
 	   DisarmRopeTip();
 	   MoveRopeTipBackwards();
+	   DestroyRopeTip();
    }
    
    void FixedUpdate()
@@ -145,10 +146,13 @@ public class VoltVoltaicHookAbility : Ability
    
    void DestroyRopeTip()
    {
-	   //TODO: Decide when and how the RopeTip needs to be destroyed
-	   //if(GetRopeTipPosition().x <= ropeSpawnPoint.position.x)
-	   //{	  
-	   //}
+	   
+	   //TODO: Decide when the RopeTip needs to be destroyed
+	   if(GetRopeTipPosition().x <= ropeSpawnPoint.position.x)
+	   {
+		   actualRopeTip.GetComponent<ProjectileLogic>().EraseProjectile();
+		   Debug.Log("RopeTip was erased.");
+	   }
    }
    //OLD
    /*
