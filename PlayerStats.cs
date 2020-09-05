@@ -13,6 +13,7 @@ public class PlayerStats : MonoBehaviour
 	public int health = 100;
 	
 	public float movementSpeed = 35;
+	//TODO: Make a variable for number of dodges
 	public float dodgeRange = 40;
 	public bool canMove = true;
 	
