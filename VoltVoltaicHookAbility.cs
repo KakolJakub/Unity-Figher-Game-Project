@@ -147,7 +147,7 @@ public class VoltVoltaicHookAbility : Ability
    void DestroyRopeTip()
    {
 	   
-	   //TODO: Decide when the RopeTip needs to be destroyed
+	   //TODO: Decide when the RopeTip needs to be destroyed (on animation event?)
 	   if(GetRopeTipPosition().x <= ropeSpawnPoint.position.x)
 	   {
 		   actualRopeTip.GetComponent<ProjectileLogic>().EraseProjectile();
