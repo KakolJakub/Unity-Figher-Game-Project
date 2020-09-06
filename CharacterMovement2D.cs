@@ -157,6 +157,12 @@ public class CharacterMovement2D : MonoBehaviour
 	
 	public void Dodge(string direction) //TODO: Consider making an Enum
 	{
+		//TODO (here or in a new method):
+		//int dodgeStacks = playerStats.dodgeStacks;
+		//create a variable 'currentDodgeStacks', at Start() set it equal to 'dodgeStacks'
+		//after dodging: currentDodgeStacks--;
+		//after timer hits the cap: currentDodgeStacks++;
+		//if(currentDodgeStacks = dodgeStacks) {return;}
 		if(direction == "Left")
 		{
 			leftClickAmount++;
@@ -164,7 +170,7 @@ public class CharacterMovement2D : MonoBehaviour
 		if(direction == "Right")
 		{
 			rightClickAmount++;
-		}
+		} //else { return; }
 		if((leftClickAmount==1)||(rightClickAmount==1))
 		{
 			dodgeTimer=dodgeTimerBaseValue;
