@@ -17,6 +17,11 @@ public class CharacterMovement2D : MonoBehaviour
 	
 	public Animator animate;
 	
+	public int dodgeAmount;
+	public int currentDodgeAmount;
+	public float dodgeRegenTimeBaseValue;
+	private float dodgeRegenTime;
+	
 	public float dodgeTimerBaseValue;
 	private float dodgeTimer;
 	private int leftClickAmount;
@@ -39,6 +44,12 @@ public class CharacterMovement2D : MonoBehaviour
 
 	}
 	
+	private void Start()
+	{
+		dodgeAmount = playerStats.dodgeAmount;
+		currentDodgeAmount = dodgeAmount;
+	}
+	
 	private void Update()
 	{
 		//TODO: Dodge method and timer
@@ -52,6 +63,25 @@ public class CharacterMovement2D : MonoBehaviour
 			leftClickAmount=0;
 			rightClickAmount=0;
 		}
+		
+		if(currentDodgeAmount >= dodgeAmount)
+		{
+			currentDodgeAmount = dodgeAmount;
+		}
+		else
+		{
+			if(dodgeRegenTime>0)
+			{
+				dodgeRegenTime-=Time.deltaTime;
+			}
+			if(dodgeRegenTime<=0)
+			{
+				dodgeRegenTime = dodgeRegenTimeBaseValue;
+				currentDodgeAmount++;
+			}
+		}
+		
+		
 		//Debug.Log("Dodgetimer: " + dodgeTimer+"clicks:"+clickAmount);
 	}
 	
@@ -157,12 +187,10 @@ public class CharacterMovement2D : MonoBehaviour
 	
 	public void Dodge(string direction) //TODO: Consider making an Enum
 	{
-		//TODO (here or in a new method):
-		//int dodgeStacks = playerStats.dodgeStacks;
-		//create a variable 'currentDodgeStacks', at Start() set it equal to 'dodgeStacks'
-		//after dodging: currentDodgeStacks--;
-		//after timer hits the cap: currentDodgeStacks++;
-		//if(currentDodgeStacks = dodgeStacks) {return;}
+		if(currentDodgeAmount == 0)
+		{
+			return;
+		}
 		if(direction == "Left")
 		{
 			leftClickAmount++;
@@ -170,7 +198,7 @@ public class CharacterMovement2D : MonoBehaviour
 		if(direction == "Right")
 		{
 			rightClickAmount++;
-		} //else { return; }
+		}
 		if((leftClickAmount==1)||(rightClickAmount==1))
 		{
 			dodgeTimer=dodgeTimerBaseValue;
@@ -179,6 +207,7 @@ public class CharacterMovement2D : MonoBehaviour
 		if((dodgeTimer>0&&leftClickAmount>=2) || (dodgeTimer>0&&rightClickAmount>=2))
 		{
 			ActualDodge(direction);
+			currentDodgeAmount--;
 			leftClickAmount=0;
 			rightClickAmount=0;
 		}

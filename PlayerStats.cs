@@ -13,7 +13,7 @@ public class PlayerStats : MonoBehaviour
 	public int health = 100;
 	
 	public float movementSpeed = 35;
-	//TODO: Make a variable for number of dodges
+	public int dodgeAmount = 3;
 	public float dodgeRange = 40;
 	public bool canMove = true;
 	
@@ -30,14 +30,18 @@ public class PlayerStats : MonoBehaviour
 	public bool canCastAbility = true;
 	
 	// Start is called before the first frame update
-    void Start()
+    /*
+	void Start()
     {
         
     }
+	*/
 
     // Update is called once per frame
-    void Update()
+    /*
+	void Update()
     {
         
     }
+	*/
 }

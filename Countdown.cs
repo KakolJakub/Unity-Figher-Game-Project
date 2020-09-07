@@ -12,6 +12,7 @@ public static class Countdown
 		timer=time;
 	}
 	
+	//use it in Update()
 	public static float Begin()
 	{
 		Debug.Log(timer);
@@ -24,5 +25,21 @@ public static class Countdown
 			timer=0;
 		}
 		return timer;
+	}
+	
+	//use it in Update()
+	public static void CountTime()
+	{
+		if (timer>0)
+		{
+			timer-=Time.deltaTime;
+			
+		}
+		if (timer<=0)
+		{
+			timer=0;
+			
+		}
+		Debug.Log(timer);
 	}
 }

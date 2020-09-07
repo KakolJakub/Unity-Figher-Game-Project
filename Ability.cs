@@ -72,7 +72,13 @@ public class Ability : MonoBehaviour
 	
 	public void ResetCooldown()
 	{
-		abilityCooldown = 0;
+		activeCooldown = 0;
+	}
+	
+	//testing only:
+	public float GetAbilityCooldown()
+	{
+		return activeCooldown;
 	}
 	
 }

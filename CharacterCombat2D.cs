@@ -81,7 +81,7 @@ public class CharacterCombat2D : MonoBehaviour
 				break;
 			}
 			playerStats.health-=damage;
-			Debug.Log(name+" health: "+playerStats.health);
+			//Debug.Log(name+" health: "+playerStats.health);
 		}
 	}
 	
@@ -89,14 +89,14 @@ public class CharacterCombat2D : MonoBehaviour
 	public void BlockOff()
 	{
 		playerStats.blocking = false;
-		Debug.Log("BlockOn: " + playerStats.blocking);
+		//Debug.Log("BlockOn: " + playerStats.blocking);
 	}
 	
 	//used via animation events on Block
 	public void BlockOn()
 	{
 		playerStats.blocking = true;
-		Debug.Log("BlockOn: " + playerStats.blocking);
+		//Debug.Log("BlockOn: " + playerStats.blocking);
 	}
 	
 	//used via animation events on Attack1, Attack2 and Attack3
@@ -225,5 +225,10 @@ public class CharacterCombat2D : MonoBehaviour
 		{
 			TakeDamage(playerStats.thirdAttackDamage, (DamageEffect)2);
 		}
+	}
+	
+	public bool GetComboInfo()
+	{
+		return canCombo;
 	}
 }
