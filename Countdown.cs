@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO: Make adjustments or delete this script
 public static class Countdown
 {
 	
