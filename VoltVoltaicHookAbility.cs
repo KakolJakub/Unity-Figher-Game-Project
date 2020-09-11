@@ -22,10 +22,8 @@ public class VoltVoltaicHookAbility : Ability
    
    //used via animation event
    public void VoltaicHook_Fire()
-   {
-	   
-	   SpawnRope();
-	   
+   {   
+	   SpawnRope();   
    }
    
    //used via animation event
@@ -67,11 +65,18 @@ public class VoltVoltaicHookAbility : Ability
 	   //DestroyRopeTip();
    }
    
-   void FixedUpdate()
+   public void VoltaicHook_DestroyRopeTip()
    {
-	   
-	   //Debug.Log(attachRope);
-	   
+	   if(actualRopeTip != null)
+	   {
+		   actualRopeTip.GetComponent<ProjectileLogic>().EraseProjectile();
+		   rope.enabled = false;
+		   Debug.Log("RopeTip was erased.");
+	   }
+   }
+   
+   void FixedUpdate()
+   {   
 	   if(rope.enabled)
 	   {
 		   TrackRopeTip();
@@ -84,6 +89,7 @@ public class VoltVoltaicHookAbility : Ability
 	   attachRope = false;
 	   rope.enabled = false;
 	   
+	   playerStats.OnInterrupt += VoltaicHook_DestroyRopeTip;
    }
    
    void SpawnRope()
@@ -112,17 +118,6 @@ public class VoltVoltaicHookAbility : Ability
    void MoveRopeTipBackwards()
    {
 		actualRopeTip.GetComponent<ProjectileLogic>().rigidbodyReference.velocity = transform.right * 40 * (-1);
-   }
-   
-   void DestroyRopeTip()
-   {
-	   
-	   //TODO: Decide when the RopeTip needs to be destroyed (on animation event?)
-	   if(GetRopeTipPosition().x <= ropeSpawnPoint.position.x)
-	   {
-		   actualRopeTip.GetComponent<ProjectileLogic>().EraseProjectile();
-		   Debug.Log("RopeTip was erased.");
-	   }
    }
    
    bool GetRopeTipImpactInfo()

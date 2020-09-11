@@ -17,6 +17,9 @@ public class CharacterCombat2D : MonoBehaviour
 	public float attackRange = 0.5f;
 	public LayerMask enemyLayers;
 	
+	//public delegate void StopAction();
+	//public static event StopAction OnInterrupt;
+	
 	bool canCombo=false; 
 	int clickAmount=0;
 		
@@ -186,20 +189,25 @@ public class CharacterCombat2D : MonoBehaviour
 	}
 	
 	void Hurt()
-	{
-		playerStats.canMove = false;
-		playerStats.canAttack = false;
-		playerStats.canCastAbility = false;
-		animate.SetTrigger("Hurt");
-	}
-	
-	void Knockback()
-	{
-		animate.SetTrigger("Knockback");
+	{	
+		playerStats.Interrupt();
 		
 		playerStats.canMove = false;
 		playerStats.canAttack = false;
 		playerStats.canCastAbility = false;
+		
+		animate.SetTrigger("Hurt");
+	}
+	
+	void Knockback()
+	{	
+		playerStats.Interrupt();
+		
+		playerStats.canMove = false;
+		playerStats.canAttack = false;
+		playerStats.canCastAbility = false;
+		
+		animate.SetTrigger("Knockback");
 	}
 	
 	void OnDrawGizmosSelected()

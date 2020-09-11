@@ -29,6 +29,16 @@ public class PlayerStats : MonoBehaviour
 	
 	public bool canCastAbility = true;
 	
+	public delegate void StopAction();
+	public event StopAction OnInterrupt;
+	
+	public void Interrupt()
+	{
+		if(OnInterrupt != null)
+		{
+			OnInterrupt();
+		}
+	}
 	// Start is called before the first frame update
     /*
 	void Start()
