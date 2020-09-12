@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class VoltVoltaicHookAbility : Ability
 {   
+   //TODO: Fix visual effects: 
+   //-> the rope is extending outside of the ropeTip 
+   //-> the rope is extending outside of its spawnPoint
+   
    public Transform ropeSpawnPoint;
    public Transform ropeTip;
    public LineRenderer rope;
