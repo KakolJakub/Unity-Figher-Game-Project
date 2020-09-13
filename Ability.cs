@@ -18,7 +18,7 @@ public class Ability : MonoBehaviour
 	float activeCooldown;
 	bool abilityReady = true;
 	
-	protected void Update()
+	protected void FixedUpdate()
 	{
 		if(activeCooldown > 0)
 		{

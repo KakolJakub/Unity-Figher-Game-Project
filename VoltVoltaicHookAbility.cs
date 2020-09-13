@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class VoltVoltaicHookAbility : Ability
 {   
-   //TODO: Fix visual effects: 
+   //DONE: The rope was updated via FixedUpdate(), while the projectile was moving via Update()
+   //Fix visual effects: 
    //-> the rope is extending outside of the ropeTip 
    //-> the rope is extending outside of its spawnPoint
    
@@ -79,7 +80,8 @@ public class VoltVoltaicHookAbility : Ability
 	   }
    }
    
-   void FixedUpdate()
+   void //Fixed
+   Update()
    {   
 	   if(rope.enabled)
 	   {
