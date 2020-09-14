@@ -85,6 +85,11 @@ public class PlayerControls : MonoBehaviour
 			characterAbilities2D=GetComponent<CharacterAbilities2D>();
 			characterAbilities2D.ability2.Use();
 		}
+		if(Input.GetKeyDown(KeyCode.P))
+		{
+			characterAbilities2D=GetComponent<CharacterAbilities2D>();
+			characterAbilities2D.ability3.Use();
+		}
 		
     }
 	

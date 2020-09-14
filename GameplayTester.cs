@@ -48,7 +48,7 @@ public class GameplayTester : MonoBehaviour
 			
 			abilities1[i].text = players[i].GetComponent<CharacterAbilities2D>().ability1.GetAbilityCooldown().ToString();
 			abilities2[i].text = players[i].GetComponent<CharacterAbilities2D>().ability2.GetAbilityCooldown().ToString();
-			////NOT READY: abilities3[i].text = players[i].GetComponent<CharacterAbilities2D>().ability3.GetAbilityCooldown().ToString();
+			abilities3[i].text = players[i].GetComponent<CharacterAbilities2D>().ability3.GetAbilityCooldown().ToString();
 			
 			comboInfo[i].text = players[i].GetComponent<CharacterCombat2D>().GetComboInfo().ToString();
 			//TODO: add the same functionality for combo duration
