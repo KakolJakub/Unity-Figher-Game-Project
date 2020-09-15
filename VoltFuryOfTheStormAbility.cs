@@ -25,6 +25,11 @@ public class VoltFuryOfTheStormAbility : Ability
 	   int dmg;
 	   DamageEffect dmgEffect;
 	   
+	   //TODO: 
+	   // -> Determine each attack damage and damageEffect
+	   // -> If you want to use one method, stay with enum approach
+	   // -> Else you can use two (or more) methods, one for each kind of attack
+	   
 	   //TESTING ONLY:
 	   if(attackNumber == FuryOfTheStormAttack.FifthFuryAttack)
 	   {
