@@ -163,15 +163,15 @@ public class CharacterMovement2D : MonoBehaviour
 		}
 	}
 	
-	public void MovePlayerForward(float distance)
+	public void MovePlayerForward(float speed)
 	{
 		if(!m_FacingRight)
 		{
-			m_Rigidbody2D.velocity = Vector2.left * distance;
+			m_Rigidbody2D.velocity = Vector2.left * speed;
 		}
 		if(m_FacingRight)
 		{
-			m_Rigidbody2D.velocity = Vector2.right * distance;
+			m_Rigidbody2D.velocity = Vector2.right * speed;
 		}
 		else
 		{

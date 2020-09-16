@@ -4,16 +4,12 @@ using UnityEngine;
 
 public class VoltVoltaicHookAbility : Ability
 {   
-   //DONE: The rope was updated via FixedUpdate(), while the projectile was moving via Update()
-   //Fix visual effects: 
-   //-> the rope is extending outside of the ropeTip 
-   //-> the rope is extending outside of its spawnPoint
-   
    public Transform ropeSpawnPoint;
    public Transform ropeTip;
    public LineRenderer rope;
 
-   public float pullDistance;
+   public float pullSpeed;
+   public float ropeReturnSpeed;
    
    Transform actualRopeTip;
    bool attachRope;
@@ -59,15 +55,13 @@ public class VoltVoltaicHookAbility : Ability
    public void VoltaicHook_Pull()
    {
 	   DisarmRopeTip();
-	   GetComponent<CharacterMovement2D>().MovePlayerForward(pullDistance);
+	   GetComponent<CharacterMovement2D>().MovePlayerForward(pullSpeed);
    }
    
-   //TODO:
    public void VoltaicHook_Retract()
    {
 	   DisarmRopeTip();
 	   MoveRopeTipBackwards();
-	   //DestroyRopeTip();
    }
    
    public void VoltaicHook_DestroyRopeTip()
@@ -80,8 +74,7 @@ public class VoltVoltaicHookAbility : Ability
 	   }
    }
    
-   void //Fixed
-   Update()
+   void Update()
    {   
 	   if(rope.enabled)
 	   {
@@ -123,7 +116,7 @@ public class VoltVoltaicHookAbility : Ability
    
    void MoveRopeTipBackwards()
    {
-		actualRopeTip.GetComponent<ProjectileLogic>().rigidbodyReference.velocity = transform.right * 40 * (-1);
+		actualRopeTip.GetComponent<ProjectileLogic>().rigidbodyReference.velocity = transform.right * ropeReturnSpeed * (-1);
    }
    
    bool GetRopeTipImpactInfo()
