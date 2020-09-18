@@ -19,6 +19,11 @@ public class VoltFuryOfTheStormAbility : Ability
 	   Debug.Log("You used: " + abilityName);
    }
    
+   //TODO:
+   //One method for all 4 attacks
+   //One method for the final attack
+   //No enums in the process
+   
    //used via animation event
    public void FuryOfTheStorm_DealDamage(FuryOfTheStormAttack attackNumber)
    {
