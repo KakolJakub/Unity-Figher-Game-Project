@@ -12,11 +12,19 @@ public abstract class Ability : MonoBehaviour
 	public string abilityName;
 	
 	public int abilityDamage;
+	int amplifiedAbilityDamage;
 	public DamageEffect abilityDamageEffect;
 	
 	public float abilityCooldown;
 	float activeCooldown;
 	bool abilityReady = true;
+	
+	protected void Awake()
+	{
+		amplifiedAbilityDamage = abilityDamage * playerStats.rageMultiplier;
+		playerStats.OnRageMode += IncreaseAbilityDamage;
+		playerStats.OnRageModeOff += DecreaseAbilityDamage;
+	}
 	
 	protected void FixedUpdate()
 	{
@@ -31,6 +39,18 @@ public abstract class Ability : MonoBehaviour
 			abilityReady = true;
 		}
 		
+	}
+	
+	protected void IncreaseAbilityDamage()
+	{
+		abilityDamage = amplifiedAbilityDamage;
+		Debug.Log(abilityName + " damage was increased: " + abilityDamage);
+	}
+	
+	protected void DecreaseAbilityDamage()
+	{
+		abilityDamage = amplifiedAbilityDamage / playerStats.rageMultiplier;
+		Debug.Log(abilityName + " damage was lowered: " + abilityDamage);
 	}
 	
 	public void Use()

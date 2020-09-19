@@ -29,15 +29,80 @@ public class PlayerStats : MonoBehaviour
 	
 	public bool canCastAbility = true;
 	
-	public delegate void StopAction();
-	public event StopAction OnInterrupt;
+	public bool rageActive = false;
+	public float rageDuration = 3;
+	public int rageMultiplier = 2;
 	
-	public void Interrupt()
+	public delegate void TakeAction();
+	public event TakeAction OnInterrupt;
+	public event TakeAction OnRageMode;
+	public event TakeAction OnRageModeOff;
+	
+	public delegate void GetDamage(int damage);
+	public event GetDamage OnDamageTaken;
+	public event GetDamage OnDamageDealt;
+	
+	//TODO: Create an universal method for these 4 events
+	
+	void Start()
+	{
+		OnRageMode += IncreasePlayerAttackDamage;
+		OnRageModeOff += DecreasePlayerAttackDamage;
+	}
+	
+	public void PlayerTookDamage(int damage) 
+	{
+		if(OnDamageTaken != null)
+		{
+			OnDamageTaken(damage);
+		}
+	}
+
+	public void PlayerDealtDamage(int damage) 
+	{
+		if(OnDamageDealt != null)
+		{
+			OnDamageDealt(damage);
+		}
+	}
+	
+	public void PlayerWasInterrupted()
 	{
 		if(OnInterrupt != null)
 		{
 			OnInterrupt();
 		}
+	}
+	
+	public void PlayerActivatedRage()
+	{
+		if(OnRageMode != null)
+		{
+			OnRageMode();
+		}
+	}
+	
+	public void PlayerDeactivatedRage()
+	{
+		if(OnRageModeOff != null)
+		{
+			OnRageModeOff();
+		}
+	}
+		
+	
+	void IncreasePlayerAttackDamage()
+	{
+		firstAttackDamage *= rageMultiplier;
+		secondAttackDamage *= rageMultiplier;
+		thirdAttackDamage *= rageMultiplier;
+	}
+	
+	void DecreasePlayerAttackDamage()
+	{
+		firstAttackDamage /= rageMultiplier;
+		secondAttackDamage /= rageMultiplier;
+		thirdAttackDamage /= rageMultiplier;
 	}
 	// Start is called before the first frame update
     /*

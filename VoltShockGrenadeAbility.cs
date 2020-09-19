@@ -15,18 +15,24 @@ public class VoltShockGrenadeAbility : Ability
 	
 	void Start()
 	{
-		projectile.GetComponent<ProjectileLogic>().SetProjectileStats(abilityDamage, abilityDamageEffect, grenadeSpeed, grenadeLifeTime, grenadeGravity);
-		projectile.GetComponent<ProjectileLogic>().SetProjectileEffects(explosion);
+		AdjustGrenadeStats();
 	}
 	
 	public override void ActivateAbility()
 	{
+		AdjustGrenadeStats();
 		animate.SetTrigger("Ability_ShockGrenade");
 	}
 	
 	public void ShockGrenade_ThrowGrenade()
 	{
 		Instantiate(projectile, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
+	}
+	
+	void AdjustGrenadeStats()
+	{
+		projectile.GetComponent<ProjectileLogic>().SetProjectileStats(abilityDamage, abilityDamageEffect, grenadeSpeed, grenadeLifeTime, grenadeGravity, playerStats);
+		projectile.GetComponent<ProjectileLogic>().SetProjectileEffects(explosion);
 	}
 	
 	//TODO:

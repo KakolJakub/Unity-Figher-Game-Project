@@ -58,7 +58,9 @@ public class CharacterCombat2D : MonoBehaviour
 		foreach(Collider2D enemy in hitEnemies)
 		{
 			enemy.GetComponent<CharacterCombat2D>().TakeDamage(damage, effect);
+			playerStats.PlayerDealtDamage(damage);
 		}
+		
 	}
 	
 	public void TakeDamage(int damage, DamageEffect effect)
@@ -83,7 +85,9 @@ public class CharacterCombat2D : MonoBehaviour
 				Debug.Log("Took damage");
 				break;
 			}
+			
 			playerStats.health-=damage;
+			playerStats.PlayerTookDamage(damage);
 			//Debug.Log(name+" health: "+playerStats.health);
 		}
 	}
@@ -190,7 +194,7 @@ public class CharacterCombat2D : MonoBehaviour
 	
 	void Hurt()
 	{	
-		playerStats.Interrupt();
+		playerStats.PlayerWasInterrupted();
 		
 		playerStats.canMove = false;
 		playerStats.canAttack = false;
@@ -201,7 +205,7 @@ public class CharacterCombat2D : MonoBehaviour
 	
 	void Knockback()
 	{	
-		playerStats.Interrupt();
+		playerStats.PlayerWasInterrupted();
 		
 		playerStats.canMove = false;
 		playerStats.canAttack = false;

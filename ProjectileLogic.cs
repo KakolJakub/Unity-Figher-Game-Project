@@ -11,6 +11,8 @@ public class ProjectileLogic : MonoBehaviour
 	
 	[SerializeField] ParticleSystem projectileExplosion;
 	
+	[SerializeField] PlayerStats ownerStats;
+	
 	public Rigidbody2D rigidbodyReference;
 	public Animator animatorReference;
 	
@@ -21,13 +23,14 @@ public class ProjectileLogic : MonoBehaviour
 	
 	public bool Impact { get; private set; }
 	
-	public void SetProjectileStats(int damage, DamageEffect statusNumber, float speed, float lifetime, float gravity)
+	public void SetProjectileStats(int damage, DamageEffect statusNumber, float speed, float lifetime, float gravity, PlayerStats playerStats)
 	{
 		projectileDamage = damage;
 		projectileDamageStatusNumber = statusNumber;
 		projectileSpeed = speed;
 		projectileLifeTime = lifetime;
 		rigidbodyReference.gravityScale = gravity;
+		ownerStats = playerStats;
 	}
 	
 	public void SetProjectileEffects(ParticleSystem effect)
@@ -84,9 +87,12 @@ public class ProjectileLogic : MonoBehaviour
 	void DealProjectileDamage(Collider2D enemy, int damage, DamageEffect statusNumber)
 	{
 		CharacterCombat2D enemyCombatSystem = enemy.GetComponent<CharacterCombat2D>();
-		if (enemy != null)
+		PlayerStats enemyStats = enemy.GetComponent<PlayerStats>();
+		
+		if (enemy != null && enemyStats.blocking != true)
 		{
 			enemyCombatSystem.TakeDamage(damage, statusNumber);
+			ownerStats.PlayerDealtDamage(damage);
 		}
 	}
 	
