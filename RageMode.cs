@@ -72,6 +72,7 @@ public class RageMode : MonoBehaviour
 	
 	public void ActivateRageMode()
 	{
+		//TODO: Play cutscene
 		currentRageDuration = playerStats.rageDuration;
 		rageMeter = 0;
 		playerStats.rageActive = true;
@@ -84,6 +85,16 @@ public class RageMode : MonoBehaviour
 		rageReady = false;
 		playerStats.rageActive = false;
 		playerStats.PlayerDeactivatedRage();
+	}
+	
+	virtual void AddBonusEffects()
+	{
+		Debug.Log("Rage effects added.");
+	}
+	
+	virtual void RemoveBonusEffects()
+	{
+		Debug.Log("Rage effects removed.");
 	}
 	
 	//TESTING ONLY:
