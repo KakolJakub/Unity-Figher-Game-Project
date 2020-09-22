@@ -8,6 +8,12 @@ public class VoltVoltaicHookAbility : Ability
    public Transform ropeTip;
    public LineRenderer rope;
 
+   public int ropeTipDamage;
+   public DamageEffect ropeTipDamageEffect;
+   public float ropeTipSpeed;
+   public float ropeTipLifeTime;
+   public float ropeTipGravity;
+   
    public float pullSpeed;
    public float ropeReturnSpeed;
    
@@ -93,6 +99,7 @@ public class VoltVoltaicHookAbility : Ability
    
    void SpawnRope()
    {
+	   ropeTip.GetComponent<ProjectileLogic>().SetProjectileStats(ropeTipDamage, ropeTipDamageEffect, ropeTipSpeed, ropeTipLifeTime, ropeTipGravity, playerStats);
 	   actualRopeTip = Instantiate(ropeTip, ropeSpawnPoint.position, ropeSpawnPoint.rotation);
 	   TrackRopeTip();
 	   rope.enabled = true;

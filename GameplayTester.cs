@@ -6,33 +6,25 @@ using UnityEngine.UI;
 
 public class GameplayTester : MonoBehaviour
 {
-    [SerializeField]
-	private GameObject[] players;
+    [SerializeField] private GameObject[] players;
 	
-	[SerializeField]
-	private Text[] hpBars;
+	[SerializeField] private Text[] hpBars;
 	
-	[SerializeField]
-	private Text[] dodges;
+	[SerializeField] private Text[] dodges;
 	
-	[SerializeField]
-	private Text[] abilities1;
-	[SerializeField]
-	private Text[] abilities2;
-	[SerializeField]
-	private Text[] abilities3;
+	[SerializeField] private Text[] abilities1;
+	[SerializeField] private Text[] abilities2;
+	[SerializeField] private Text[] abilities3;
 	
-	[SerializeField]
-	private Text[] blockInfo;
+	[SerializeField] private Text[] blockInfo;
 	
-	[SerializeField]
-	private Text[] comboInfo;
+	[SerializeField] private Text[] comboInfo;
 	
-	[SerializeField]
-	private Text[] rageMeterAmount;
+	[SerializeField] private Text[] rageMeterAmount;
 	
-	[SerializeField]
-	private Text[] rageInfo;
+	[SerializeField] private Text[] rageInfo;
+	
+	[SerializeField] private Text[] rageDuration;
 	
     void Start()
     {
@@ -62,7 +54,7 @@ public class GameplayTester : MonoBehaviour
 			rageMeterAmount[i].text = players[i].GetComponent<RageMode>().GetRageMeterInfo().ToString();
 			//up to change, probably: rageMeterAmount[i].text = players[i].GetComponent<CharacterAbilities2D>().rageMode.GetRageMeterAmount().ToString();
 			rageInfo[i].text = players[i].GetComponent<PlayerStats>().rageActive.ToString();
-			//TODO: add the same functionality for rageMode duration
+			rageDuration[i].text = players[i].GetComponent<RageMode>().GetRageDuration().ToString();
 			
 		}
 	}

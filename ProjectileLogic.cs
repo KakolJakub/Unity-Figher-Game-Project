@@ -92,7 +92,7 @@ public class ProjectileLogic : MonoBehaviour
 		if (enemy != null && enemyStats.blocking != true)
 		{
 			enemyCombatSystem.TakeDamage(damage, statusNumber);
-			ownerStats.PlayerDealtDamage(damage);
+			//ownerStats.PlayerDealtDamage(damage);
 		}
 	}
 	

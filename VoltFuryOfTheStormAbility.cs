@@ -13,6 +13,7 @@ public enum FuryOfTheStormAttack
 
 public class VoltFuryOfTheStormAbility : Ability
 {
+   
    public override void ActivateAbility()
    {
 	   //animate.SetTrigger("Ability_FuryOfTheStorm");
@@ -38,7 +39,7 @@ public class VoltFuryOfTheStormAbility : Ability
 	   //TESTING ONLY:
 	   if(attackNumber == FuryOfTheStormAttack.FifthFuryAttack)
 	   {
-		   dmg = 20;
+		   dmg = abilityDamage * 2;
 		   dmgEffect = DamageEffect.Knockback;
 	   }
 	   else

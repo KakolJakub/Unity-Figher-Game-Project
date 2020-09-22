@@ -6,6 +6,7 @@ using UnityEngine;
 public class RageMode : MonoBehaviour
 {
     public PlayerStats playerStats;
+	public Animator animate;
 	
 	bool rageReady;
 	
@@ -16,8 +17,8 @@ public class RageMode : MonoBehaviour
 	
 	void Start()
 	{
-		playerStats.OnDamageTaken += IncreaseRageMeter; //rage meter += 1/1 of the damage taken
-		playerStats.OnDamageDealt += IncreaseRageMeterByHalf; //rage meter += 1/2 of the damage dealt
+		playerStats.OnDamageTaken += IncreaseRageMeter;
+		playerStats.OnDamageDealt += IncreaseRageMeterByHalf;
 		rageReady = false; 
 		rageMeter = 0;
 	}
@@ -64,15 +65,16 @@ public class RageMode : MonoBehaviour
 	
 	void IncreaseRageMeterByHalf(int amount)
 	{
-		double _amount = amount;
-		_amount = Math.Round(_amount / 2);
-		rageMeter += (int)_amount;
+		double amountValue = amount;
+		amountValue = Math.Round(amountValue / 2);
+		rageMeter += (int)amountValue;
 		Debug.Log("rageMeter: " + rageMeter);
 	}
 	
 	public void ActivateRageMode()
 	{
-		//TODO: Play cutscene
+		//TODO: Play cutscene (on animation event)
+		//animate.SetTrigger("Rage"); 
 		currentRageDuration = playerStats.rageDuration;
 		rageMeter = 0;
 		playerStats.rageActive = true;
@@ -87,12 +89,19 @@ public class RageMode : MonoBehaviour
 		playerStats.PlayerDeactivatedRage();
 	}
 	
-	virtual void AddBonusEffects()
+	public void PlayRageCutscene()
+	{
+		//Access GameManager (probably a static class)
+		//Play a cutscene (it should pause player input, probably a static method inside a GameManager)
+		//Rage buffs and bonus effects should apply after the cutscene ends
+	}
+	
+	public virtual void AddBonusEffects()
 	{
 		Debug.Log("Rage effects added.");
 	}
 	
-	virtual void RemoveBonusEffects()
+	public virtual void RemoveBonusEffects()
 	{
 		Debug.Log("Rage effects removed.");
 	}
@@ -102,10 +111,10 @@ public class RageMode : MonoBehaviour
 	{
 		return rageMeter;
 	}
-	//int RageMeter; //Max amount
-	//int RageAmount; //Current amount
-	//RageAmount goes up: when player takes damage, when player deals damage,
-	//When RageAmount >= RageMeter, RageModeAvailable; playerStats.rageMode = true;
-	//ActivateRageMode() { //plays cutscene and freezes the game/playerInput //ActivateCharacterRageBonus()}
-	//RageMode grants: damage increase, shorter ability cooldown, higher dodgeRegen speed
+	
+	public float GetRageDuration()
+	{
+		return currentRageDuration;
+	}
+
 }

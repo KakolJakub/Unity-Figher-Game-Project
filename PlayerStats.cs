@@ -10,7 +10,7 @@ public enum DamageEffect
 public class PlayerStats : MonoBehaviour
 {
     
-	public int health = 100;
+	public int health = 200;
 	
 	public float movementSpeed = 35;
 	public int dodgeAmount = 3;
@@ -30,7 +30,7 @@ public class PlayerStats : MonoBehaviour
 	public bool canCastAbility = true;
 	
 	public bool rageActive = false;
-	public float rageDuration = 3;
+	public float rageDuration = 10;
 	public int rageMultiplier = 2;
 	
 	public delegate void TakeAction();
@@ -42,15 +42,15 @@ public class PlayerStats : MonoBehaviour
 	public event GetDamage OnDamageTaken;
 	public event GetDamage OnDamageDealt;
 	
-	//TODO: Create an universal method for these 4 events
-	
 	void Start()
 	{
 		OnRageMode += IncreasePlayerAttackDamage;
 		OnRageModeOff += DecreasePlayerAttackDamage;
 	}
 	
-	public void PlayerTookDamage(int damage) 
+	//TODO: Create an universal method for these 4 events
+	
+	public void PlayerTookDamage(int damage)  
 	{
 		if(OnDamageTaken != null)
 		{
@@ -104,19 +104,4 @@ public class PlayerStats : MonoBehaviour
 		secondAttackDamage /= rageMultiplier;
 		thirdAttackDamage /= rageMultiplier;
 	}
-	// Start is called before the first frame update
-    /*
-	void Start()
-    {
-        
-    }
-	*/
-
-    // Update is called once per frame
-    /*
-	void Update()
-    {
-        
-    }
-	*/
 }
