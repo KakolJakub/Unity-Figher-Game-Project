@@ -32,7 +32,6 @@ public class GameplayTester : MonoBehaviour
 		players[1] = GameObject.Find("TestDummy");
     }
 	
-	
 	void Update()
     {
         try 

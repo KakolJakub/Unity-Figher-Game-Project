@@ -80,6 +80,16 @@ public class VoltVoltaicHookAbility : Ability
 	   }
    }
    
+   void OnEnable()
+   {
+	   playerStats.OnInterrupt += VoltaicHook_DestroyRopeTip;
+   }
+   
+   void OnDisable()
+   {
+	   playerStats.OnInterrupt -= VoltaicHook_DestroyRopeTip;
+   }
+   
    void Update()
    {   
 	   if(rope.enabled)
@@ -93,8 +103,6 @@ public class VoltVoltaicHookAbility : Ability
    {
 	   attachRope = false;
 	   rope.enabled = false;
-	   
-	   playerStats.OnInterrupt += VoltaicHook_DestroyRopeTip;
    }
    
    void SpawnRope()

@@ -15,10 +15,20 @@ public class RageMode : MonoBehaviour
 	
 	float currentRageDuration;
 	
-	void Start()
+	void OnEnable()
 	{
 		playerStats.OnDamageTaken += IncreaseRageMeter;
 		playerStats.OnDamageDealt += IncreaseRageMeterByHalf;
+	}
+	
+	void OnDisable()
+	{
+		playerStats.OnDamageTaken -= IncreaseRageMeter;
+		playerStats.OnDamageDealt -= IncreaseRageMeterByHalf;
+	}
+	
+	void Start()
+	{
 		rageReady = false; 
 		rageMeter = 0;
 	}

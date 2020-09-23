@@ -1,6 +1,12 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+public enum Direction
+{
+	Left,
+	Right
+}
+
 public class CharacterMovement2D : MonoBehaviour
 {
 	[Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;	// How much to smooth out the movement
@@ -17,13 +23,13 @@ public class CharacterMovement2D : MonoBehaviour
 	
 	public Animator animate;
 	
-	public int dodgeAmount;
+	private int dodgeAmount;
 	public int currentDodgeAmount;
-	public float dodgeRegenTimeBaseValue;
 	private float dodgeRegenTime;
+	private float currentDodgeRegenTime;
 	
-	public float dodgeTimerBaseValue;
 	private float dodgeTimer;
+	private float currentDodgeTimer;
 	private int leftClickAmount;
 	private int rightClickAmount;
 	
@@ -46,6 +52,8 @@ public class CharacterMovement2D : MonoBehaviour
 	
 	private void Start()
 	{
+		dodgeRegenTime = playerStats.dodgeRegenTime;
+		dodgeTimer = playerStats.dodgeTimer;
 		dodgeAmount = playerStats.dodgeAmount;
 		currentDodgeAmount = dodgeAmount;
 	}
@@ -53,15 +61,15 @@ public class CharacterMovement2D : MonoBehaviour
 	private void Update()
 	{
 		//TODO: Dodge method and timer
-		if(dodgeTimer>0)
+		if(currentDodgeTimer > 0)
 		{
-			dodgeTimer-=Time.deltaTime;
+			currentDodgeTimer-=Time.deltaTime;
 		}
-		if(dodgeTimer<=0)
+		if(currentDodgeTimer <= 0)
 		{
-			dodgeTimer=0;
-			leftClickAmount=0;
-			rightClickAmount=0;
+			currentDodgeTimer = 0;
+			leftClickAmount = 0;
+			rightClickAmount = 0;
 		}
 		
 		if(currentDodgeAmount >= dodgeAmount)
@@ -70,19 +78,19 @@ public class CharacterMovement2D : MonoBehaviour
 		}
 		else
 		{
-			if(dodgeRegenTime>0)
+			if(currentDodgeRegenTime > 0)
 			{
-				dodgeRegenTime-=Time.deltaTime;
+				currentDodgeRegenTime -= Time.deltaTime;
 			}
-			if(dodgeRegenTime<=0)
+			if(currentDodgeRegenTime <= 0)
 			{
-				dodgeRegenTime = dodgeRegenTimeBaseValue;
+				currentDodgeRegenTime = dodgeRegenTime;
 				currentDodgeAmount++;
 			}
 		}
 		
 		
-		//Debug.Log("Dodgetimer: " + dodgeTimer+"clicks:"+clickAmount);
+		//Debug.Log("currentDodgeTimer: " + currentDodgeTimer+"clicks:"+clickAmount);
 	}
 	
 	private void FixedUpdate()
@@ -109,12 +117,27 @@ public class CharacterMovement2D : MonoBehaviour
 		playerStats.canMove=true;
 	}
 	
-	public void Move(float move)
+	public void Move(Direction direction)
 	{
 
 		//only control the player if grounded or airControl is turned on
 		if (m_Grounded && playerStats.canMove)
 		{
+			float move;
+			float moveSpeed;
+			
+			if(direction == Direction.Right)
+			{
+				moveSpeed = playerStats.movementSpeed;
+				
+			}
+			else
+			{
+				moveSpeed = playerStats.movementSpeed * (-1);
+			}
+			
+			//Get movement value
+			move = moveSpeed * Time.fixedDeltaTime;
 			//Animate the character
 			animate.SetBool("Moving",true);
 			// Move the character by finding the target velocity
@@ -201,10 +224,10 @@ public class CharacterMovement2D : MonoBehaviour
 		}
 		if((leftClickAmount==1)||(rightClickAmount==1))
 		{
-			dodgeTimer=dodgeTimerBaseValue;
+			currentDodgeTimer = dodgeTimer;
 		}
 		//Debug.Log("clickamount:" +clickAmount);
-		if((dodgeTimer>0&&leftClickAmount>=2) || (dodgeTimer>0&&rightClickAmount>=2))
+		if((currentDodgeTimer>0&&leftClickAmount>=2) || (currentDodgeTimer>0&&rightClickAmount>=2))
 		{
 			ActualDodge(direction);
 			currentDodgeAmount--;

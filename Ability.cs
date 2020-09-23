@@ -22,8 +22,18 @@ public abstract class Ability : MonoBehaviour
 	protected void Awake()
 	{
 		amplifiedAbilityDamage = abilityDamage * playerStats.rageMultiplier;
+	}
+	
+	protected void OnEnable()
+	{
 		playerStats.OnRageMode += IncreaseAbilityDamage;
 		playerStats.OnRageModeOff += DecreaseAbilityDamage;
+	}
+	
+	protected void OnDisable()
+	{
+		playerStats.OnRageMode -= IncreaseAbilityDamage;
+		playerStats.OnRageModeOff -= DecreaseAbilityDamage;
 	}
 	
 	protected void FixedUpdate()

@@ -194,7 +194,7 @@ public class CharacterCombat2D : MonoBehaviour
 	
 	void Hurt()
 	{	
-		playerStats.PlayerWasInterrupted();
+		//playerStats.PlayerWasInterrupted(); -> on animation event
 		
 		playerStats.canMove = false;
 		playerStats.canAttack = false;
@@ -205,13 +205,23 @@ public class CharacterCombat2D : MonoBehaviour
 	
 	void Knockback()
 	{	
-		playerStats.PlayerWasInterrupted();
+		//playerStats.PlayerWasInterrupted(); -> on animation event
 		
 		playerStats.canMove = false;
 		playerStats.canAttack = false;
 		playerStats.canCastAbility = false;
 		
 		animate.SetTrigger("Knockback");
+	}
+	
+	void OnEnable()
+	{
+		playerStats.OnInterrupt += BlockOff;
+	}
+	
+	void OnDisable()
+	{
+		playerStats.OnInterrupt -= BlockOff;
 	}
 	
 	void OnDrawGizmosSelected()
