@@ -46,7 +46,7 @@ public class PlayerStats : MonoBehaviour
 	public event GetDamage OnDamageTaken;
 	public event GetDamage OnDamageDealt;
 	
-	void Start()
+	void Awake()
 	{
 		_playerId++;
 		playerId = _playerId;
@@ -118,5 +118,11 @@ public class PlayerStats : MonoBehaviour
 		firstAttackDamage /= rageMultiplier;
 		secondAttackDamage /= rageMultiplier;
 		thirdAttackDamage /= rageMultiplier;
+	}
+	
+	//TESTING ONLY:
+	public int GetPlayerId()
+	{
+		return playerId;
 	}
 }

@@ -295,4 +295,10 @@ public class CharacterMovement2D : MonoBehaviour
 		theScale.x *= -1;
 		transform.localScale = theScale;*/
 	}
+	
+	//TESTING ONLY:
+	public void TestFlip()
+	{
+		Flip();
+	}
 }

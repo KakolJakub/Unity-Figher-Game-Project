@@ -20,9 +20,12 @@ public class PlayerControls : MonoBehaviour
 	private CharacterAbilities2D characterAbilities2D;
 
     // Update is called once per frame
-    void Update()										//TODO: Maybe add an interface for gameplay systems ("IControllable" or "IGameplaySystem")
+    void Update()										
     {
-        if(Input.GetKey(moveLeft))
+		//TODO: Maybe add an interface for gameplay systems ("IControllable" or "IGameplaySystem")
+		//TODO: Maybe base the logic on events, not if statements
+		
+		if(Input.GetKey(moveLeft))
 		{
 			characterMovement2D = GetComponent<CharacterMovement2D>();    			
 			characterMovement2D.Move(Direction.Left);
@@ -54,6 +57,12 @@ public class PlayerControls : MonoBehaviour
 		{
 			characterMovement2D = GetComponent<CharacterMovement2D>();
 			characterMovement2D.Dodge("Right");
+		}
+		
+		if(Input.GetKey(moveLeft) && Input.GetKey(moveRight))
+		{
+			characterMovement2D = GetComponent<CharacterMovement2D>();
+			characterMovement2D.DontMove();
 		}
 		
 		if(Input.GetKeyDown(attack))

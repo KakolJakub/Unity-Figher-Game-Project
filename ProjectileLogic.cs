@@ -89,7 +89,7 @@ public class ProjectileLogic : MonoBehaviour
 		CharacterCombat2D enemyCombatSystem = enemy.GetComponent<CharacterCombat2D>();
 		PlayerStats enemyStats = enemy.GetComponent<PlayerStats>();
 		
-		if (enemy != null && enemyStats.blocking != true)
+		if (enemyCombatSystem != null && enemyStats.blocking != true)
 		{
 			enemyCombatSystem.TakeDamage(damage, statusNumber);
 			ownerStats.PlayerDealtDamage(damage);
