@@ -68,7 +68,7 @@ public class GameplayTester : MonoBehaviour
 				hpBars[i].text = players[i].GetComponent<PlayerStats>().health.ToString(); if(players[i].GetComponent<PlayerStats>().health <= 0) { hpBars[i].text = "0"; }
 				blockInfo[i].text = players[i].GetComponent<PlayerStats>().blocking.ToString();
 				
-				dodges[i].text = players[i].GetComponent<CharacterMovement2D>().currentDodgeAmount.ToString();
+				dodges[i].text = players[i].GetComponent<CharacterMovement2D>().GetCurrentDodgeAmount().ToString();
 				
 				abilities1[i].text = players[i].GetComponent<CharacterAbilities2D>().ability1.GetAbilityCooldown().ToString();
 				abilities2[i].text = players[i].GetComponent<CharacterAbilities2D>().ability2.GetAbilityCooldown().ToString();

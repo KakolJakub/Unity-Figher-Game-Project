@@ -24,7 +24,7 @@ public class CharacterMovement2D : MonoBehaviour
 	public Animator animate;
 	
 	private int dodgeAmount;
-	public int currentDodgeAmount;
+	private int currentDodgeAmount;
 	private float dodgeRegenTime;
 	private float currentDodgeRegenTime;
 	
@@ -32,6 +32,8 @@ public class CharacterMovement2D : MonoBehaviour
 	private float currentDodgeTimer;
 	private int leftClickAmount;
 	private int rightClickAmount;
+	
+	private float defaultGravityScale;
 	
 	[Header("Events")]
 	[Space]
@@ -52,6 +54,8 @@ public class CharacterMovement2D : MonoBehaviour
 	
 	private void Start()
 	{
+		defaultGravityScale = m_Rigidbody2D.gravityScale;
+		
 		dodgeRegenTime = playerStats.dodgeRegenTime;
 		dodgeTimer = playerStats.dodgeTimer;
 		dodgeAmount = playerStats.dodgeAmount;
@@ -60,6 +64,7 @@ public class CharacterMovement2D : MonoBehaviour
 	
 	private void Update()
 	{
+		
 		//TODO: Dodge method and timer
 		if(currentDodgeTimer > 0)
 		{
@@ -111,7 +116,27 @@ public class CharacterMovement2D : MonoBehaviour
 			}
 		}
 	}
-
+	
+	//TESTING ONLY:
+	private void OnCollisionEnter2D(Collision2D enemy)
+	{
+		if(playerStats.dodging)
+		{
+			float addedDistance = 0;
+			
+			//Debug.Log(enemy.gameObject.name); //Player collides with the platform
+			
+			if(enemy.gameObject.GetComponent<CircleCollider2D>())
+			{
+				addedDistance = enemy.gameObject.GetComponent<CircleCollider2D>().radius * 2;
+				ActualDodge(Direction.Right);
+			}
+			
+			m_Rigidbody2D.velocity = transform.right * addedDistance; //that's velocity, not distance
+			Debug.Log("You moved by additional distance: " + addedDistance);
+		}
+	}
+	
 	public void MovementAvailable()
 	{
 		playerStats.canMove=true;
@@ -208,17 +233,17 @@ public class CharacterMovement2D : MonoBehaviour
 		m_Rigidbody2D.velocity = new Vector2(0.0f, 0.0f);
 	}
 	
-	public void Dodge(string direction) //TODO: Consider making an Enum
+	public void Dodge(Direction direction) //TODO: Consider making an Enum
 	{
 		if(currentDodgeAmount == 0)
 		{
 			return;
 		}
-		if(direction == "Left")
+		if(direction == Direction.Left)
 		{
 			leftClickAmount++;
 		}
-		if(direction == "Right")
+		if(direction == Direction.Right)
 		{
 			rightClickAmount++;
 		}
@@ -236,14 +261,24 @@ public class CharacterMovement2D : MonoBehaviour
 		}
 	}
 	
-	private void ActualDodge(string direction)
+	private void ActualDodge(Direction direction)
 	{
-		if(direction == "Left")
+		//TODO: Remove testing methods and create the final ones
+		//TODO: Find solution to characters colliding after a dodge (research: overriding what happens on collision, raycasts before dodging)
+		
+		playerStats.dodging = true;
+		DisableCharacterCollision(true);
+		//TESTING ONLY:
+		Invoke("ResetCharacterCollision", 0.5f);
+		//TESTING ONLY:
+		Invoke("StopDodging", 0.6f);
+		
+		if(direction == Direction.Left)
 		{
 			m_Rigidbody2D.velocity = Vector2.left * playerStats.dodgeRange;
 			Invoke("ResetVelocity", 0.1f);
 		}
-		if(direction == "Right")
+		if(direction == Direction.Right)
 		{
 			m_Rigidbody2D.velocity = Vector2.right * playerStats.dodgeRange;
 			Invoke("ResetVelocity", 0.1f);
@@ -280,6 +315,32 @@ public class CharacterMovement2D : MonoBehaviour
 		}
 	}
 	*/
+	private void StopDodging()
+	{
+		playerStats.dodging = false;
+	}
+	
+	private void ResetCharacterCollision()
+	{
+		DisableCharacterCollision(false);
+	}
+	
+	private void DisableCharacterCollision(bool isActive)
+	{
+		if(isActive)
+		{
+			m_Rigidbody2D.gravityScale = 0;
+			GetComponent<CircleCollider2D>().enabled = false;
+			GetComponent<BoxCollider2D>().enabled = false;
+		}
+		else
+		{
+			GetComponent<CircleCollider2D>().enabled = true;
+			GetComponent<BoxCollider2D>().enabled = true;
+			m_Rigidbody2D.gravityScale = defaultGravityScale;
+		}
+		
+	}
 	
 	private void Flip()
 	{
@@ -300,5 +361,10 @@ public class CharacterMovement2D : MonoBehaviour
 	public void TestFlip()
 	{
 		Flip();
+	}
+	
+	public int GetCurrentDodgeAmount()
+	{
+		return currentDodgeAmount;
 	}
 }

@@ -39,7 +39,7 @@ public class PlayerControls : MonoBehaviour
 		if(Input.GetKeyDown(moveLeft))
 		{
 			characterMovement2D = GetComponent<CharacterMovement2D>();
-			characterMovement2D.Dodge("Left");
+			characterMovement2D.Dodge(Direction.Left);
 		}
 		
 		if(Input.GetKey(moveRight))
@@ -56,7 +56,7 @@ public class PlayerControls : MonoBehaviour
 		if(Input.GetKeyDown(moveRight))
 		{
 			characterMovement2D = GetComponent<CharacterMovement2D>();
-			characterMovement2D.Dodge("Right");
+			characterMovement2D.Dodge(Direction.Right);
 		}
 		
 		if(Input.GetKey(moveLeft) && Input.GetKey(moveRight))

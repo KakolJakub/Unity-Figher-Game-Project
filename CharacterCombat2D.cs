@@ -126,7 +126,7 @@ public class CharacterCombat2D : MonoBehaviour
 			clickAmount++;
 			ComboAvailable();
 			ComboTimer(playerStats.comboTime);
-			AttackManager(clickAmount);
+			ManageAttacks(clickAmount);
 		}
 	}
 	
@@ -156,7 +156,7 @@ public class CharacterCombat2D : MonoBehaviour
 		clickAmount=0;
 	}
 	
-	void AttackManager(int attackNumber)
+	void ManageAttacks(int attackNumber)
 	{
 		if(attackNumber==1)
 		{
