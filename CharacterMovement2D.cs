@@ -9,15 +9,19 @@ public enum Direction
 
 public class CharacterMovement2D : MonoBehaviour
 {
-	[Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;	// How much to smooth out the movement
-	[SerializeField] private LayerMask m_WhatIsGround;							// A mask determining what is ground to the character
-	[SerializeField] private Transform m_GroundCheck;							// A position marking where to check if the player is grounded.
+	[Range(0, .3f)] [SerializeField] private float movementSmoothing = 0.1f;	// How much to smooth out the movement
+	[SerializeField] private LayerMask whatIsGround;							// A mask determining what is ground to the character
+	[SerializeField] private Transform groundCheck;							// A position marking where to check if the player is grounded.
 
-	const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
-	private bool m_Grounded;            // Whether or not the player is grounded.
-	private Rigidbody2D m_Rigidbody2D;
-	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
-	private Vector3 m_Velocity = Vector3.zero;
+	[SerializeField] private Transform rayFirePoint; // A point from which Raycast can be fired.
+	
+	[SerializeField] private float minDodgePassingDistance; // The minimum distance the player needs to be in when dodging, in order to pass through the other player.
+	
+	const float GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
+	private bool _Grounded;            // Whether or not the player is grounded.
+	private Rigidbody2D _Rigidbody2D;
+	private bool _FacingRight = true;  // For determining which way the player is currently facing.
+	private Vector3 _Velocity = Vector3.zero;
 	
 	public PlayerStats playerStats;
 	
@@ -45,7 +49,7 @@ public class CharacterMovement2D : MonoBehaviour
 
 	private void Awake()
 	{
-		m_Rigidbody2D = GetComponent<Rigidbody2D>();
+		_Rigidbody2D = GetComponent<Rigidbody2D>();
 
 		if (OnLandEvent == null)
 			OnLandEvent = new UnityEvent();
@@ -54,7 +58,7 @@ public class CharacterMovement2D : MonoBehaviour
 	
 	private void Start()
 	{
-		defaultGravityScale = m_Rigidbody2D.gravityScale;
+		defaultGravityScale = _Rigidbody2D.gravityScale;
 		
 		dodgeRegenTime = playerStats.dodgeRegenTime;
 		dodgeTimer = playerStats.dodgeTimer;
@@ -68,7 +72,7 @@ public class CharacterMovement2D : MonoBehaviour
 		//TODO: Dodge method and timer
 		if(currentDodgeTimer > 0)
 		{
-			currentDodgeTimer-=Time.deltaTime;
+			currentDodgeTimer -= Time.deltaTime;
 		}
 		if(currentDodgeTimer <= 0)
 		{
@@ -100,17 +104,17 @@ public class CharacterMovement2D : MonoBehaviour
 	
 	private void FixedUpdate()
 	{
-		bool wasGrounded = m_Grounded;
-		m_Grounded = false;
+		bool wasGrounded = _Grounded;
+		_Grounded = false;
 
 		// The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
 		// This can be done using layers instead but Sample Assets will not overwrite your project settings.
-		Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
+		Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, GroundedRadius, whatIsGround);
 		for (int i = 0; i < colliders.Length; i++)
 		{
 			if (colliders[i].gameObject != gameObject)
 			{
-				m_Grounded = true;
+				_Grounded = true;
 				if (!wasGrounded)
 					OnLandEvent.Invoke();
 			}
@@ -118,7 +122,7 @@ public class CharacterMovement2D : MonoBehaviour
 	}
 	
 	//TESTING ONLY:
-	private void OnCollisionEnter2D(Collision2D enemy)
+	/*private void OnCollisionEnter2D(Collision2D enemy)
 	{
 		if(playerStats.dodging)
 		{
@@ -129,24 +133,24 @@ public class CharacterMovement2D : MonoBehaviour
 			if(enemy.gameObject.GetComponent<CircleCollider2D>())
 			{
 				addedDistance = enemy.gameObject.GetComponent<CircleCollider2D>().radius * 2;
-				ActualDodge(Direction.Right);
+				//ActualDodge(Direction.Right);
 			}
 			
-			m_Rigidbody2D.velocity = transform.right * addedDistance; //that's velocity, not distance
+			_Rigidbody2D.velocity = transform.right * addedDistance; //that's velocity, not distance
 			Debug.Log("You moved by additional distance: " + addedDistance);
 		}
-	}
+	}*/
 	
 	public void MovementAvailable()
 	{
-		playerStats.canMove=true;
+		playerStats.canMove = true;
 	}
 	
 	public void Move(Direction direction)
 	{
 
 		//only control the player if grounded or airControl is turned on
-		if (m_Grounded && playerStats.canMove)
+		if (_Grounded && playerStats.canMove)
 		{
 			float move;
 			float moveSpeed;
@@ -166,18 +170,18 @@ public class CharacterMovement2D : MonoBehaviour
 			//Animate the character
 			animate.SetBool("Moving",true);
 			// Move the character by finding the target velocity
-			Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
+			Vector3 targetVelocity = new Vector2(move * 10f, _Rigidbody2D.velocity.y);
 			// And then smoothing it out and applying it to the character
-			m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
+			_Rigidbody2D.velocity = Vector3.SmoothDamp(_Rigidbody2D.velocity, targetVelocity, ref _Velocity, movementSmoothing);
 
 			// If the input is moving the player right and the player is facing left...
-			if (move > 0 && !m_FacingRight)
+			if (move > 0 && !_FacingRight)
 			{
 				// ... flip the player.
 				Flip();
 			}
 			// Otherwise if the input is moving the player left and the player is facing right...
-			else if (move < 0 && m_FacingRight)
+			else if (move < 0 && _FacingRight)
 			{
 				// ... flip the player.
 				Flip();
@@ -187,7 +191,7 @@ public class CharacterMovement2D : MonoBehaviour
 	
 	public void DontMove()
 	{
-		if (m_Grounded)
+		if (_Grounded)
 		{
 			//Animate the character
 			animate.SetBool("Moving", false);
@@ -197,13 +201,13 @@ public class CharacterMovement2D : MonoBehaviour
 	//Used via animation events on knockback animation
 	public void SlideBack()
 	{
-		if(m_FacingRight)
+		if(_FacingRight)
 		{
-			m_Rigidbody2D.velocity = Vector2.left * playerStats.knockbackForce;
+			_Rigidbody2D.velocity = Vector2.left * playerStats.knockbackForce;
 		}
-		if(!m_FacingRight)
+		if(!_FacingRight)
 		{
-			m_Rigidbody2D.velocity = Vector2.right * playerStats.knockbackForce;
+			_Rigidbody2D.velocity = Vector2.right * playerStats.knockbackForce;
 		}
 		else
 		{
@@ -213,13 +217,13 @@ public class CharacterMovement2D : MonoBehaviour
 	
 	public void MovePlayerForward(float speed)
 	{
-		if(!m_FacingRight)
+		if(!_FacingRight)
 		{
-			m_Rigidbody2D.velocity = Vector2.left * speed;
+			_Rigidbody2D.velocity = Vector2.left * speed;
 		}
-		if(m_FacingRight)
+		if(_FacingRight)
 		{
-			m_Rigidbody2D.velocity = Vector2.right * speed;
+			_Rigidbody2D.velocity = Vector2.right * speed;
 		}
 		else
 		{
@@ -230,15 +234,27 @@ public class CharacterMovement2D : MonoBehaviour
 	//Used via animation events on knockback animation
 	public void ResetVelocity()
 	{
-		m_Rigidbody2D.velocity = new Vector2(0.0f, 0.0f);
+		_Rigidbody2D.velocity = new Vector2(0.0f, 0.0f);
 	}
 	
-	public void Dodge(Direction direction) //TODO: Consider making an Enum
+	public void Dodge(Direction direction)
 	{
+		bool canPassThrough;
+		
+		if(AllowPassingThrough())
+		{
+			canPassThrough = true;
+		}
+		else
+		{
+			canPassThrough = false;
+		}
+		
 		if(currentDodgeAmount == 0)
 		{
 			return;
 		}
+		
 		if(direction == Direction.Left)
 		{
 			leftClickAmount++;
@@ -247,45 +263,53 @@ public class CharacterMovement2D : MonoBehaviour
 		{
 			rightClickAmount++;
 		}
-		if((leftClickAmount==1)||(rightClickAmount==1))
+		
+		if((leftClickAmount == 1)||(rightClickAmount == 1))
 		{
 			currentDodgeTimer = dodgeTimer;
 		}
+		
 		//Debug.Log("clickamount:" +clickAmount);
-		if((currentDodgeTimer>0&&leftClickAmount>=2) || (currentDodgeTimer>0&&rightClickAmount>=2))
+		
+		if((currentDodgeTimer > 0 && leftClickAmount >= 2) || (currentDodgeTimer > 0 && rightClickAmount >= 2))
 		{
-			ActualDodge(direction);
+			ActualDodge(direction, canPassThrough);
 			currentDodgeAmount--;
-			leftClickAmount=0;
-			rightClickAmount=0;
+			leftClickAmount = 0;
+			rightClickAmount = 0;
 		}
 	}
 	
-	private void ActualDodge(Direction direction)
+	private void ActualDodge(Direction direction, bool canPassThrough)
 	{
-		//TODO: Remove testing methods and create the final ones
-		//TODO: Find solution to characters colliding after a dodge (research: overriding what happens on collision, raycasts before dodging)
+		//TODO: Remove testing methods and set up the ones used on animation events
 		
 		playerStats.dodging = true;
-		DisableCharacterCollision(true);
-		//TESTING ONLY:
-		Invoke("ResetCharacterCollision", 0.5f);
+		
+		if(canPassThrough)
+		{
+			DisableCharacterCollision(true);
+			
+			//TESTING ONLY:
+			Invoke("ResetCharacterCollision", 0.5f);
+		}
+		
 		//TESTING ONLY:
 		Invoke("StopDodging", 0.6f);
 		
 		if(direction == Direction.Left)
 		{
-			m_Rigidbody2D.velocity = Vector2.left * playerStats.dodgeRange;
-			Invoke("ResetVelocity", 0.1f);
+			_Rigidbody2D.velocity = Vector2.left * playerStats.dodgeRange;
+			
+			//TESTING ONLY:
+			Invoke("ResetVelocity", 0.1f);  
 		}
-		if(direction == Direction.Right)
+		else if(direction == Direction.Right)
 		{
-			m_Rigidbody2D.velocity = Vector2.right * playerStats.dodgeRange;
+			_Rigidbody2D.velocity = Vector2.right * playerStats.dodgeRange;
+			
+			//TESTING ONLY:
 			Invoke("ResetVelocity", 0.1f);
-		}
-		else
-		{
-			return;
 		}
 	}
 	
@@ -293,21 +317,21 @@ public class CharacterMovement2D : MonoBehaviour
 	private void ActualDodge(float move)
 	{
 		//only control the player if grounded or airControl is turned on
-		if (m_Grounded)
+		if (_Grounded)
 		{
 			// Move the character by finding the target velocity
-			Vector3 targetVelocity = new Vector2(move * 250f, m_Rigidbody2D.velocity.y);
+			Vector3 targetVelocity = new Vector2(move * 250f, _Rigidbody2D.velocity.y);
 			// And then smoothing it out and applying it to the character
-			m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
+			_Rigidbody2D.velocity = Vector3.SmoothDamp(_Rigidbody2D.velocity, targetVelocity, ref _Velocity, movementSmoothing);
 
 			// If the input is moving the player right and the player is facing left...
-			if (move > 0 && !m_FacingRight)
+			if (move > 0 && !_FacingRight)
 			{
 				// ... flip the player.
 				Flip();
 			}
 			// Otherwise if the input is moving the player left and the player is facing right...
-			else if (move < 0 && m_FacingRight)
+			else if (move < 0 && _FacingRight)
 			{
 				// ... flip the player.
 				Flip();
@@ -329,7 +353,7 @@ public class CharacterMovement2D : MonoBehaviour
 	{
 		if(isActive)
 		{
-			m_Rigidbody2D.gravityScale = 0;
+			_Rigidbody2D.gravityScale = 0;
 			GetComponent<CircleCollider2D>().enabled = false;
 			GetComponent<BoxCollider2D>().enabled = false;
 		}
@@ -337,15 +361,45 @@ public class CharacterMovement2D : MonoBehaviour
 		{
 			GetComponent<CircleCollider2D>().enabled = true;
 			GetComponent<BoxCollider2D>().enabled = true;
-			m_Rigidbody2D.gravityScale = defaultGravityScale;
+			_Rigidbody2D.gravityScale = defaultGravityScale;
 		}
 		
+	}
+	
+	private bool AllowPassingThrough()
+	{
+		bool allow;
+		
+		RaycastHit2D dodgeInformator = Physics2D.Raycast(rayFirePoint.transform.position, rayFirePoint.transform.right);		
+		
+		if(dodgeInformator.collider != null)
+		{
+			Debug.Log(dodgeInformator.collider.gameObject.name);
+			
+			if(dodgeInformator.distance < minDodgePassingDistance)
+			{
+				allow = true;
+				Debug.Log("If you dodge, you will pass through the enemy.");
+			}
+			else
+			{
+				allow = false;
+				Debug.Log("If you dodge, you won't pass through the enemy.");
+			}
+		}
+		else
+		{
+			allow = false;
+			Debug.Log("No enemy in sight.");
+		}
+		
+		return allow;
 	}
 	
 	private void Flip()
 	{
 		// Switch the way the player is labelled as facing.
-		m_FacingRight = !m_FacingRight;
+		_FacingRight = !_FacingRight;
 		
 		//New flip:
 		transform.Rotate(0f, 180f, 0f);

@@ -5,12 +5,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class GameplayTester : MonoBehaviour
-{
-    [SerializeField] private Vector3 player1SpawnPoint;
+{	
+	[SerializeField] private Vector3 player1SpawnPoint;
 	[SerializeField] private Vector3 player2SpawnPoint;
 	
+	[SerializeField] private KeyCode skipRoundCountdownButton;
 	[SerializeField] private float roundCountdown;
 	private float currentCountdown;
+	private bool roundStarted;
 	
 	[SerializeField] private GameObject[] players;
 
@@ -45,22 +47,28 @@ public class GameplayTester : MonoBehaviour
 	
 	void FixedUpdate()
 	{
-		if(currentCountdown > 0)
+		if(!roundStarted)
 		{
-			currentCountdown -= Time.fixedDeltaTime;
-			roundCountdownInfo.text = currentCountdown.ToString();
-		}
-		
-		if(currentCountdown < 0)
-		{
-			currentCountdown = 0;
-			roundCountdownInfo.text = "Start!";
-			RoundStart();
-		}
+			if(currentCountdown > 0)
+			{
+				currentCountdown -= Time.fixedDeltaTime;
+				roundCountdownInfo.text = currentCountdown.ToString();
+			}
+			else if(currentCountdown < 0)
+			{
+				currentCountdown = 0;
+				RoundStart();
+			}
+		}	
 	}
 	
 	void Update()
     {
+		if(Input.GetKeyDown(skipRoundCountdownButton))
+		{
+			RoundStart();
+		}
+		
 		try 
 		{
 			for(int i = 0; i < 2; i++)
@@ -114,6 +122,8 @@ public class GameplayTester : MonoBehaviour
 	
 	void RoundCountdown()
 	{
+		roundStarted = false;
+		
 		EnablePlayerControls(false);
 		
 		currentCountdown = roundCountdown;
@@ -121,7 +131,10 @@ public class GameplayTester : MonoBehaviour
 	
 	void RoundStart()
 	{
+		roundStarted = true;
+		
 		EnablePlayerControls(true);
+		roundCountdownInfo.text = "Start!";
 		
 		Invoke("ClearRoundInfo", 0.5f);
 	}
