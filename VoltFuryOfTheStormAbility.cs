@@ -13,6 +13,8 @@ public enum FuryOfTheStormAttack
 
 public class VoltFuryOfTheStormAbility : Ability
 {
+   //TODO: Add Transform for ParticleSpawnPoint
+   //TODO: Add ParticleSystem
    
    public override void ActivateAbility()
    {
