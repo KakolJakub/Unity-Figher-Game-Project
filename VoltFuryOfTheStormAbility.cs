@@ -16,6 +16,9 @@ public class VoltFuryOfTheStormAbility : Ability
    //TODO: Add Transform for ParticleSpawnPoint
    //TODO: Add ParticleSystem
    
+   public Transform particleSpawnPoint;
+   public ParticleSystem particles;
+   
    public override void ActivateAbility()
    {
 	   //animate.SetTrigger("Ability_FuryOfTheStorm");
@@ -52,4 +55,10 @@ public class VoltFuryOfTheStormAbility : Ability
 	   
 	   GetComponent<CharacterCombat2D>().DealCombatDamage(dmg, dmgEffect);
    }  
+   
+   //used via animation event
+   public void FuryOfTheStorm_Energize()
+   {
+	   Instantiate(particles, particleSpawnPoint.position, particleSpawnPoint.rotation);
+   }
 }
