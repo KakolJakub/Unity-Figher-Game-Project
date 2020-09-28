@@ -13,15 +13,14 @@ public enum FuryOfTheStormAttack
 
 public class VoltFuryOfTheStormAbility : Ability
 {
-   //TODO: Add Transform for ParticleSpawnPoint
-   //TODO: Add ParticleSystem
-   
    public Transform particleSpawnPoint;
-   public ParticleSystem particles;
+   public ParticleSystem particles;	//TODO: Create particles.
+   
+   ParticleSystem actualParticles;
    
    public override void ActivateAbility()
    {
-	   //animate.SetTrigger("Ability_FuryOfTheStorm");
+	   animate.SetTrigger("Ability_FuryOfTheStorm");
 	   Debug.Log("You used: " + abilityName);
    }
    
@@ -54,11 +53,24 @@ public class VoltFuryOfTheStormAbility : Ability
 	   }
 	   
 	   GetComponent<CharacterCombat2D>().DealCombatDamage(dmg, dmgEffect);
-   }  
+   }
    
    //used via animation event
    public void FuryOfTheStorm_Energize()
    {
-	   Instantiate(particles, particleSpawnPoint.position, particleSpawnPoint.rotation);
+	   actualParticles = Instantiate(particles, particleSpawnPoint.position, particleSpawnPoint.rotation);
+   }
+   
+   public void FuryOfTheStorm_EnergizeOff()
+   {
+	  actualParticles.Stop();
+   }
+   
+   void Update()
+   {
+	   if(actualParticles != null)
+	   {
+		   actualParticles.transform.position = particleSpawnPoint.position;
+	   }
    }
 }
