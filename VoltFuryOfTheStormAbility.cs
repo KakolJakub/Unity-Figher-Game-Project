@@ -13,6 +13,8 @@ public enum FuryOfTheStormAttack
 
 public class VoltFuryOfTheStormAbility : Ability
 {
+   //TODO: Create a logic for calculating each hit damage.
+   
    public Transform particleSpawnPoint;
    public ParticleSystem particles;	//TODO: Create particles.
    
