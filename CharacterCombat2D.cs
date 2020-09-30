@@ -57,15 +57,22 @@ public class CharacterCombat2D : MonoBehaviour
 		
 		foreach(Collider2D enemy in hitEnemies)
 		{
-			enemy.GetComponent<CharacterCombat2D>().TakeDamage(damage, effect);
-			playerStats.PlayerDealtDamage(damage);
+			
+			if(enemy.GetComponent<PlayerStats>().blocking || enemy.GetComponent<PlayerStats>().dodging)
+			{
+				return;
+			}
+			else
+			{
+				enemy.GetComponent<CharacterCombat2D>().TakeDamage(damage, effect);
+				playerStats.PlayerDealtDamage(damage);
+			}
 		}
-		
 	}
 	
 	public void TakeDamage(int damage, DamageEffect effect)
 	{
-		if(!playerStats.blocking)
+		if(!playerStats.blocking && !playerStats.dodging)
 		{
 			switch(effect)
 			{

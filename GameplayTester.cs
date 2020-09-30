@@ -64,7 +64,7 @@ public class GameplayTester : MonoBehaviour
 	
 	void Update()
     {
-		if(Input.GetKeyDown(skipRoundCountdownButton))
+		if(!roundStarted && Input.GetKeyDown(skipRoundCountdownButton))
 		{
 			RoundStart();
 		}

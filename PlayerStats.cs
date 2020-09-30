@@ -16,11 +16,12 @@ public class PlayerStats : MonoBehaviour
 	
 	public float movementSpeed = 35;
 	public int dodgeAmount = 3;
-	public float dodgeRange = 40;
+	public float dodgeRange = 15;
 	public float dodgeRegenTime = 3;
 	public float dodgeTimer = 0.5f;
 	public bool dodging = false;
 	public bool canMove = true;
+	public bool canDodge = true;
 	
 	public float comboTime = 3;
 	public bool canAttack = true;

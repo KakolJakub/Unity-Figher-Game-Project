@@ -37,7 +37,10 @@ public class CharacterMovement2D : MonoBehaviour
 	private int leftClickAmount;
 	private int rightClickAmount;
 	
+	private Direction dodgeDirection;
+	
 	private float defaultGravityScale;
+	
 	
 	[Header("Events")]
 	[Space]
@@ -215,6 +218,19 @@ public class CharacterMovement2D : MonoBehaviour
 		}
 	}
 	
+	//Used via animation events on dodge animation
+	public void SlideForward()
+	{
+		if(dodgeDirection == Direction.Right)
+		{
+			_Rigidbody2D.velocity = Vector2.right * playerStats.dodgeRange;
+		}
+		else
+		{
+			_Rigidbody2D.velocity = Vector2.left * playerStats.dodgeRange;
+		}
+	}
+
 	public void MovePlayerForward(float speed)
 	{
 		if(!_FacingRight)
@@ -231,122 +247,90 @@ public class CharacterMovement2D : MonoBehaviour
 		}
 	}
 	
-	//Used via animation events on knockback animation
+	//Used via animation events on knockback and dodge animation
 	public void ResetVelocity()
 	{
 		_Rigidbody2D.velocity = new Vector2(0.0f, 0.0f);
 	}
 	
+	//Used via animation events on dodge animation
+	public void StopDodging()
+	{
+		DisableCharacterCollision(false);
+		playerStats.dodging = false;
+		playerStats.canDodge = true;
+	}
+	
 	public void Dodge(Direction direction)
 	{
-		bool canPassThrough;
+		if(playerStats.canDodge)
+		{
+			bool canPassThrough;
 		
-		if(AllowPassingThrough())
-		{
-			canPassThrough = true;
-		}
-		else
-		{
-			canPassThrough = false;
-		}
+			if(AllowPassingThrough())
+			{
+				canPassThrough = true;
+			}
+			else
+			{
+				canPassThrough = false;
+			}
+			
+			if(currentDodgeAmount == 0)
+			{
+				return;
+			}
 		
-		if(currentDodgeAmount == 0)
-		{
-			return;
-		}
+			if(direction == Direction.Left)
+			{
+				leftClickAmount++;
+			}
+			if(direction == Direction.Right)
+			{
+				rightClickAmount++;
+			}
 		
-		if(direction == Direction.Left)
-		{
-			leftClickAmount++;
-		}
-		if(direction == Direction.Right)
-		{
-			rightClickAmount++;
-		}
+			if((leftClickAmount == 1)||(rightClickAmount == 1))
+			{
+				currentDodgeTimer = dodgeTimer;
+			}
 		
-		if((leftClickAmount == 1)||(rightClickAmount == 1))
-		{
-			currentDodgeTimer = dodgeTimer;
-		}
-		
-		//Debug.Log("clickamount:" +clickAmount);
-		
-		if((currentDodgeTimer > 0 && leftClickAmount >= 2) || (currentDodgeTimer > 0 && rightClickAmount >= 2))
-		{
-			ActualDodge(direction, canPassThrough);
-			currentDodgeAmount--;
-			leftClickAmount = 0;
-			rightClickAmount = 0;
+			if((currentDodgeTimer > 0 && leftClickAmount >= 2) || (currentDodgeTimer > 0 && rightClickAmount >= 2))
+			{
+				ActualDodge(direction, canPassThrough);
+				currentDodgeAmount--;
+				leftClickAmount = 0;
+				rightClickAmount = 0;
+			}
 		}
 	}
 	
 	private void ActualDodge(Direction direction, bool canPassThrough)
 	{
-		//TODO: Remove testing methods and set up the ones used on animation events
+		playerStats.canMove = false;
+		playerStats.canDodge = false;
+		playerStats.canAttack = false;
+		playerStats.canCastAbility = false;
 		
 		playerStats.dodging = true;
+		
+		dodgeDirection = direction;
 		
 		if(canPassThrough)
 		{
 			DisableCharacterCollision(true);
-			
-			//TESTING ONLY:
-			Invoke("ResetCharacterCollision", 0.5f);
+		}
+		else
+		{
+			DisableCharacterHitBox();
 		}
 		
-		//TESTING ONLY:
-		Invoke("StopDodging", 0.6f);
+		if((direction == Direction.Left && _FacingRight) || (direction == Direction.Right && !_FacingRight))
+		{
+			Flip();
+		}
 		
-		if(direction == Direction.Left)
-		{
-			_Rigidbody2D.velocity = Vector2.left * playerStats.dodgeRange;
-			
-			//TESTING ONLY:
-			Invoke("ResetVelocity", 0.1f);  
-		}
-		else if(direction == Direction.Right)
-		{
-			_Rigidbody2D.velocity = Vector2.right * playerStats.dodgeRange;
-			
-			//TESTING ONLY:
-			Invoke("ResetVelocity", 0.1f);
-		}
-	}
-	
-	/*
-	private void ActualDodge(float move)
-	{
-		//only control the player if grounded or airControl is turned on
-		if (_Grounded)
-		{
-			// Move the character by finding the target velocity
-			Vector3 targetVelocity = new Vector2(move * 250f, _Rigidbody2D.velocity.y);
-			// And then smoothing it out and applying it to the character
-			_Rigidbody2D.velocity = Vector3.SmoothDamp(_Rigidbody2D.velocity, targetVelocity, ref _Velocity, movementSmoothing);
-
-			// If the input is moving the player right and the player is facing left...
-			if (move > 0 && !_FacingRight)
-			{
-				// ... flip the player.
-				Flip();
-			}
-			// Otherwise if the input is moving the player left and the player is facing right...
-			else if (move < 0 && _FacingRight)
-			{
-				// ... flip the player.
-				Flip();
-			}
-		}
-	}
-	*/
-	private void StopDodging()
-	{
-		playerStats.dodging = false;
-	}
-	
-	private void ResetCharacterCollision()
-	{
-		DisableCharacterCollision(false);
+		animate.SetTrigger("Dodge");
 	}
 	
 	private void DisableCharacterCollision(bool isActive)
@@ -362,8 +346,12 @@ public class CharacterMovement2D : MonoBehaviour
 			GetComponent<CircleCollider2D>().enabled = true;
 			GetComponent<BoxCollider2D>().enabled = true;
 			_Rigidbody2D.gravityScale = defaultGravityScale;
-		}
-		
+		}	
+	}
+	
+	private void DisableCharacterHitBox()
+	{
+		GetComponent<BoxCollider2D>().enabled = false;
 	}
 	
 	private bool AllowPassingThrough()
