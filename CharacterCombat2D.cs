@@ -20,8 +20,8 @@ public class CharacterCombat2D : MonoBehaviour
 	//public delegate void StopAction();
 	//public static event StopAction OnInterrupt;
 	
-	bool canCombo=false; 
-	int clickAmount=0;
+	bool canCombo = false; 
+	int clickAmount = 0;
 		
 	public void DealAttackDamage(MeleeAttack number)
 	{

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,6 +17,9 @@ public class VoltFuryOfTheStormAbility : Ability
    public Transform particleSpawnPoint;
    public ParticleSystem particles;	//TODO: Create particles.
    
+   [SerializeField] int noOfRegularHits = 4;
+   [SerializeField] int finalHitMultiplier;
+   
    ParticleSystem actualParticles;
    
    public override void ActivateAbility()
@@ -24,35 +28,25 @@ public class VoltFuryOfTheStormAbility : Ability
 	   Debug.Log("You used: " + abilityName);
    }
    
-   //TODO:
-   //One method for all 4 attacks
-   //One method for the final attack
-   //No enums in the process
-   
    //used via animation event
    public void FuryOfTheStorm_DealDamage(FuryOfTheStormAttack attackNumber)
-   {
+   {   
 	   int dmg;
 	   DamageEffect dmgEffect;
 	   
-	   //TODO: 
-	   // -> Determine each attack damage and damageEffect
-	   // -> If you want to use one method, stay with enum approach
-	   // -> Else you can use two (or more) methods, one for each kind of attack
-	   
-	   //TESTING ONLY:
 	   if(attackNumber == FuryOfTheStormAttack.FifthFuryAttack)
 	   {
-		   dmg = abilityDamage * 2;
+		   dmg = CalculateDamage(attackNumber);
 		   dmgEffect = DamageEffect.Knockback;
 	   }
 	   else
 	   {
-		   dmg = abilityDamage;
+		   dmg = CalculateDamage(attackNumber);
 		   dmgEffect = abilityDamageEffect;
 	   }
 	   
 	   GetComponent<CharacterCombat2D>().DealCombatDamage(dmg, dmgEffect);
+	   Debug.Log("FuryOfTheStorm dealt: " + dmg);
    }
    
    //used via animation event
@@ -64,6 +58,27 @@ public class VoltFuryOfTheStormAbility : Ability
    public void FuryOfTheStorm_EnergizeOff()
    {
 	  actualParticles.Stop();
+   }
+   
+   int CalculateDamage(FuryOfTheStormAttack attackNumber)
+   {
+	   double regularHitDamage = Math.Round((double)(abilityDamage / (noOfRegularHits + finalHitMultiplier)));
+	   
+	   int finalHitDamage = (int)regularHitDamage * finalHitMultiplier;
+	   
+	   if((finalHitDamage + (noOfRegularHits * regularHitDamage)) != abilityDamage)
+	   {
+		   finalHitDamage = abilityDamage - (noOfRegularHits * (int)regularHitDamage);
+	   }
+	   
+	   if(attackNumber == FuryOfTheStormAttack.FifthFuryAttack)
+	   {
+		  return finalHitDamage;
+	   }
+	   else
+	   {
+		   return (int)regularHitDamage;
+	   }
    }
    
    void Update()
