@@ -93,8 +93,15 @@ public class CharacterCombat2D : MonoBehaviour
 				break;
 			}
 			
-			playerStats.health-=damage;
+			playerStats.health -= damage;
 			playerStats.PlayerTookDamage(damage);
+			
+			if(playerStats.health <= 0)
+			{
+				playerStats.PlayerDied(); //TODO: Determine what happens when a player dies - disable Animation Controller or disable playerControls?
+			}
+			
+			
 			//Debug.Log(name+" health: "+playerStats.health);
 		}
 	}
@@ -221,14 +228,21 @@ public class CharacterCombat2D : MonoBehaviour
 		animate.SetTrigger("Knockback");
 	}
 	
+	void Die()
+	{
+		animate.SetTrigger("Death");
+	}
+	
 	void OnEnable()
 	{
 		playerStats.OnInterrupt += BlockOff;
+		playerStats.OnDeath += Die;
 	}
 	
 	void OnDisable()
 	{
 		playerStats.OnInterrupt -= BlockOff;
+		playerStats.OnDeath -= Die;
 	}
 	
 	void OnDrawGizmosSelected()
