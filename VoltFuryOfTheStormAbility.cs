@@ -14,13 +14,14 @@ public enum FuryOfTheStormAttack
 
 public class VoltFuryOfTheStormAbility : Ability
 {
-   public Transform particleSpawnPoint;
-   public ParticleSystem particles;	//TODO: Create particles.
+   public Transform primaryParticleSpawnPoint;
+   public Transform secondaryParticleSpawnPoint;
+   public ParticleSystem[] particles;	//TODO: Create particles.
    
    [SerializeField] int noOfRegularHits = 4;
    [SerializeField] int finalHitMultiplier;
    
-   ParticleSystem actualParticles;
+   ParticleSystem[] actualParticles = new ParticleSystem[5];
    
    public override void ActivateAbility()
    {
@@ -50,14 +51,31 @@ public class VoltFuryOfTheStormAbility : Ability
    }
    
    //used via animation event
-   public void FuryOfTheStorm_Energize()
+   public void FuryOfTheStorm_Energize(FuryOfTheStormAttack attackNumber)
    {
-	   actualParticles = Instantiate(particles, particleSpawnPoint.position, particleSpawnPoint.rotation);
+	   int index;
+	   index = (int)attackNumber;
+	   
+	   if(DeterminePrimarySpawnPoint(attackNumber))
+	   {
+		   actualParticles[index] = Instantiate(particles[index], primaryParticleSpawnPoint.position, primaryParticleSpawnPoint.rotation);
+	   }
+	   else
+	   {
+		   actualParticles[index] = Instantiate(particles[index], secondaryParticleSpawnPoint.position, secondaryParticleSpawnPoint.rotation);
+	   }
    }
    
-   public void FuryOfTheStorm_EnergizeOff()
+   public void FuryOfTheStorm_EnergizeOff(FuryOfTheStormAttack attackNumber)
    {
-	  actualParticles.Stop();
+	  
+	  int index;
+	  index = (int)attackNumber;
+	  
+	  if(actualParticles[index] != null)
+	  {
+		  actualParticles[index].Stop();
+	  }
    }
    
    int CalculateDamage(FuryOfTheStormAttack attackNumber)
@@ -81,11 +99,47 @@ public class VoltFuryOfTheStormAbility : Ability
 	   }
    }
    
+   bool DeterminePrimarySpawnPoint(FuryOfTheStormAttack attackNumber)
+   {
+	   bool isPrimary;
+	   
+	   switch(attackNumber)
+	   {
+		   case FuryOfTheStormAttack.SecondFuryAttack :
+		   isPrimary = false;
+		   break;
+		   
+		   case FuryOfTheStormAttack.FourthFuryAttack :
+		   isPrimary = false;
+		   break;
+		   
+		   default:
+		   isPrimary = true;
+		   break;
+	   }
+	   
+	   return isPrimary;
+   }
+   
    void Update()
    {
 	   if(actualParticles != null)
 	   {
-		   actualParticles.transform.position = particleSpawnPoint.position;
+		   for(int i = 0; i < actualParticles.Length; i++)
+		   {
+			   if(actualParticles[i] != null)
+			   {
+				   if(DeterminePrimarySpawnPoint((FuryOfTheStormAttack)i))
+				   {
+					   actualParticles[i].transform.position = primaryParticleSpawnPoint.position;
+					}
+					else
+					{
+						actualParticles[i].transform.position = secondaryParticleSpawnPoint.position;
+					}
+				}
+			}
 	   }
+
    }
 }

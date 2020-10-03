@@ -45,6 +45,16 @@ public class GameplayTester : MonoBehaviour
 		RoundCountdown();
     }
 	
+	void OnEnable()
+	{
+		PlayerStats.OnDeath += RoundEnd;
+	}
+	
+	void OnDisable()
+	{
+		PlayerStats.OnDeath -= RoundEnd;
+	}
+	
 	void FixedUpdate()
 	{
 		if(!roundStarted)
@@ -137,6 +147,12 @@ public class GameplayTester : MonoBehaviour
 		roundCountdownInfo.text = "Start!";
 		
 		Invoke("ClearRoundInfo", 0.5f);
+	}
+	
+	void RoundEnd()
+	{
+		EnablePlayerControls(false);
+		roundCountdownInfo.text = "Round ended.";
 	}
 	
 	void EnablePlayerControls(bool setting)

@@ -98,7 +98,7 @@ public class CharacterCombat2D : MonoBehaviour
 			
 			if(playerStats.health <= 0)
 			{
-				playerStats.PlayerDied(); //TODO: Determine what happens when a player dies - disable Animation Controller or disable playerControls?
+				Die(); //TODO: Determine what happens when a player dies - disable Animation Controller or disable playerControls?
 			}
 			
 			
@@ -231,18 +231,17 @@ public class CharacterCombat2D : MonoBehaviour
 	void Die()
 	{
 		animate.SetTrigger("Death");
+		playerStats.PlayerDied();
 	}
 	
 	void OnEnable()
 	{
 		playerStats.OnInterrupt += BlockOff;
-		playerStats.OnDeath += Die;
 	}
 	
 	void OnDisable()
 	{
 		playerStats.OnInterrupt -= BlockOff;
-		playerStats.OnDeath -= Die;
 	}
 	
 	void OnDrawGizmosSelected()

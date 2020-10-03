@@ -41,14 +41,13 @@ public class PlayerStats : MonoBehaviour
 	
 	public delegate void TakeAction();
 	public event TakeAction OnInterrupt;
-	public event TakeAction OnDeath;
+	public static event TakeAction OnDeath;
 	public event TakeAction OnRageMode;
 	public event TakeAction OnRageModeOff;
 	
 	public delegate void GetDamage(int damage);
 	public event GetDamage OnDamageTaken;
 	public event GetDamage OnDamageDealt;
-	
 	
 	void Awake()
 	{
