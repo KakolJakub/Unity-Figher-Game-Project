@@ -16,12 +16,15 @@ public class VoltFuryOfTheStormAbility : Ability
 {
    public Transform primaryParticleSpawnPoint;
    public Transform secondaryParticleSpawnPoint;
-   public ParticleSystem[] particles;	//TODO: Create particles.
+   
+   public ParticleSystem[] particles;
+   public ParticleSystem specialParticles;
    
    [SerializeField] int noOfRegularHits = 4;
    [SerializeField] int finalHitMultiplier;
    
    ParticleSystem[] actualParticles = new ParticleSystem[5];
+   ParticleSystem actualSpecialParticles;
    
    public override void ActivateAbility()
    {
@@ -39,6 +42,8 @@ public class VoltFuryOfTheStormAbility : Ability
 	   {
 		   dmg = CalculateDamage(attackNumber);
 		   dmgEffect = DamageEffect.Knockback;
+		   
+		   specialParticlesOn(false);
 	   }
 	   else
 	   {
@@ -63,6 +68,11 @@ public class VoltFuryOfTheStormAbility : Ability
 	   else
 	   {
 		   actualParticles[index] = Instantiate(particles[index], secondaryParticleSpawnPoint.position, secondaryParticleSpawnPoint.rotation);
+	   }
+	   
+	   if(attackNumber == FuryOfTheStormAttack.FifthFuryAttack)
+	   {
+		   specialParticlesOn(true);
 	   }
    }
    
@@ -121,6 +131,21 @@ public class VoltFuryOfTheStormAbility : Ability
 	   return isPrimary;
    }
    
+   void specialParticlesOn(bool answer)
+   {
+	   if(specialParticles != null)
+	   {
+		   if(answer)
+		   {
+			   actualSpecialParticles = Instantiate(specialParticles, primaryParticleSpawnPoint.position, primaryParticleSpawnPoint.rotation);
+		   }
+		   else
+		   {
+			   actualSpecialParticles.Stop();
+		   }
+	   }
+   }
+   
    void Update()
    {
 	   if(actualParticles != null)
@@ -139,6 +164,11 @@ public class VoltFuryOfTheStormAbility : Ability
 					}
 				}
 			}
+	   }
+	   
+	   if(actualSpecialParticles != null)
+	   {
+		   actualSpecialParticles.transform.position = primaryParticleSpawnPoint.position;
 	   }
 
    }
