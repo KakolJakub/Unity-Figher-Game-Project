@@ -155,6 +155,8 @@ public class GameplayTester : MonoBehaviour
 		roundCountdownInfo.text = "Round ended.";
 	}
 	
+	//TODO: Add a method for restarting the round.
+	
 	void EnablePlayerControls(bool setting)
 	{
 		foreach(GameObject player in players)
