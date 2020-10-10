@@ -156,6 +156,7 @@ public class GameplayTester : MonoBehaviour
 	}
 	
 	//TODO: Add a method for restarting the round.
+	//Set player spawns, roundCountdown, restore player HP
 	
 	void EnablePlayerControls(bool setting)
 	{
