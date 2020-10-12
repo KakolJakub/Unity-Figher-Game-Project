@@ -36,11 +36,14 @@ public class GameplayTester : MonoBehaviour
 	
 	[SerializeField] private Text roundCountdownInfo;
 	
+	int playerMaxHealth;
+	
     void Start()
     {
 		players[0] = GameObject.Find("Player");
 		players[1] = GameObject.Find("TestDummy");
 		
+		GetPlayerMaxHealth();
 		SetPlayersSpawn();
 		RoundCountdown();
     }
@@ -78,6 +81,10 @@ public class GameplayTester : MonoBehaviour
 		{
 			RoundStart();
 		}
+		else if (roundStarted && Input.GetKeyDown(skipRoundCountdownButton))
+		{
+			RoundRestart();
+		}
 		
 		try 
 		{
@@ -111,10 +118,25 @@ public class GameplayTester : MonoBehaviour
 	void SetPlayersSpawn()
 	{
 		foreach(GameObject player in players)
-		{
+		{	
+			if(player.GetComponent<CharacterMovement2D>())
+			{
+				player.GetComponent<CharacterMovement2D>().ResetVelocity();
+			}
+			
+			if(player.GetComponent<Animator>())
+			{
+				player.GetComponent<Animator>().SetTrigger("Hurt");
+			}
+			
 			if(player.GetComponent<PlayerStats>().GetPlayerId() == 1)
 			{
 				player.transform.position = player1SpawnPoint;
+				
+				if(player.GetComponent<CharacterMovement2D>().GetDirectionInfo() != Direction.Right)
+				{
+					player.GetComponent<CharacterMovement2D>().TestFlip();
+				}
 				Debug.Log("Player 1 ready.");
 			}
 			else
@@ -127,6 +149,34 @@ public class GameplayTester : MonoBehaviour
 				player.transform.position = player2SpawnPoint;
 				Debug.Log("Player 2 ready.");
 			}
+		}
+	}
+	
+	void GetPlayerMaxHealth()
+	{
+		foreach(GameObject player in players)
+		{
+			playerMaxHealth += player.GetComponent<PlayerStats>().health;
+		}
+		
+		playerMaxHealth /= players.Length;
+	}
+	
+	void ResetPlayersStats()
+	{
+		foreach(GameObject player in players)
+		{
+			if(player.GetComponent<PlayerStats>())
+			{
+				player.GetComponent<PlayerStats>().health = playerMaxHealth;
+				player.GetComponent<PlayerStats>().dodging = false;
+			}
+			
+			if(player.GetComponent<RageMode>())
+			{
+				player.GetComponent<RageMode>().DeactivateRageMode();
+			}
+
 		}
 	}
 	
@@ -155,9 +205,14 @@ public class GameplayTester : MonoBehaviour
 		roundCountdownInfo.text = "Round ended.";
 	}
 	
-	//TODO: Add a method for restarting the round.
-	//Set player spawns, roundCountdown, restore player HP
-	//TODO: create a variable for playerMaxHp and in the Start() method set it equal to player starting HP
+	void RoundRestart()
+	{
+		//TODO: Check if you reloading current scene works better.
+		
+		ResetPlayersStats();
+		SetPlayersSpawn();
+		RoundCountdown();
+	}
 	
 	void EnablePlayerControls(bool setting)
 	{

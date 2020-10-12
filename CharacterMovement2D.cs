@@ -101,7 +101,6 @@ public class CharacterMovement2D : MonoBehaviour
 			}
 		}
 		
-		
 		//Debug.Log("currentDodgeTimer: " + currentDodgeTimer+"clicks:"+clickAmount);
 	}
 	
@@ -147,6 +146,7 @@ public class CharacterMovement2D : MonoBehaviour
 	public void MovementAvailable()
 	{
 		playerStats.canMove = true;
+		playerStats.canDodge = true;
 	}
 	
 	public void Move(Direction direction)
@@ -403,6 +403,18 @@ public class CharacterMovement2D : MonoBehaviour
 	public void TestFlip()
 	{
 		Flip();
+	}
+	
+	public Direction GetDirectionInfo()
+	{
+		if(_FacingRight)
+		{
+			return Direction.Right;
+		}
+		else
+		{
+			return Direction.Left;
+		}
 	}
 	
 	public int GetCurrentDodgeAmount()

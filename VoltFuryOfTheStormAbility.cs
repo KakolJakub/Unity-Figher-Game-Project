@@ -43,7 +43,7 @@ public class VoltFuryOfTheStormAbility : Ability
 		   dmg = CalculateDamage(attackNumber);
 		   dmgEffect = DamageEffect.Knockback;
 		   
-		   specialParticlesOn(false);
+		   SpecialParticlesOn(false);
 	   }
 	   else
 	   {
@@ -72,13 +72,12 @@ public class VoltFuryOfTheStormAbility : Ability
 	   
 	   if(attackNumber == FuryOfTheStormAttack.FifthFuryAttack)
 	   {
-		   specialParticlesOn(true);
+		   SpecialParticlesOn(true);
 	   }
    }
    
    public void FuryOfTheStorm_EnergizeOff(FuryOfTheStormAttack attackNumber)
    {
-	  
 	  int index;
 	  index = (int)attackNumber;
 	  
@@ -131,7 +130,7 @@ public class VoltFuryOfTheStormAbility : Ability
 	   return isPrimary;
    }
    
-   void specialParticlesOn(bool answer)
+   void SpecialParticlesOn(bool answer)
    {
 	   if(specialParticles != null)
 	   {
@@ -139,11 +138,21 @@ public class VoltFuryOfTheStormAbility : Ability
 		   {
 			   actualSpecialParticles = Instantiate(specialParticles, primaryParticleSpawnPoint.position, primaryParticleSpawnPoint.rotation);
 		   }
-		   else
+		   else if(actualSpecialParticles != null)
 		   {
 			   actualSpecialParticles.Stop();
 		   }
 	   }
+   }
+   
+   void DisableAllParticles()
+   {
+	   for(int i = 0; i < actualParticles.Length; i++)
+	   {
+		   FuryOfTheStorm_EnergizeOff((FuryOfTheStormAttack)i);
+	   }
+	   
+	   SpecialParticlesOn(false);
    }
    
    void Update()
@@ -171,5 +180,15 @@ public class VoltFuryOfTheStormAbility : Ability
 		   actualSpecialParticles.transform.position = primaryParticleSpawnPoint.position;
 	   }
 
+   }
+   
+   void OnEnable()
+   {
+	   playerStats.OnInterrupt += DisableAllParticles;
+   }
+   
+   void OnDisable()
+   {
+	   playerStats.OnInterrupt -= DisableAllParticles;
    }
 }
