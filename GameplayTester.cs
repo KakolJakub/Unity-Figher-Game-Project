@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameplayTester : MonoBehaviour
 {	
@@ -118,26 +119,12 @@ public class GameplayTester : MonoBehaviour
 	void SetPlayersSpawn()
 	{
 		foreach(GameObject player in players)
-		{	
-			if(player.GetComponent<CharacterMovement2D>())
-			{
-				player.GetComponent<CharacterMovement2D>().ResetVelocity();
-			}
-			
-			if(player.GetComponent<Animator>())
-			{
-				player.GetComponent<Animator>().SetTrigger("Hurt");
-			}
-			
+		{				
 			if(player.GetComponent<PlayerStats>().GetPlayerId() == 1)
 			{
 				player.transform.position = player1SpawnPoint;
 				
-				if(player.GetComponent<CharacterMovement2D>().GetDirectionInfo() != Direction.Right)
-				{
-					player.GetComponent<CharacterMovement2D>().TestFlip();
-				}
-				Debug.Log("Player 1 ready.");
+				Debug.Log("Player 1 ready." + " ID: " + player.GetComponent<PlayerStats>().GetPlayerId());
 			}
 			else
 			{
@@ -147,7 +134,7 @@ public class GameplayTester : MonoBehaviour
 				}
 				
 				player.transform.position = player2SpawnPoint;
-				Debug.Log("Player 2 ready.");
+				Debug.Log("Player 2 ready." + " ID: " + player.GetComponent<PlayerStats>().GetPlayerId());
 			}
 		}
 	}
@@ -160,24 +147,6 @@ public class GameplayTester : MonoBehaviour
 		}
 		
 		playerMaxHealth /= players.Length;
-	}
-	
-	void ResetPlayersStats()
-	{
-		foreach(GameObject player in players)
-		{
-			if(player.GetComponent<PlayerStats>())
-			{
-				player.GetComponent<PlayerStats>().health = playerMaxHealth;
-				player.GetComponent<PlayerStats>().dodging = false;
-			}
-			
-			if(player.GetComponent<RageMode>())
-			{
-				player.GetComponent<RageMode>().DeactivateRageMode();
-			}
-
-		}
 	}
 	
 	void RoundCountdown()
@@ -207,11 +176,7 @@ public class GameplayTester : MonoBehaviour
 	
 	void RoundRestart()
 	{
-		//TODO: Check if you reloading current scene works better.
-		
-		ResetPlayersStats();
-		SetPlayersSpawn();
-		RoundCountdown();
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 	
 	void EnablePlayerControls(bool setting)

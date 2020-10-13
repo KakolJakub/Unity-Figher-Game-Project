@@ -67,6 +67,11 @@ public class PlayerStats : MonoBehaviour
 		OnRageModeOff -= DecreasePlayerAttackDamage;
 	}
 	
+	void OnDestroy()
+	{
+		_playerId = 0;
+	}
+	
 	//TODO: Create an universal method for these 4 events
 	
 	public void PlayerTookDamage(int damage)  
