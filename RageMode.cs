@@ -2,11 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class RageMode : MonoBehaviour
 {
     public PlayerStats playerStats;
 	public Animator animate;
+	public VideoClip rageClip;
 	
 	bool rageReady;
 	
@@ -85,9 +87,11 @@ public class RageMode : MonoBehaviour
 	{
 		//TODO: Play cutscene (on animation event)
 		//animate.SetTrigger("Rage"); 
+		PlayRageCutscene(); //TESTING ONLY
 		currentRageDuration = playerStats.rageDuration;
 		rageMeter = 0;
 		playerStats.rageActive = true;
+		AddBonusEffects();
 		playerStats.PlayerActivatedRage();
 	}
 	
@@ -96,12 +100,15 @@ public class RageMode : MonoBehaviour
 		rageMeter = 0;
 		rageReady = false;
 		playerStats.rageActive = false;
+		RemoveBonusEffects();
 		playerStats.PlayerDeactivatedRage();
 	}
 	
 	public void PlayRageCutscene()
 	{
+		GameplayTester.PlayCutscene(rageClip);
 		//Access GameManager (probably a static class)
+		//VideoManager.Play(rageClip);
 		//Play a cutscene (it should pause player input, probably a static method inside a GameManager)
 		//Rage buffs and bonus effects should apply after the cutscene ends
 	}

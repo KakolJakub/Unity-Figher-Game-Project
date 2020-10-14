@@ -82,12 +82,14 @@ public class VoltVoltaicHookAbility : Ability
    
    void OnEnable()
    {
-	   playerStats.OnInterrupt += VoltaicHook_DestroyRopeTip;
+	   base.OnEnable();
+      playerStats.OnInterrupt += VoltaicHook_DestroyRopeTip;
    }
    
    void OnDisable()
    {
-	   playerStats.OnInterrupt -= VoltaicHook_DestroyRopeTip;
+	   base.OnDisable();
+      playerStats.OnInterrupt -= VoltaicHook_DestroyRopeTip;
    }
    
    void Update()

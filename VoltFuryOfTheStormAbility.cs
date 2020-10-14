@@ -184,11 +184,13 @@ public class VoltFuryOfTheStormAbility : Ability
    
    void OnEnable()
    {
+	   base.OnEnable();
 	   playerStats.OnInterrupt += DisableAllParticles;
    }
    
    void OnDisable()
    {
+	   base.OnDisable();
 	   playerStats.OnInterrupt -= DisableAllParticles;
    }
 }

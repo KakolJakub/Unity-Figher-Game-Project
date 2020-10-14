@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
@@ -38,7 +39,14 @@ public class GameplayTester : MonoBehaviour
 	[SerializeField] private Text roundCountdownInfo;
 	
 	int playerMaxHealth;
-	
+
+	public static void PlayCutscene(VideoClip clip)
+	{
+		VideoPlayer vp = GameObject.Find("GameTester").GetComponent<VideoPlayer>();
+		vp.clip = clip;
+		vp.Play();
+	}
+
     void Start()
     {
 		players[0] = GameObject.Find("Player");
