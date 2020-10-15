@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 
 public class GameplayTester : MonoBehaviour
 {	
+	public static bool gamePaused;
+	
 	[SerializeField] private Vector3 player1SpawnPoint;
 	[SerializeField] private Vector3 player2SpawnPoint;
 	
@@ -40,15 +42,20 @@ public class GameplayTester : MonoBehaviour
 	
 	int playerMaxHealth;
 
-	public static void PlayCutscene(VideoClip clip)
+	[SerializeField] VideoPlayer videoPlayer;
+
+	public void PlayCutscene(VideoClip clip)
 	{
-		VideoPlayer vp = GameObject.Find("GameTester").GetComponent<VideoPlayer>();
-		vp.clip = clip;
-		vp.Play();
+		EnablePlayerControls(false);
+		PauseGame();
+		videoPlayer.clip = clip;
+		videoPlayer.Play();
 	}
 
     void Start()
     {
+		gamePaused = false;
+		
 		players[0] = GameObject.Find("Player");
 		players[1] = GameObject.Find("TestDummy");
 		
@@ -60,28 +67,14 @@ public class GameplayTester : MonoBehaviour
 	void OnEnable()
 	{
 		PlayerStats.OnDeath += RoundEnd;
+		RageMode.OnCutscene += PlayCutscene;
+		videoPlayer.loopPointReached += ResumeGame;
 	}
 	
 	void OnDisable()
 	{
 		PlayerStats.OnDeath -= RoundEnd;
-	}
-	
-	void FixedUpdate()
-	{
-		if(!roundStarted)
-		{
-			if(currentCountdown > 0)
-			{
-				currentCountdown -= Time.fixedDeltaTime;
-				roundCountdownInfo.text = currentCountdown.ToString();
-			}
-			else if(currentCountdown < 0)
-			{
-				currentCountdown = 0;
-				RoundStart();
-			}
-		}	
+		RageMode.OnCutscene -= PlayCutscene;
 	}
 	
 	void Update()
@@ -111,10 +104,9 @@ public class GameplayTester : MonoBehaviour
 				comboInfo[i].text = players[i].GetComponent<CharacterCombat2D>().GetComboInfo().ToString();
 				//TODO: add the same functionality for combo duration
 			
-				rageMeterAmount[i].text = players[i].GetComponent<RageMode>().GetRageMeterInfo().ToString();
-				//up to change, probably: rageMeterAmount[i].text = players[i].GetComponent<CharacterAbilities2D>().rageMode.GetRageMeterAmount().ToString();
+				rageMeterAmount[i].text = players[i].GetComponent<CharacterAbilities2D>().rageMode.GetRageMeterInfo().ToString();
 				rageInfo[i].text = players[i].GetComponent<PlayerStats>().rageActive.ToString();
-				rageDuration[i].text = players[i].GetComponent<RageMode>().GetRageDuration().ToString();
+				rageDuration[i].text = players[i].GetComponent<CharacterAbilities2D>().rageMode.GetRageDuration().ToString();
 				
 			}
 		}
@@ -122,6 +114,20 @@ public class GameplayTester : MonoBehaviour
 		{
 			//just to see other Debug Logs
 		}
+
+		if(!roundStarted)
+		{
+			if(currentCountdown > 0)
+			{
+				currentCountdown -= Time.fixedDeltaTime;
+				roundCountdownInfo.text = currentCountdown.ToString();
+			}
+			else if(currentCountdown < 0)
+			{
+				currentCountdown = 0;
+				RoundStart();
+			}
+		}	
 	}
 	
 	void SetPlayersSpawn()
@@ -180,13 +186,39 @@ public class GameplayTester : MonoBehaviour
 	{
 		EnablePlayerControls(false);
 		roundCountdownInfo.text = "Round ended.";
+		PauseGame();
 	}
 	
 	void RoundRestart()
 	{
 		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+		if(gamePaused)
+		{
+			ResumeGame();
+		}
 	}
 	
+	void PauseGame()
+	{
+		Time.timeScale = 0;
+		gamePaused = true;
+	}
+
+	void ResumeGame()
+	{
+		Time.timeScale = 1;
+		gamePaused = false;
+	}
+
+	void ResumeGame(VideoPlayer source)
+	{
+		source = videoPlayer;
+		ResumeGame();
+		EnablePlayerControls(true);
+		source.Stop();
+	}
+
 	void EnablePlayerControls(bool setting)
 	{
 		foreach(GameObject player in players)

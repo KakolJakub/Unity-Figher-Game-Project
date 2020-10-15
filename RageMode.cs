@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 
-public class RageMode : MonoBehaviour
+public abstract class RageMode : MonoBehaviour
 {
     public PlayerStats playerStats;
 	public Animator animate;
 	public VideoClip rageClip;
 	
+	public delegate void PlayCutscene(VideoClip clip);
+	public static event PlayCutscene OnCutscene;
+
 	bool rageReady;
 	
 	int rageMeterCap = 100;
@@ -58,15 +61,6 @@ public class RageMode : MonoBehaviour
 				DeactivateRageMode();
 			}
 		}
-		
-		//TESTING ONLY:
-		if(!playerStats.rageActive)
-		{
-			if((Input.GetKeyDown(KeyCode.R)) && rageReady)
-			{
-				ActivateRageMode();
-			}
-		}
 	}
 	
 	void IncreaseRageMeter(int amount)
@@ -82,12 +76,36 @@ public class RageMode : MonoBehaviour
 		rageMeter += (int)amountValue;
 		Debug.Log("rageMeter: " + rageMeter);
 	}
-	
+
+	public void Use()
+	{
+		if(!playerStats.rageActive)
+		{
+			if(rageReady)
+			{
+				ActivateRageMode();
+			}
+		}
+	}
+
+	public void PlayerEnteredRageCutscene()  
+	{
+		if(OnCutscene != null)
+		{
+			OnCutscene(rageClip);
+		}
+		
+		//Access GameManager (probably a static class)
+		//VideoManager.Play(rageClip);
+		//Play a cutscene (it should pause player input, probably a static method inside a GameManager)
+		//Rage buffs and bonus effects should apply after the cutscene ends
+	}
+
 	public void ActivateRageMode()
 	{
 		//TODO: Play cutscene (on animation event)
 		//animate.SetTrigger("Rage"); 
-		PlayRageCutscene(); //TESTING ONLY
+		PlayerEnteredRageCutscene(); //TESTING ONLY
 		currentRageDuration = playerStats.rageDuration;
 		rageMeter = 0;
 		playerStats.rageActive = true;
@@ -102,15 +120,6 @@ public class RageMode : MonoBehaviour
 		playerStats.rageActive = false;
 		RemoveBonusEffects();
 		playerStats.PlayerDeactivatedRage();
-	}
-	
-	public void PlayRageCutscene()
-	{
-		GameplayTester.PlayCutscene(rageClip);
-		//Access GameManager (probably a static class)
-		//VideoManager.Play(rageClip);
-		//Play a cutscene (it should pause player input, probably a static method inside a GameManager)
-		//Rage buffs and bonus effects should apply after the cutscene ends
 	}
 	
 	public virtual void AddBonusEffects()

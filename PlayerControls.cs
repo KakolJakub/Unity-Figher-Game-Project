@@ -93,6 +93,12 @@ public class PlayerControls : MonoBehaviour
 			characterAbilities2D = GetComponent<CharacterAbilities2D>();
 			characterAbilities2D.ability3.Use();
 		}
+
+		if(Input.GetKeyDown(KeyCode.R))
+		{
+			characterAbilities2D = GetComponent<CharacterAbilities2D>();
+			characterAbilities2D.rageMode.Use();
+		}
 		
     }
 	
