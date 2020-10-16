@@ -68,13 +68,14 @@ public class GameplayTester : MonoBehaviour
 	{
 		PlayerStats.OnDeath += RoundEnd;
 		RageMode.OnCutscene += PlayCutscene;
-		videoPlayer.loopPointReached += ResumeGame;
+		videoPlayer.loopPointReached += EndCutscene;
 	}
 	
 	void OnDisable()
 	{
 		PlayerStats.OnDeath -= RoundEnd;
 		RageMode.OnCutscene -= PlayCutscene;
+		videoPlayer.loopPointReached -= EndCutscene;
 	}
 	
 	void Update()
@@ -186,7 +187,6 @@ public class GameplayTester : MonoBehaviour
 	{
 		EnablePlayerControls(false);
 		roundCountdownInfo.text = "Round ended.";
-		PauseGame();
 	}
 	
 	void RoundRestart()
@@ -211,12 +211,12 @@ public class GameplayTester : MonoBehaviour
 		gamePaused = false;
 	}
 
-	void ResumeGame(VideoPlayer source)
+	void EndCutscene(VideoPlayer source)
 	{
 		source = videoPlayer;
+		source.Stop();
 		ResumeGame();
 		EnablePlayerControls(true);
-		source.Stop();
 	}
 
 	void EnablePlayerControls(bool setting)

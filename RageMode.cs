@@ -13,6 +13,9 @@ public abstract class RageMode : MonoBehaviour
 	public delegate void PlayCutscene(VideoClip clip);
 	public static event PlayCutscene OnCutscene;
 
+	//When cutscene ends (VideoManager script), send message
+	//When you get the message, activate rage mode
+
 	bool rageReady;
 	
 	int rageMeterCap = 100;
@@ -38,7 +41,7 @@ public abstract class RageMode : MonoBehaviour
 		rageMeter = 0;
 	}
 	
-	void Update()
+	protected void Update()
 	{
 		if(rageMeter >= rageMeterCap)
 		{
@@ -106,9 +109,9 @@ public abstract class RageMode : MonoBehaviour
 		//TODO: Play cutscene (on animation event)
 		//animate.SetTrigger("Rage"); 
 		PlayerEnteredRageCutscene(); //TESTING ONLY
+		playerStats.rageActive = true;
 		currentRageDuration = playerStats.rageDuration;
 		rageMeter = 0;
-		playerStats.rageActive = true;
 		AddBonusEffects();
 		playerStats.PlayerActivatedRage();
 	}
