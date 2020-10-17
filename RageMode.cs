@@ -15,6 +15,7 @@ public abstract class RageMode : MonoBehaviour
 
 	//When cutscene ends (VideoManager script), send message
 	//When you get the message, activate rage mode
+	//Consider creating a RageCutsceneClass that would contain required events and rageClip
 
 	bool rageReady;
 	
