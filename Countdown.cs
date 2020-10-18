@@ -6,41 +6,31 @@ using UnityEngine;
 public static class Countdown
 {
 	
-	public static float timer=0;
+	public static float timer = 0;
+	public static bool timerSet = false;
 	
 	public static void Set(float time)
 	{
-		timer=time;
+		timer = time;
+		timerSet = true;
 	}
 	
 	//use it in Update()
-	public static float Begin()
+	public static int CountTime()
 	{
-		Debug.Log(timer);
-		if (timer>0)
+		if(timerSet)
 		{
-			timer-=Time.deltaTime;
-		}
-		if (timer<=0)
-		{
-			timer=0;
-		}
-		return timer;
-	}
-	
-	//use it in Update()
-	public static void CountTime()
-	{
-		if (timer>0)
-		{
-			timer-=Time.deltaTime;
+			if (timer > 0)
+			{
+				timer -= Time.deltaTime;
 			
+			}
+			if (timer <= 0)
+			{
+				timer = 0;
+			}
+			//Debug.Log(timer);
+			return timer;
 		}
-		if (timer<=0)
-		{
-			timer=0;
-			
-		}
-		Debug.Log(timer);
 	}
 }
