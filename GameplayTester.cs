@@ -217,6 +217,7 @@ public class GameplayTester : MonoBehaviour
 		source.Stop();
 		ResumeGame();
 		EnablePlayerControls(true);
+		RageMode.RageCutsceneEnded();
 	}
 
 	void EnablePlayerControls(bool setting)

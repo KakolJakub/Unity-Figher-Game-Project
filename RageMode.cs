@@ -12,10 +12,19 @@ public abstract class RageMode : MonoBehaviour
 	
 	public delegate void PlayCutscene(VideoClip clip);
 	public static event PlayCutscene OnCutscene;
+	
+	delegate void TakeAction();
+	static event TakeAction OnCutsceneEnd;
+	
+	//DIFFERENT IDEA:
+	//delegate void TakeAction(RageCutscene cutscene);
+	//event TakeAction OnCutsceneEnd;
 
-	//When cutscene ends (VideoManager script), send message
-	//When you get the message, activate rage mode
-	//Consider creating a RageCutsceneClass that would contain required events and rageClip
+	//TODO:
+	//Create RageCutscene class
+	//It consists of VideoClip and OwnerId
+	//DONE: In GameplayTester EndCutscene method add a static event that RageMode is subscribed to
+	//The method that's raised on that event determines whether to activate RageMode, based on OwnerId (if OwnerId == playerStats.GetPlayerId())
 
 	bool rageReady;
 	
@@ -28,12 +37,14 @@ public abstract class RageMode : MonoBehaviour
 	{
 		playerStats.OnDamageTaken += IncreaseRageMeter;
 		playerStats.OnDamageDealt += IncreaseRageMeterByHalf;
+		OnCutsceneEnd += TestId;
 	}
 	
 	void OnDisable()
 	{
 		playerStats.OnDamageTaken -= IncreaseRageMeter;
 		playerStats.OnDamageDealt -= IncreaseRageMeterByHalf;
+		OnCutsceneEnd -= TestId;
 	}
 	
 	void Start()
@@ -81,6 +92,11 @@ public abstract class RageMode : MonoBehaviour
 		Debug.Log("rageMeter: " + rageMeter);
 	}
 
+	void TestId()
+	{
+		Debug.Log(playerStats.GetPlayerId());
+	}
+
 	public void Use()
 	{
 		if(!playerStats.rageActive)
@@ -103,6 +119,14 @@ public abstract class RageMode : MonoBehaviour
 		//VideoManager.Play(rageClip);
 		//Play a cutscene (it should pause player input, probably a static method inside a GameManager)
 		//Rage buffs and bonus effects should apply after the cutscene ends
+	}
+	
+	public static void RageCutsceneEnded()
+	{
+		if(OnCutsceneEnd != null)
+		{
+			OnCutsceneEnd();
+		}
 	}
 
 	public void ActivateRageMode()

@@ -16,7 +16,7 @@ public static class Countdown
 	}
 	
 	//use it in Update()
-	public static int CountTime()
+	public static float CountTime()
 	{
 		if(timerSet)
 		{
@@ -31,6 +31,10 @@ public static class Countdown
 			}
 			//Debug.Log(timer);
 			return timer;
+		}
+		else
+		{
+			return 0;
 		}
 	}
 }
