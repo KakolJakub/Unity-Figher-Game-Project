@@ -9,7 +9,7 @@ public abstract class RageMode : MonoBehaviour
     public PlayerStats playerStats;
 	public Animator animate;
 	public VideoClip rageClip;
-	
+
 	public delegate void PlayCutscene(VideoClip clip);
 	public static event PlayCutscene OnCutscene;
 	
@@ -19,12 +19,12 @@ public abstract class RageMode : MonoBehaviour
 	//DIFFERENT IDEA:
 	//delegate void TakeAction(RageCutscene cutscene);
 	//event TakeAction OnCutsceneEnd;
-
+	
 	//TODO:
 	//Create RageCutscene class
-	//It consists of VideoClip and OwnerId
+	//SCRAPPED: It consists of VideoClip and OwnerId
 	//DONE: In GameplayTester EndCutscene method add a static event that RageMode is subscribed to
-	//The method that's raised on that event determines whether to activate RageMode, based on OwnerId (if OwnerId == playerStats.GetPlayerId())
+	//SCRAPPED: The method that's raised on that event determines whether to activate RageMode, based on OwnerId (if OwnerId == playerStats.GetPlayerId())
 
 	bool rageReady;
 	

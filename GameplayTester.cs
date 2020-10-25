@@ -120,7 +120,7 @@ public class GameplayTester : MonoBehaviour
 		{
 			if(currentCountdown > 0)
 			{
-				currentCountdown -= Time.fixedDeltaTime;
+				currentCountdown -= Time.deltaTime;
 				roundCountdownInfo.text = currentCountdown.ToString();
 			}
 			else if(currentCountdown < 0)
@@ -138,8 +138,14 @@ public class GameplayTester : MonoBehaviour
 			if(player.GetComponent<PlayerStats>().GetPlayerId() == 1)
 			{
 				player.transform.position = player1SpawnPoint;
-				
+
 				Debug.Log("Player 1 ready." + " ID: " + player.GetComponent<PlayerStats>().GetPlayerId());
+
+				if(player.GetComponent<SpriteRenderer>())
+				{
+					player.GetComponent<SpriteRenderer>().sortingLayerName = "Player1";
+				}
+
 			}
 			else
 			{
@@ -147,9 +153,15 @@ public class GameplayTester : MonoBehaviour
 				{
 					player.GetComponent<CharacterMovement2D>().TestFlip();
 				}
-				
+
 				player.transform.position = player2SpawnPoint;
+
 				Debug.Log("Player 2 ready." + " ID: " + player.GetComponent<PlayerStats>().GetPlayerId());
+
+				if(player.GetComponent<SpriteRenderer>())
+				{
+					player.GetComponent<SpriteRenderer>().sortingLayerName = "Player2";
+				}
 			}
 		}
 	}
