@@ -16,17 +16,10 @@ public abstract class RageMode : MonoBehaviour
 	delegate void TakeAction();
 	static event TakeAction OnCutsceneEnd;
 	
-	//DIFFERENT IDEA:
-	//delegate void TakeAction(RageCutscene cutscene);
-	//event TakeAction OnCutsceneEnd;
-	
-	//TODO:
-	//Create RageCutscene class
-	//SCRAPPED: It consists of VideoClip and OwnerId
-	//DONE: In GameplayTester EndCutscene method add a static event that RageMode is subscribed to
-	//SCRAPPED: The method that's raised on that event determines whether to activate RageMode, based on OwnerId (if OwnerId == playerStats.GetPlayerId())
+	//TODO: Consider creating a RageCutscenePlayer GameObject, instead of adding that functionality here
 
 	bool rageReady;
+	bool rageInitiated;
 	
 	int rageMeterCap = 100;
 	int rageMeter;
@@ -37,19 +30,20 @@ public abstract class RageMode : MonoBehaviour
 	{
 		playerStats.OnDamageTaken += IncreaseRageMeter;
 		playerStats.OnDamageDealt += IncreaseRageMeterByHalf;
-		OnCutsceneEnd += TestId;
+		OnCutsceneEnd += ActivateRageMode;
 	}
 	
 	void OnDisable()
 	{
 		playerStats.OnDamageTaken -= IncreaseRageMeter;
 		playerStats.OnDamageDealt -= IncreaseRageMeterByHalf;
-		OnCutsceneEnd -= TestId;
+		OnCutsceneEnd -= ActivateRageMode;
 	}
 	
 	void Start()
 	{
-		rageReady = false; 
+		rageReady = false;
+		rageInitiated = false; 
 		rageMeter = 0;
 	}
 	
@@ -92,18 +86,13 @@ public abstract class RageMode : MonoBehaviour
 		Debug.Log("rageMeter: " + rageMeter);
 	}
 
-	void TestId()
-	{
-		Debug.Log(playerStats.GetPlayerId());
-	}
-
 	public void Use()
 	{
 		if(!playerStats.rageActive)
 		{
 			if(rageReady)
 			{
-				ActivateRageMode();
+				InitiateRageMode();
 			}
 		}
 	}
@@ -114,11 +103,6 @@ public abstract class RageMode : MonoBehaviour
 		{
 			OnCutscene(rageClip);
 		}
-		
-		//Access GameManager (probably a static class)
-		//VideoManager.Play(rageClip);
-		//Play a cutscene (it should pause player input, probably a static method inside a GameManager)
-		//Rage buffs and bonus effects should apply after the cutscene ends
 	}
 	
 	public static void RageCutsceneEnded()
@@ -129,18 +113,24 @@ public abstract class RageMode : MonoBehaviour
 		}
 	}
 
-	public void ActivateRageMode()
+	public void InitiateRageMode()
 	{
-		//TODO: Play cutscene (on animation event)
-		//animate.SetTrigger("Rage"); 
-		PlayerEnteredRageCutscene(); //TESTING ONLY
-		playerStats.rageActive = true;
-		currentRageDuration = playerStats.rageDuration;
-		rageMeter = 0;
-		AddBonusEffects();
-		playerStats.PlayerActivatedRage();
+		PlayerEnteredRageCutscene();
+		rageInitiated = true;
 	}
 	
+	public void ActivateRageMode()
+	{
+		if(rageInitiated)
+		{
+			playerStats.rageActive = true;
+			currentRageDuration = playerStats.rageDuration;
+			rageMeter = 0;
+			AddBonusEffects();
+			playerStats.PlayerActivatedRage();
+		}
+	}
+
 	public void DeactivateRageMode()
 	{
 		rageMeter = 0;
