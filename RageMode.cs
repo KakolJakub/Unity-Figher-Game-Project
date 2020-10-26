@@ -133,6 +133,7 @@ public abstract class RageMode : MonoBehaviour
 
 	public void DeactivateRageMode()
 	{
+		//rageInitiated = false;
 		rageMeter = 0;
 		rageReady = false;
 		playerStats.rageActive = false;
