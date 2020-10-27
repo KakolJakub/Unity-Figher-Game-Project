@@ -9,17 +9,12 @@ public abstract class RageMode : MonoBehaviour
     public PlayerStats playerStats;
 	public Animator animate;
 	public VideoClip rageClip;
-
-	public delegate void PlayCutscene(VideoClip clip);
-	public static event PlayCutscene OnCutscene;
 	
-	delegate void TakeAction();
-	static event TakeAction OnCutsceneEnd;
-	
-	//TODO: Consider creating a RageCutscenePlayer GameObject, instead of adding that functionality here
+	public delegate void ReactToRage(RageMode rage);
+	public event ReactToRage OnRageCutsceneStart;
+	public event ReactToRage OnRageCutsceneEnd;
 
 	bool rageReady;
-	bool rageInitiated;
 	
 	int rageMeterCap = 100;
 	int rageMeter;
@@ -30,20 +25,19 @@ public abstract class RageMode : MonoBehaviour
 	{
 		playerStats.OnDamageTaken += IncreaseRageMeter;
 		playerStats.OnDamageDealt += IncreaseRageMeterByHalf;
-		OnCutsceneEnd += ActivateRageMode;
+		OnRageCutsceneEnd += ActivateRageMode;
 	}
 	
 	void OnDisable()
 	{
 		playerStats.OnDamageTaken -= IncreaseRageMeter;
 		playerStats.OnDamageDealt -= IncreaseRageMeterByHalf;
-		OnCutsceneEnd -= ActivateRageMode;
+		OnRageCutsceneEnd += ActivateRageMode;
 	}
 	
 	void Start()
 	{
 		rageReady = false;
-		rageInitiated = false; 
 		rageMeter = 0;
 	}
 	
@@ -92,48 +86,38 @@ public abstract class RageMode : MonoBehaviour
 		{
 			if(rageReady)
 			{
-				InitiateRageMode();
+				PlayerRequestedCutscene();
 			}
 		}
 	}
 
-	public void PlayerEnteredRageCutscene()  
+	public void PlayerRequestedCutscene()
 	{
-		if(OnCutscene != null)
+		if(OnRageCutsceneStart != null)
 		{
-			OnCutscene(rageClip);
-		}
-	}
-	
-	public static void RageCutsceneEnded()
-	{
-		if(OnCutsceneEnd != null)
-		{
-			OnCutsceneEnd();
+			OnRageCutsceneStart(this);
 		}
 	}
 
-	public void InitiateRageMode()
+	public void PlayerCutsceneEnded()
 	{
-		PlayerEnteredRageCutscene();
-		rageInitiated = true;
+		if(OnRageCutsceneEnd != null)
+		{
+			OnRageCutsceneEnd(this);
+		}
 	}
 	
-	public void ActivateRageMode()
+	public void ActivateRageMode(RageMode rage)
 	{
-		if(rageInitiated)
-		{
-			playerStats.rageActive = true;
-			currentRageDuration = playerStats.rageDuration;
-			rageMeter = 0;
-			AddBonusEffects();
-			playerStats.PlayerActivatedRage();
-		}
+		playerStats.rageActive = true;
+		currentRageDuration = playerStats.rageDuration;
+		rageMeter = 0;
+		AddBonusEffects();
+		playerStats.PlayerActivatedRage();
 	}
 
 	public void DeactivateRageMode()
 	{
-		//rageInitiated = false;
 		rageMeter = 0;
 		rageReady = false;
 		playerStats.rageActive = false;

@@ -41,16 +41,11 @@ public class GameplayTester : MonoBehaviour
 	[SerializeField] private Text roundCountdownInfo;
 	
 	int playerMaxHealth;
+	RageMode currentRageMode;
+	
+	//TODO: Consider creating a RageCutscenePlayer GameObject, instead of adding that functionality here
 
 	[SerializeField] VideoPlayer videoPlayer;
-
-	public void PlayCutscene(VideoClip clip)
-	{
-		EnablePlayerControls(false);
-		PauseGame();
-		videoPlayer.clip = clip;
-		videoPlayer.Play();
-	}
 
     void Start()
     {
@@ -62,20 +57,23 @@ public class GameplayTester : MonoBehaviour
 		GetPlayerMaxHealth();
 		SetPlayersSpawn();
 		RoundCountdown();
+
+		players[0].GetComponent<RageMode>().OnRageCutsceneStart += PlayRageCutscene;
+		//players[1].GetComponent<RageMode>().OnRageCutsceneStart += PlayRageCutscene;
     }
 	
 	void OnEnable()
 	{
 		PlayerStats.OnDeath += RoundEnd;
-		RageMode.OnCutscene += PlayCutscene;
-		videoPlayer.loopPointReached += EndCutscene;
+		videoPlayer.loopPointReached += EndRageCutscene;
 	}
 	
 	void OnDisable()
 	{
 		PlayerStats.OnDeath -= RoundEnd;
-		RageMode.OnCutscene -= PlayCutscene;
-		videoPlayer.loopPointReached -= EndCutscene;
+		videoPlayer.loopPointReached -= EndRageCutscene;
+		players[0].GetComponent<RageMode>().OnRageCutsceneStart -= PlayRageCutscene;
+		//players[1].GetComponent<RageMode>().OnRageCutsceneStart -= PlayRageCutscene;
 	}
 	
 	void Update()
@@ -223,13 +221,28 @@ public class GameplayTester : MonoBehaviour
 		gamePaused = false;
 	}
 
-	void EndCutscene(VideoPlayer source)
+	void PlayRageCutscene(RageMode rage)
+	{
+		EnablePlayerControls(false);
+		PauseGame();
+		
+		currentRageMode = rage;
+		videoPlayer.clip = rage.rageClip;
+		videoPlayer.Play();
+	}
+
+	void RageCutsceneEnded(RageMode rage)
+	{
+		rage.PlayerCutsceneEnded();
+	}
+
+	void EndRageCutscene(VideoPlayer source)
 	{
 		source = videoPlayer;
 		source.Stop();
 		ResumeGame();
 		EnablePlayerControls(true);
-		RageMode.RageCutsceneEnded();
+		RageCutsceneEnded(currentRageMode);
 	}
 
 	void EnablePlayerControls(bool setting)
