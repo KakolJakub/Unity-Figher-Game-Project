@@ -36,7 +36,7 @@ public class PlayerStats : MonoBehaviour
 	public bool canCastAbility = true;
 	
 	public bool rageActive = false;
-	public float rageDuration = 10;
+	public float rageDuration = 30;
 	public int rageMultiplier = 2;
 	
 	public delegate void TakeAction();

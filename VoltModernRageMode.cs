@@ -13,8 +13,12 @@ public class VoltModernRageMode : RageMode
     
     public override void AddBonusEffects()
 	{
+        //TODO: Create string variables for sortingLayers
+        
 		primaryShockParticles = Instantiate(shockParticles, voltPrimaryHand.position, voltPrimaryHand.rotation);
+        primaryShockParticles.GetComponent<Renderer>().sortingLayerName = "Foreground";
 		secondaryShockParticles = Instantiate(shockParticles, voltSecondaryHand.position, voltSecondaryHand.rotation);
+        secondaryShockParticles.GetComponent<Renderer>().sortingLayerName = "Default";
         Debug.Log("VoltModernRage effects added.");
 	}
 	

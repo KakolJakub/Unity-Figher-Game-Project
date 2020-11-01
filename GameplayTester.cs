@@ -72,8 +72,11 @@ public class GameplayTester : MonoBehaviour
 	{
 		PlayerStats.OnDeath -= RoundEnd;
 		videoPlayer.loopPointReached -= EndRageCutscene;
-		//TODO: Add a nullguard for this:
-		players[0].GetComponent<RageMode>().OnRageCutsceneStart -= PlayRageCutscene;
+
+		if(players[0] != null)
+		{
+			players[0].GetComponent<RageMode>().OnRageCutsceneStart -= PlayRageCutscene;
+		}
 		//players[1].GetComponent<RageMode>().OnRageCutsceneStart -= PlayRageCutscene;
 	}
 	
