@@ -14,6 +14,7 @@ public class PlayerControls : MonoBehaviour
 	public KeyCode firstAbility;
 	public KeyCode secondAbility;
 	public KeyCode thirdAbility;
+	public KeyCode rageMode;
 	
 	private CharacterMovement2D characterMovement2D;
 	private CharacterCombat2D characterCombat2D;
@@ -24,6 +25,7 @@ public class PlayerControls : MonoBehaviour
     {
 		//TODO: Maybe add an interface for gameplay systems ("IControllable" or "IGameplaySystem")
 		//TODO: Maybe base the logic on events, not if statements
+		//TODO: Add default bindings (for each player)
 		
 		if(Input.GetKey(moveLeft))
 		{
@@ -77,24 +79,23 @@ public class PlayerControls : MonoBehaviour
 			characterCombat2D.Block();
 		}
 		
-		//TESTING ONLY:
-		if(Input.GetKeyDown(KeyCode.I))
+		if(Input.GetKeyDown(firstAbility))
 		{
 			characterAbilities2D = GetComponent<CharacterAbilities2D>();
 			characterAbilities2D.ability1.Use();
 		}
-		if(Input.GetKeyDown(KeyCode.O))
+		if(Input.GetKeyDown(secondAbility))
 		{
 			characterAbilities2D = GetComponent<CharacterAbilities2D>();
 			characterAbilities2D.ability2.Use();
 		}
-		if(Input.GetKeyDown(KeyCode.P))
+		if(Input.GetKeyDown(thirdAbility))
 		{
 			characterAbilities2D = GetComponent<CharacterAbilities2D>();
 			characterAbilities2D.ability3.Use();
 		}
 
-		if(Input.GetKeyDown(KeyCode.R))
+		if(Input.GetKeyDown(rageMode))
 		{
 			characterAbilities2D = GetComponent<CharacterAbilities2D>();
 			characterAbilities2D.rageMode.Use();

@@ -32,7 +32,7 @@ public class CharacterCombat2D : MonoBehaviour
 		{
 			case MeleeAttack.First :
 				damage = playerStats.firstAttackDamage;
-				damageEffect = DamageEffect.Hit;
+				damageEffect = DamageEffect.Hurt;
 				break;
 			case MeleeAttack.Second :
 				damage = playerStats.secondAttackDamage;
@@ -77,7 +77,8 @@ public class CharacterCombat2D : MonoBehaviour
 			switch(effect)
 			{
 			case DamageEffect.Hit :
-				//Spawn hit particle
+				//REMOVED: Spawn hit particle
+				//Hurt();
 				Debug.Log(name + " affected by: " + effect);
 				break;
 			case DamageEffect.Hurt :
@@ -232,6 +233,7 @@ public class CharacterCombat2D : MonoBehaviour
 	{
 		animate.SetTrigger("Death");
 		playerStats.PlayerDied();
+		GetComponent<BoxCollider2D>().enabled = false;
 	}
 	
 	void OnEnable()
@@ -253,6 +255,7 @@ public class CharacterCombat2D : MonoBehaviour
 	}
 	
 	//TESTING ONLY:
+	/*
 	void Update()
 	{
 		if(Input.GetKeyDown(KeyCode.Alpha1))
@@ -268,6 +271,7 @@ public class CharacterCombat2D : MonoBehaviour
 			TakeDamage(playerStats.thirdAttackDamage, (DamageEffect)2);
 		}
 	}
+	*/
 	
 	public bool GetComboInfo()
 	{

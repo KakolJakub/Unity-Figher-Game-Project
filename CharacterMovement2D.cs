@@ -41,6 +41,7 @@ public class CharacterMovement2D : MonoBehaviour
 	
 	private float defaultGravityScale;
 	
+	private bool isColliding;
 	
 	[Header("Events")]
 	[Space]
@@ -101,6 +102,11 @@ public class CharacterMovement2D : MonoBehaviour
 			}
 		}
 		
+		if(isColliding)
+		{
+			//_Rigidbody2D.velocity.x = 0;
+			ResetVelocity();
+		}
 		//Debug.Log("currentDodgeTimer: " + currentDodgeTimer+"clicks:"+clickAmount);
 	}
 	
@@ -203,7 +209,9 @@ public class CharacterMovement2D : MonoBehaviour
 	
 	//Used via animation events on knockback animation
 	public void SlideBack()
-	{
+	{		
+		isColliding = false;
+		
 		if(_FacingRight)
 		{
 			_Rigidbody2D.velocity = Vector2.left * playerStats.knockbackForce;
@@ -233,6 +241,8 @@ public class CharacterMovement2D : MonoBehaviour
 
 	public void MovePlayerForward(float speed)
 	{
+		//isColliding = false;
+
 		if(!_FacingRight)
 		{
 			_Rigidbody2D.velocity = Vector2.left * speed;
@@ -384,6 +394,24 @@ public class CharacterMovement2D : MonoBehaviour
 		return allow;
 	}
 	
+	void OnCollisionEnter2D(Collision2D enemy)
+	{
+		if(enemy.gameObject.GetComponent<PlayerStats>())
+		{
+			isColliding = true;
+			Debug.Log("Player collision occured");
+		}
+	}
+
+	void OnCollisionExit2D(Collision2D enemy)
+	{
+		if(enemy.gameObject.GetComponent<PlayerStats>())
+		{
+			isColliding = false;
+			Debug.Log("Player collision is no more");
+		}
+	}
+
 	private void Flip()
 	{
 		// Switch the way the player is labelled as facing.

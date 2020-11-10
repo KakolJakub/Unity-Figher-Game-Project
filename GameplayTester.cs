@@ -43,6 +43,10 @@ public class GameplayTester : MonoBehaviour
 	int playerMaxHealth;
 	RageMode currentRageMode;
 	
+	//test only:
+	//[SerializeField] Collider2D player1feet;
+	//[SerializeField] Collider2D player2feet;
+
 	//TODO: Consider creating a RageCutscenePlayer GameObject, instead of adding that functionality here
 
 	[SerializeField] VideoPlayer videoPlayer;
@@ -52,14 +56,22 @@ public class GameplayTester : MonoBehaviour
 		gamePaused = false;
 		
 		players[0] = GameObject.Find("Player");
-		players[1] = GameObject.Find("TestDummy");
+		players[1] = GameObject.Find("Player2Test");
+		//players[1] = GameObject.Find("TestDummy");
+
 		
 		GetPlayerMaxHealth();
 		SetPlayersSpawn();
 		RoundCountdown();
 
 		players[0].GetComponent<RageMode>().OnRageCutsceneStart += PlayRageCutscene;
-		//players[1].GetComponent<RageMode>().OnRageCutsceneStart += PlayRageCutscene;
+		players[1].GetComponent<RageMode>().OnRageCutsceneStart += PlayRageCutscene;
+
+		//test only:
+		//player1feet = players[0].GetComponent<CircleCollider2D>();
+		//player2feet = players[1].GetComponent<CircleCollider2D>();
+		//Physics2D.IgnoreCollision(player1feet, player2feet);
+
     }
 	
 	void OnEnable()
@@ -77,7 +89,10 @@ public class GameplayTester : MonoBehaviour
 		{
 			players[0].GetComponent<RageMode>().OnRageCutsceneStart -= PlayRageCutscene;
 		}
-		//players[1].GetComponent<RageMode>().OnRageCutsceneStart -= PlayRageCutscene;
+		if(players[1] != null)
+		{
+			players[1].GetComponent<RageMode>().OnRageCutsceneStart -= PlayRageCutscene;
+		}
 	}
 	
 	void Update()
