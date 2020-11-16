@@ -23,7 +23,7 @@ public class PlayerStats : MonoBehaviour
 	public bool canMove = true;
 	public bool canDodge = true;
 	
-	public float comboTime = 3;
+	public float comboTime = 1;
 	public bool canAttack = true;
 	public bool blocking = false;
 	

@@ -6,7 +6,7 @@ using System;
 public class PlayerControls : MonoBehaviour
 {
     public PlayerStats stats;
-	
+
 	public KeyCode moveLeft;
 	public KeyCode moveRight;
 	public KeyCode attack;
@@ -15,10 +15,20 @@ public class PlayerControls : MonoBehaviour
 	public KeyCode secondAbility;
 	public KeyCode thirdAbility;
 	public KeyCode rageMode;
-	
+
+	[SerializeField] private KeyBinding defaultBinding;
+	[SerializeField] private KeyBinding additionalBinding;
+
 	private CharacterMovement2D characterMovement2D;
 	private CharacterCombat2D characterCombat2D;
 	private CharacterAbilities2D characterAbilities2D;
+
+
+	void Start()
+	{
+		GetDefaultBindings();
+		SetDefaultBindings();
+	}
 
     // Update is called once per frame
     void Update()										
@@ -103,6 +113,54 @@ public class PlayerControls : MonoBehaviour
 		
     }
 	
+	void ChangeKeyBinding(KeyBinding k)
+	{
+		this.moveLeft = k.GetKey("moveLeft");
+        this.moveRight = k.GetKey("moveRight");
+        this.attack = k.GetKey("attack");
+        this.block = k.GetKey("block");
+        this.firstAbility = k.GetKey("firstAbility");
+        this.secondAbility = k.GetKey("secondAbility");
+        this.thirdAbility = k.GetKey("thirdAbility");
+        this.rageMode = k.GetKey("rageMode");
+	}
+
+	void GetDefaultBindings()
+	{
+		if(GameObject.Find("GameTester"))
+		{
+			defaultBinding = GameObject.Find("GameTester").GetComponent<GameplayTester>().ShareControls()[0];
+			additionalBinding = GameObject.Find("GameTester").GetComponent<GameplayTester>().ShareControls()[1];
+		}
+	}
+
+	void SetDefaultBindings()
+	{
+		if(GetComponent<PlayerStats>().GetPlayerId() == 1)
+		{
+			try
+			{
+				ChangeKeyBinding(defaultBinding);
+			}
+			catch
+			{
+				Debug.Log("Something went wrong with setting binding: " + defaultBinding);
+			}
+
+		}
+		else
+		{
+			try
+			{
+				ChangeKeyBinding(additionalBinding);
+			}
+			catch
+			{
+				Debug.Log("Something went wrong with setting binding: " + additionalBinding);
+			}
+		}
+	}
+
 	//IDEA:
 	//Probably not in this script
 	//Instead of returning nothing, return KeyCode

@@ -13,6 +13,8 @@ public class GameplayTester : MonoBehaviour
 	[SerializeField] private Vector3 player1SpawnPoint;
 	[SerializeField] private Vector3 player2SpawnPoint;
 	
+	[SerializeField] private KeyBinding[] defaultcontrols;
+
 	[SerializeField] private KeyCode skipRoundCountdownButton;
 	[SerializeField] private float roundCountdown;
 	private float currentCountdown;
@@ -50,6 +52,11 @@ public class GameplayTester : MonoBehaviour
 	//TODO: Consider creating a RageCutscenePlayer GameObject, instead of adding that functionality here
 
 	[SerializeField] VideoPlayer videoPlayer;
+
+	public KeyBinding[] ShareControls()
+	{
+		return defaultcontrols;
+	}
 
     void Start()
     {

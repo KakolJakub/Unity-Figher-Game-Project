@@ -41,6 +41,7 @@ public class CharacterCombat2D : MonoBehaviour
 			case MeleeAttack.Third :
 				damage = playerStats.thirdAttackDamage;
 				damageEffect = DamageEffect.Knockback;
+				ComboEnds();
 				break;
 			default:
 				damage = playerStats.firstAttackDamage;
@@ -124,25 +125,26 @@ public class CharacterCombat2D : MonoBehaviour
 	//used via animation events on Attack1, Attack2 and Attack3
 	public void AttackNotReady()
 	{
-		playerStats.canAttack=false;
+		playerStats.canAttack = false;
 	}
 	
 	//used via animation events on IdleAnimation
 	public void AttackReady()
 	{
-		playerStats.canAttack=true;
+		playerStats.canAttack = true;
 	}
 	
 	public void Attack()
 	{
 		if(playerStats.canAttack)
 		{
-			playerStats.canMove=false;
+			playerStats.canMove = false;
 			clickAmount++;
 			ComboAvailable();
 			ComboTimer(playerStats.comboTime);
 			ManageAttacks(clickAmount);
 		}
+		Debug.Log("Był atak: " + clickAmount);
 	}
 	
 	public void Block()
@@ -162,13 +164,13 @@ public class CharacterCombat2D : MonoBehaviour
 	
 	void ComboAvailable()
 	{
-		canCombo=true;
+		canCombo = true;
 	}
 
 	void ComboEnds()
 	{
-		canCombo=false;
-		clickAmount=0;
+		canCombo = false;
+		clickAmount = 0;
 	}
 	
 	void ManageAttacks(int attackNumber)
@@ -181,12 +183,12 @@ public class CharacterCombat2D : MonoBehaviour
 		{
 			SecondAttack();
 		}
-		if(canCombo&&attackNumber>=3)
+		if(canCombo&&attackNumber>=3) 
 		{
+			//playerStats.canMove = false;
 			ThirdAttack();
-			ComboEnds();
+			//ComboEnds();
 		}
-
 	}
  
 	void FirstAttack()
@@ -229,6 +231,13 @@ public class CharacterCombat2D : MonoBehaviour
 		animate.SetTrigger("Knockback");
 	}
 	
+	void CancelAttacks()
+	{
+		animate.ResetTrigger("FirstAttack");
+		animate.ResetTrigger("SecondAttack");
+		animate.ResetTrigger("ThirdAttack");
+	}
+
 	void Die()
 	{
 		animate.SetTrigger("Death");
@@ -239,11 +248,13 @@ public class CharacterCombat2D : MonoBehaviour
 	void OnEnable()
 	{
 		playerStats.OnInterrupt += BlockOff;
+		playerStats.OnInterrupt += CancelAttacks;
 	}
 	
 	void OnDisable()
 	{
 		playerStats.OnInterrupt -= BlockOff;
+		playerStats.OnInterrupt -= CancelAttacks;
 	}
 	
 	void OnDrawGizmosSelected()

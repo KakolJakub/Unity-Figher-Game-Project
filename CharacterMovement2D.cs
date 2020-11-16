@@ -85,7 +85,7 @@ public class CharacterMovement2D : MonoBehaviour
 			rightClickAmount = 0;
 		}
 		
-		if(currentDodgeAmount >= dodgeAmount)
+		if(currentDodgeAmount > dodgeAmount)
 		{
 			currentDodgeAmount = dodgeAmount;
 		}
@@ -178,6 +178,10 @@ public class CharacterMovement2D : MonoBehaviour
 			move = moveSpeed * Time.fixedDeltaTime;
 			//Animate the character
 			animate.SetBool("Moving",true);
+			//Reset attacking animation triggers
+			animate.ResetTrigger("FirstAttack");
+			animate.ResetTrigger("SecondAttack");
+			animate.ResetTrigger("ThirdAttack");
 			// Move the character by finding the target velocity
 			Vector3 targetVelocity = new Vector2(move * 10f, _Rigidbody2D.velocity.y);
 			// And then smoothing it out and applying it to the character
@@ -229,6 +233,8 @@ public class CharacterMovement2D : MonoBehaviour
 	//Used via animation events on dodge animation
 	public void SlideForward()
 	{
+		isColliding = false;
+		
 		if(dodgeDirection == Direction.Right)
 		{
 			_Rigidbody2D.velocity = Vector2.right * playerStats.dodgeRange;
