@@ -89,12 +89,14 @@ public class GameplayTester : MonoBehaviour
 	{
 		PlayerStats.OnDeath += RoundEnd;
 		videoPlayer.loopPointReached += EndRageCutscene;
+		videoPlayer.started += ApplyFade;
 	}
 	
 	void OnDisable()
 	{
 		PlayerStats.OnDeath -= RoundEnd;
 		videoPlayer.loopPointReached -= EndRageCutscene;
+		videoPlayer.started -= ApplyFade;
 
 		if(players[0] != null)
 		{
@@ -256,11 +258,11 @@ public class GameplayTester : MonoBehaviour
 	{
 		EnablePlayerControls(false);
 		PauseGame();
-
-		imageFader.FadeIn();
 		
 		currentRageMode = rage;
 		videoPlayer.clip = rage.rageClip;
+
+		imageFader.FadeIn();
 	}
 
 	void PlayClip()
@@ -271,6 +273,11 @@ public class GameplayTester : MonoBehaviour
 	void RageCutsceneEnded(RageMode rage)
 	{
 		rage.PlayerCutsceneEnded();
+	}
+
+	void ApplyFade(VideoPlayer source)
+	{
+		imageFader.ResetAlpha();
 	}
 
 	void EndRageCutscene(VideoPlayer source)

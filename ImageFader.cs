@@ -10,6 +10,7 @@ public class ImageFader : MonoBehaviour
     public event TakeAction OnFullFade;
     
     [SerializeField] float fadeDuration;
+    [SerializeField] float resetDuration;
     [SerializeField] Image imageToFade;
 
     public void FadeIn()
@@ -17,12 +18,21 @@ public class ImageFader : MonoBehaviour
         StartCoroutine(ActualFadeIn());
     }
 
-    public void ResetAlpha()
+    public void ResetAlpha(float duration = 0)
+    {
+        if(duration == 0)
+        {
+            duration = resetDuration;
+        }
+
+        imageToFade.CrossFadeAlpha(0, duration, true);
+    }
+
+    void ResetAlpha()
     {
         imageToFade.canvasRenderer.SetAlpha(0.0f);
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         ResetAlpha();
@@ -34,9 +44,6 @@ public class ImageFader : MonoBehaviour
         yield return new WaitForSecondsRealtime(fadeDuration);
         OnFullFade();
         Debug.Log("Fullfade");
-        yield return new WaitForSecondsRealtime(0.6f);
-        ResetAlpha();
-        Debug.Log("Alpha reset");
     }
 
 }

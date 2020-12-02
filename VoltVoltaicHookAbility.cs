@@ -25,8 +25,7 @@ public class VoltVoltaicHookAbility : Ability
    
    public override void ActivateAbility()
    {
-	   animate.ResetTrigger("Ability_VoltaicHook_Return");
-	   animate.ResetTrigger("Ability_VoltaicHook_Pull");
+	   ResetAnimationTriggers();
 	   animate.SetTrigger("Ability_VoltaicHook");
       checkForEnemyDodge = false;
    }
@@ -131,6 +130,13 @@ public class VoltVoltaicHookAbility : Ability
 	   rope.enabled = false;
    }
    
+   void ResetAnimationTriggers()
+   {
+      animate.ResetTrigger("Ability_VoltaicHook_Return");
+      animate.ResetTrigger("Ability_VoltaicHook_Pull");
+      animate.ResetTrigger("Ability_VoltaicHook_PullReturn");
+   }
+
    void SpawnRope()
    {
 	   ropeTip.GetComponent<ProjectileLogic>().SetProjectileStats(ropeTipDamage, ropeTipDamageEffect, ropeTipSpeed, ropeTipLifeTime, ropeTipGravity, playerStats);

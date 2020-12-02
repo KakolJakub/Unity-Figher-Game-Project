@@ -216,9 +216,11 @@ public class CharacterCombat2D : MonoBehaviour
 	{	
 		//playerStats.PlayerWasInterrupted(); -> on animation event
 		
-		playerStats.canMove = false;
-		playerStats.canAttack = false;
-		playerStats.canCastAbility = false;
+		//playerStats.canMove = false;
+		//playerStats.canAttack = false;
+		//playerStats.canCastAbility = false;
+
+		PermitActions();
 		
 		animate.SetTrigger("Hurt");
 	}
@@ -234,9 +236,10 @@ public class CharacterCombat2D : MonoBehaviour
 
 		}
 		
-		playerStats.canMove = false;
-		playerStats.canAttack = false;
-		playerStats.canCastAbility = false;
+		//playerStats.canMove = false;
+		//playerStats.canAttack = false;
+		//playerStats.canCastAbility = false;
+		PermitActions();
 		
 		animate.SetTrigger("Knockback");
 
@@ -250,6 +253,13 @@ public class CharacterCombat2D : MonoBehaviour
 		ComboEnds();
 	}
 
+	void PermitActions()
+	{
+		playerStats.canMove = false;
+		playerStats.canAttack = false;
+		playerStats.canCastAbility = false;
+	}
+
 	void Die()
 	{
 		animate.SetTrigger("Death");
@@ -261,12 +271,14 @@ public class CharacterCombat2D : MonoBehaviour
 	{
 		playerStats.OnInterrupt += BlockOff;
 		playerStats.OnInterrupt += CancelAttacks;
+		playerStats.OnInterrupt += PermitActions;
 	}
 	
 	void OnDisable()
 	{
 		playerStats.OnInterrupt -= BlockOff;
 		playerStats.OnInterrupt -= CancelAttacks;
+		playerStats.OnInterrupt -= PermitActions;
 	}
 	
 	void OnDrawGizmosSelected()
