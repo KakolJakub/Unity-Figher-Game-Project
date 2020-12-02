@@ -22,6 +22,7 @@ public class ProjectileLogic : MonoBehaviour
 	public bool dealsDamage;
 	
 	public bool Impact { get; private set; }
+	public Collider2D ImpactTarget {get; private set; }
 	
 	public void SetProjectileStats(int damage, DamageEffect statusNumber, float speed, float lifetime, float gravity, PlayerStats playerStats)
 	{
@@ -67,6 +68,7 @@ public class ProjectileLogic : MonoBehaviour
 		if(stopsOnImpact)
 		{
 			Impact = true;
+			ImpactTarget = enemy;
 			StopProjectile();
 		}
 		if(explodesOnImpact)

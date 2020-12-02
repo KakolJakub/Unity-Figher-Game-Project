@@ -51,6 +51,17 @@ public class CharacterMovement2D : MonoBehaviour
 	[System.Serializable]
 	public class BoolEvent : UnityEvent<bool> { }
 
+	
+	private void OnEnable()
+	{
+		PlayerStats.OnDeath += DontMove;
+	}
+	
+	private void OnDisable()
+	{
+		PlayerStats.OnDeath -= DontMove;
+	}
+	
 	private void Awake()
 	{
 		_Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -68,6 +79,7 @@ public class CharacterMovement2D : MonoBehaviour
 		dodgeTimer = playerStats.dodgeTimer;
 		dodgeAmount = playerStats.dodgeAmount;
 		currentDodgeAmount = dodgeAmount;
+
 	}
 	
 	private void Update()
@@ -199,6 +211,7 @@ public class CharacterMovement2D : MonoBehaviour
 				// ... flip the player.
 				Flip();
 			}
+			UpdateCurrentDirection();
 		}
 	}
 	
@@ -209,6 +222,7 @@ public class CharacterMovement2D : MonoBehaviour
 			//Animate the character
 			animate.SetBool("Moving", false);
 		}
+		UpdateCurrentDirection();
 	}
 	
 	//Used via animation events on knockback animation
@@ -243,6 +257,7 @@ public class CharacterMovement2D : MonoBehaviour
 		{
 			_Rigidbody2D.velocity = Vector2.left * playerStats.dodgeRange;
 		}
+		UpdateCurrentDirection();
 	}
 
 	public void MovePlayerForward(float speed)
@@ -261,6 +276,7 @@ public class CharacterMovement2D : MonoBehaviour
 		{
 			return;
 		}
+		UpdateCurrentDirection();
 	}
 	
 	//Used via animation events on knockback and dodge animation
@@ -319,6 +335,7 @@ public class CharacterMovement2D : MonoBehaviour
 				rightClickAmount = 0;
 			}
 		}
+		UpdateCurrentDirection();
 	}
 	
 	private void ActualDodge(Direction direction, bool canPassThrough)
@@ -332,6 +349,9 @@ public class CharacterMovement2D : MonoBehaviour
 		
 		dodgeDirection = direction;
 		
+		//DisableCharacterCollision(true);
+
+		
 		if(canPassThrough)
 		{
 			DisableCharacterCollision(true);
@@ -341,12 +361,14 @@ public class CharacterMovement2D : MonoBehaviour
 			DisableCharacterHitBox();
 		}
 		
+		
 		if((direction == Direction.Left && _FacingRight) || (direction == Direction.Right && !_FacingRight))
 		{
 			Flip();
 		}
 		
 		animate.SetTrigger("Dodge");
+		UpdateCurrentDirection();
 	}
 	
 	private void DisableCharacterCollision(bool isActive)
@@ -441,14 +463,21 @@ public class CharacterMovement2D : MonoBehaviour
 	
 	public Direction GetDirectionInfo()
 	{
-		if(_FacingRight)
-		{
-			return Direction.Right;
-		}
-		else
+		Debug.Log("ANGLE::::::::::::" + transform.right);
+
+		if(transform.right.x < 0) 
 		{
 			return Direction.Left;
 		}
+		else
+		{
+			return Direction.Right;
+		}
+	}
+
+	public void UpdateCurrentDirection()
+	{
+		playerStats.currentDirection = GetDirectionInfo();
 	}
 	
 	public int GetCurrentDodgeAmount()

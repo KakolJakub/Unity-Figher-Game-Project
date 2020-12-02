@@ -54,24 +54,25 @@ public class CharacterCombat2D : MonoBehaviour
 	
 	public void DealCombatDamage(int damage, DamageEffect effect)
 	{
+		Direction ownerDirection = playerStats.currentDirection;
 		Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 		
 		foreach(Collider2D enemy in hitEnemies)
 		{
 			
-			if(enemy.GetComponent<PlayerStats>().blocking || enemy.GetComponent<PlayerStats>().dodging)
+			if(/*enemy.GetComponent<PlayerStats>().blocking ||*/enemy.GetComponent<PlayerStats>().dodging)
 			{
 				return;
 			}
 			else
 			{
-				enemy.GetComponent<CharacterCombat2D>().TakeDamage(damage, effect);
+				enemy.GetComponent<CharacterCombat2D>().TakeDamage(damage, effect, ownerDirection);
 				playerStats.PlayerDealtDamage(damage);
 			}
 		}
 	}
 	
-	public void TakeDamage(int damage, DamageEffect effect)
+	public void TakeDamage(int damage, DamageEffect effect, Direction ownerDirection = Direction.Right)
 	{
 		if(!playerStats.blocking && !playerStats.dodging)
 		{
@@ -87,7 +88,7 @@ public class CharacterCombat2D : MonoBehaviour
 				Debug.Log(name + " affected by: " + effect);
 				break;
 			case DamageEffect.Knockback :
-				Knockback();
+				Knockback(ownerDirection);
 				Debug.Log(name + " affected by: " + effect);
 				break;
 			default:
@@ -98,13 +99,12 @@ public class CharacterCombat2D : MonoBehaviour
 			playerStats.health -= damage;
 			playerStats.PlayerTookDamage(damage);
 			
-			if(playerStats.health <= 0)
-			{
-				Die(); //TODO: Determine what happens when a player dies - disable Animation Controller or disable playerControls?
-			}
-			
-			
 			//Debug.Log(name+" health: "+playerStats.health);
+
+		} 
+		if(playerStats.health <= 0)
+		{
+			Die(); //TODO: Determine what happens when a player dies - disable Animation Controller or disable playerControls?
 		}
 	}
 	
@@ -149,10 +149,13 @@ public class CharacterCombat2D : MonoBehaviour
 	
 	public void Block()
 	{
-		if(playerStats.canAttack)
+		if(enabled)
 		{
-			playerStats.canMove=false;
-			animate.SetTrigger("Block");
+			if(playerStats.canAttack)
+			{
+				playerStats.canMove = false;
+				animate.SetTrigger("Block");
+			}
 		}
 	}
 	
@@ -220,15 +223,23 @@ public class CharacterCombat2D : MonoBehaviour
 		animate.SetTrigger("Hurt");
 	}
 	
-	void Knockback()
+	void Knockback(Direction ownerDirection)
 	{	
 		//playerStats.PlayerWasInterrupted(); -> on animation event
+
+		if(ownerDirection == playerStats.currentDirection)
+		{
+			GetComponent<CharacterMovement2D>().TestFlip();
+			GetComponent<CharacterMovement2D>().UpdateCurrentDirection();
+
+		}
 		
 		playerStats.canMove = false;
 		playerStats.canAttack = false;
 		playerStats.canCastAbility = false;
 		
 		animate.SetTrigger("Knockback");
+
 	}
 	
 	void CancelAttacks()
@@ -236,6 +247,7 @@ public class CharacterCombat2D : MonoBehaviour
 		animate.ResetTrigger("FirstAttack");
 		animate.ResetTrigger("SecondAttack");
 		animate.ResetTrigger("ThirdAttack");
+		ComboEnds();
 	}
 
 	void Die()
@@ -287,5 +299,30 @@ public class CharacterCombat2D : MonoBehaviour
 	public bool GetComboInfo()
 	{
 		return canCombo;
+	}
+
+	public bool DetectEnemies()
+	{
+		bool enemiesInRange;
+
+		Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+
+		if(hitEnemies.Length > 0)
+		{
+			if(hitEnemies[0].GetComponent<PlayerStats>())
+			{
+				enemiesInRange = true;
+			}
+			else
+			{
+				enemiesInRange = false;
+			}
+		}
+		else
+		{
+			enemiesInRange = false;
+		}
+		
+		return enemiesInRange;
 	}
 }

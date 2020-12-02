@@ -22,7 +22,9 @@ public class PlayerStats : MonoBehaviour
 	public bool dodging = false;
 	public bool canMove = true;
 	public bool canDodge = true;
-	
+	public Direction currentDirection;
+
+
 	public float comboTime = 1;
 	public bool canAttack = true;
 	public bool blocking = false;

@@ -13,6 +13,7 @@ public abstract class RageMode : MonoBehaviour
 	public delegate void ReactToRage(RageMode rage);
 	public event ReactToRage OnRageCutsceneStart;
 	public event ReactToRage OnRageCutsceneEnd;
+	public static event ReactToRage OnEveryRageCutsceneEnd;
 
 	bool rageReady;
 	
@@ -26,6 +27,7 @@ public abstract class RageMode : MonoBehaviour
 		playerStats.OnDamageTaken += IncreaseRageMeter;
 		playerStats.OnDamageDealt += IncreaseRageMeterByHalf;
 		OnRageCutsceneEnd += ActivateRageMode;
+		OnEveryRageCutsceneEnd += ResetBoolAnimation;
 	}
 	
 	void OnDisable()
@@ -33,6 +35,7 @@ public abstract class RageMode : MonoBehaviour
 		playerStats.OnDamageTaken -= IncreaseRageMeter;
 		playerStats.OnDamageDealt -= IncreaseRageMeterByHalf;
 		OnRageCutsceneEnd += ActivateRageMode;
+		OnEveryRageCutsceneEnd -= ResetBoolAnimation;
 	}
 	
 	void Start()
@@ -80,6 +83,14 @@ public abstract class RageMode : MonoBehaviour
 		Debug.Log("rageMeter: " + rageMeter);
 	}
 
+	void ResetBoolAnimation(RageMode rage)
+	{
+		if(animate.GetBool("Moving"))
+		{
+			animate.SetBool("Moving", false);
+		}
+	}
+
 	public void Use()
 	{
 		if(!playerStats.rageActive)
@@ -104,6 +115,7 @@ public abstract class RageMode : MonoBehaviour
 		if(OnRageCutsceneEnd != null)
 		{
 			OnRageCutsceneEnd(this);
+			OnEveryRageCutsceneEnd(this);
 		}
 	}
 	

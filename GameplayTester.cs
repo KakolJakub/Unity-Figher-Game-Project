@@ -45,6 +45,8 @@ public class GameplayTester : MonoBehaviour
 	int playerMaxHealth;
 	RageMode currentRageMode;
 	
+	ImageFader imageFader;
+
 	//test only:
 	//[SerializeField] Collider2D player1feet;
 	//[SerializeField] Collider2D player2feet;
@@ -61,6 +63,8 @@ public class GameplayTester : MonoBehaviour
     void Start()
     {
 		gamePaused = false;
+		imageFader = GetComponent<ImageFader>();
+		imageFader.OnFullFade += PlayClip;
 		
 		players[0] = GameObject.Find("Player");
 		players[1] = GameObject.Find("Player2Test");
@@ -187,6 +191,7 @@ public class GameplayTester : MonoBehaviour
 					player.GetComponent<SpriteRenderer>().sortingLayerName = "Player2";
 				}
 			}
+			player.GetComponent<CharacterMovement2D>().UpdateCurrentDirection();
 		}
 	}
 	
@@ -251,9 +256,15 @@ public class GameplayTester : MonoBehaviour
 	{
 		EnablePlayerControls(false);
 		PauseGame();
+
+		imageFader.FadeIn();
 		
 		currentRageMode = rage;
 		videoPlayer.clip = rage.rageClip;
+	}
+
+	void PlayClip()
+	{
 		videoPlayer.Play();
 	}
 
