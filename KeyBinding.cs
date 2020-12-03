@@ -9,6 +9,7 @@ public class KeyBinding
     
     [SerializeField] KeyCode moveLeft;
 	[SerializeField] KeyCode moveRight;
+	[SerializeField] KeyCode dodge;
 	[SerializeField] KeyCode attack;
 	[SerializeField] KeyCode block;
 	[SerializeField] KeyCode firstAbility;
@@ -29,6 +30,10 @@ public class KeyBinding
 
             case "moveRight":
             key = moveRight;
+            break;
+            
+            case "dodge":
+            key = dodge;
             break;
 
             case "attack":

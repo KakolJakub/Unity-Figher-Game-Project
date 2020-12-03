@@ -41,7 +41,7 @@ public class VoltVoltaicHookAbility : Ability
    //used via animation event
    public void VoltaicHook_DealDamage()
    {
-      if(GetComponent<CharacterCombat2D>().DetectEnemies())
+      if(GetComponent<CharacterCombat2D>().DetectTargets())
       {
          GetComponent<CharacterCombat2D>().DealCombatDamage(abilityDamage, abilityDamageEffect);
          animate.SetTrigger("Ability_VoltaicHook_PullReturn");
@@ -176,11 +176,17 @@ public class VoltVoltaicHookAbility : Ability
          }
       }
 
-      if(hookedEnemy != null && hookedEnemy.GetComponent<PlayerStats>().dodging)
+      if(hookedEnemy != null)
       {
-         checkForEnemyDodge = false;
-         animate.SetTrigger("Ability_VoltaicHook_PullReturn");
-         hookedEnemy = null;
+         if(hookedEnemy.GetComponent<PlayerStats>())
+         {
+            if(hookedEnemy.GetComponent<PlayerStats>().dodging)
+            {
+               checkForEnemyDodge = false;
+               animate.SetTrigger("Ability_VoltaicHook_PullReturn");
+               hookedEnemy = null;
+            }
+         }
       }
    }
 

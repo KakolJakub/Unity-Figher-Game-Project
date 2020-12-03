@@ -9,6 +9,7 @@ public class PlayerControls : MonoBehaviour
 
 	public KeyCode moveLeft;
 	public KeyCode moveRight;
+	public KeyCode dodge;
 	public KeyCode attack;
 	public KeyCode block;
 	public KeyCode firstAbility;
@@ -39,7 +40,7 @@ public class PlayerControls : MonoBehaviour
     {
 		//TODO: Maybe add an interface for gameplay systems ("IControllable" or "IGameplaySystem")
 		//TODO: Maybe base the logic on events, not if statements
-		//TODO: Add default bindings (for each player)
+		//DONE: Add default bindings (for each player)
 		
 		if(Input.GetKey(moveLeft))
 		{  			
@@ -49,9 +50,9 @@ public class PlayerControls : MonoBehaviour
 		{
 			characterMovement2D.DontMove();
 		}
-		if(Input.GetKeyDown(moveLeft))
+		if(Input.GetKey(moveLeft) && Input.GetKey(dodge))
 		{
-			characterMovement2D.Dodge(Direction.Left);
+			characterMovement2D.NewDodge(Direction.Left);
 		}
 		
 		if(Input.GetKey(moveRight))
@@ -62,9 +63,9 @@ public class PlayerControls : MonoBehaviour
 		{
 			characterMovement2D.DontMove();
 		}
-		if(Input.GetKeyDown(moveRight))
+		if(Input.GetKey(moveRight) && Input.GetKey(dodge))
 		{
-			characterMovement2D.Dodge(Direction.Right);
+			characterMovement2D.NewDodge(Direction.Right);
 		}
 		
 		if(Input.GetKey(moveLeft) && Input.GetKey(moveRight))
@@ -106,6 +107,7 @@ public class PlayerControls : MonoBehaviour
 	{
 		this.moveLeft = k.GetKey("moveLeft");
         this.moveRight = k.GetKey("moveRight");
+		this.dodge = k.GetKey("dodge");
         this.attack = k.GetKey("attack");
         this.block = k.GetKey("block");
         this.firstAbility = k.GetKey("firstAbility");

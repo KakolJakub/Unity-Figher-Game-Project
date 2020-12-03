@@ -16,9 +16,9 @@ public class VoltModernRageMode : RageMode
         //TODO: Create string variables for sortingLayers
         
 		primaryShockParticles = Instantiate(shockParticles, voltPrimaryHand.position, voltPrimaryHand.rotation);
-        primaryShockParticles.GetComponent<Renderer>().sortingLayerName = "Foreground";
+        primaryShockParticles.GetComponent<Renderer>().sortingLayerName = SortingLayers.DetermineParticleLayer(true, playerStats); 
 		secondaryShockParticles = Instantiate(shockParticles, voltSecondaryHand.position, voltSecondaryHand.rotation);
-        secondaryShockParticles.GetComponent<Renderer>().sortingLayerName = "Default";
+        secondaryShockParticles.GetComponent<Renderer>().sortingLayerName = SortingLayers.DetermineParticleLayer(false, playerStats);
         Debug.Log("VoltModernRage effects added.");
 	}
 	

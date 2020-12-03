@@ -166,6 +166,12 @@ public class CharacterMovement2D : MonoBehaviour
 		playerStats.canMove = true;
 		playerStats.canDodge = true;
 	}
+
+	public void MovementDisabled()
+	{
+		playerStats.canMove = false;
+		ResetVelocity();
+	}
 	
 	public void Move(Direction direction)
 	{
@@ -191,9 +197,9 @@ public class CharacterMovement2D : MonoBehaviour
 			//Animate the character
 			animate.SetBool("Moving",true);
 			//Reset attacking animation triggers
-			animate.ResetTrigger("FirstAttack");
-			animate.ResetTrigger("SecondAttack");
-			animate.ResetTrigger("ThirdAttack");
+			//animate.ResetTrigger("FirstAttack");
+			//animate.ResetTrigger("SecondAttack");
+			//animate.ResetTrigger("ThirdAttack");
 			// Move the character by finding the target velocity
 			Vector3 targetVelocity = new Vector2(move * 10f, _Rigidbody2D.velocity.y);
 			// And then smoothing it out and applying it to the character
@@ -293,6 +299,33 @@ public class CharacterMovement2D : MonoBehaviour
 		playerStats.canDodge = true;
 	}
 	
+	public void NewDodge(Direction direction)
+	{
+		if(playerStats.canDodge)
+		{
+			bool canPassThrough;
+		
+			if(AllowPassingThrough())
+			{
+				canPassThrough = true;
+			}
+			else
+			{
+				canPassThrough = false;
+			}
+			
+			if(currentDodgeAmount == 0)
+			{
+				return;
+			}
+			
+			ActualDodge(direction, canPassThrough);
+			currentDodgeAmount--;
+			
+		}
+		UpdateCurrentDirection();
+	}
+
 	public void Dodge(Direction direction)
 	{
 		if(playerStats.canDodge)
@@ -398,7 +431,7 @@ public class CharacterMovement2D : MonoBehaviour
 		
 		RaycastHit2D dodgeInformator = Physics2D.Raycast(rayFirePoint.transform.position, rayFirePoint.transform.right);		
 		
-		if(dodgeInformator.collider != null)
+		if(dodgeInformator.collider != null && dodgeInformator.collider.GetComponent<PlayerStats>())
 		{
 			Debug.Log(dodgeInformator.collider.gameObject.name);
 			

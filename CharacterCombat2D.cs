@@ -60,14 +60,18 @@ public class CharacterCombat2D : MonoBehaviour
 		foreach(Collider2D enemy in hitEnemies)
 		{
 			
-			if(/*enemy.GetComponent<PlayerStats>().blocking ||*/enemy.GetComponent<PlayerStats>().dodging)
+			if(enemy.GetComponent<PlayerStats>().blocking || enemy.GetComponent<PlayerStats>().dodging)
 			{
 				return;
 			}
 			else
 			{
-				enemy.GetComponent<CharacterCombat2D>().TakeDamage(damage, effect, ownerDirection);
-				playerStats.PlayerDealtDamage(damage);
+				var enemyCombat = enemy.GetComponent<CharacterCombat2D>();
+				if(enemyCombat != null)
+				{
+					enemyCombat.TakeDamage(damage, effect, ownerDirection);
+					playerStats.PlayerDealtDamage(damage);
+				}
 			}
 		}
 	}
@@ -214,12 +218,6 @@ public class CharacterCombat2D : MonoBehaviour
 	
 	void Hurt()
 	{	
-		//playerStats.PlayerWasInterrupted(); -> on animation event
-		
-		//playerStats.canMove = false;
-		//playerStats.canAttack = false;
-		//playerStats.canCastAbility = false;
-
 		PermitActions();
 		
 		animate.SetTrigger("Hurt");
@@ -227,8 +225,7 @@ public class CharacterCombat2D : MonoBehaviour
 	
 	void Knockback(Direction ownerDirection)
 	{	
-		//playerStats.PlayerWasInterrupted(); -> on animation event
-
+		
 		if(ownerDirection == playerStats.currentDirection)
 		{
 			GetComponent<CharacterMovement2D>().TestFlip();
@@ -236,9 +233,6 @@ public class CharacterCombat2D : MonoBehaviour
 
 		}
 		
-		//playerStats.canMove = false;
-		//playerStats.canAttack = false;
-		//playerStats.canCastAbility = false;
 		PermitActions();
 		
 		animate.SetTrigger("Knockback");
@@ -313,22 +307,23 @@ public class CharacterCombat2D : MonoBehaviour
 		return canCombo;
 	}
 
-	public bool DetectEnemies()
+	public bool DetectTargets(bool playersOnly = false)
 	{
 		bool enemiesInRange;
+		Collider2D[] hitEnemies;
 
-		Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+		if(playersOnly)
+		{
+			hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+		}
+		else
+		{
+			hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange);
+		}
 
 		if(hitEnemies.Length > 0)
 		{
-			if(hitEnemies[0].GetComponent<PlayerStats>())
-			{
-				enemiesInRange = true;
-			}
-			else
-			{
-				enemiesInRange = false;
-			}
+			enemiesInRange = true;
 		}
 		else
 		{

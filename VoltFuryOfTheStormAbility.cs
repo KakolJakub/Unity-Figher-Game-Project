@@ -64,10 +64,12 @@ public class VoltFuryOfTheStormAbility : Ability
 	   if(DeterminePrimarySpawnPoint(attackNumber))
 	   {
 		   actualParticles[index] = Instantiate(particles[index], primaryParticleSpawnPoint.position, primaryParticleSpawnPoint.rotation);
+		   actualParticles[index].GetComponent<Renderer>().sortingLayerName = SortingLayers.DetermineParticleLayer(true, playerStats);
 	   }
 	   else
 	   {
 		   actualParticles[index] = Instantiate(particles[index], secondaryParticleSpawnPoint.position, secondaryParticleSpawnPoint.rotation);
+		   actualParticles[index].GetComponent<Renderer>().sortingLayerName = SortingLayers.DetermineParticleLayer(true, playerStats);
 	   }
 	   
 	   if(attackNumber == FuryOfTheStormAttack.FifthFuryAttack)
